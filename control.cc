@@ -58,49 +58,67 @@ namespace MC
             {
                 if (port_->isOpen())
                 {
-                    if (input.argument(0).startsWith("0x"))
+                    if (input.argument(0).startsWith("0b"))
                     {
-                        // Hex skall skickas
+                        // Binärt skall skickas
                         QByteArray message;
 
                         for (int i = 0; i < input.argumentCount(); ++i)
                         {
                             QString arg = input.argument(i);
 
-                            if (arg.startsWith("0x"))
+                            if (arg.startsWith("0b"))
                             {
-                                // Hex-representation följer
-                                arg.remove("0x");
+                                // Binär representation följer
+                                arg.remove("0b");
 
-                                // Konvertera till hex
+                                // Konvertera
                                 bool ok;
-                                int hex = arg.toInt(&ok, 16);
+                                int binary = arg.toInt(&ok, 2);
 
                                 if (ok)
                                 {
                                     // Lägg till i meddelandet
-                                    message.append(hex);
+                                    message.append(binary);
                                 }
                                 else
                                 {
-                                    emit out("Error: Not a valid hex input.\n");
+                                    emit out("Error: Not a valid binary input.\n");
                                     return;
                                 }
                             }
                         }
 
                         emit out("Transmitting...");
-                        emit out("In ASCII: " + message);
                         emit out("Raw data: " + utils::readableByteArray(message.toHex()) + "\n");
 
                         port_->transmit(message);
                     }
                     else
                     {
-                        // Skicka allt som följer som meddelande
-                        QString message = input.concatenateArguments();
+                        // Tolka som hex
+                        QByteArray message;
+
+                        for (int i = 0; i < input.argumentCount(); ++i)
+                        {
+                            QString arg = input.argument(i);
+
+                            bool ok;
+                            int hex = arg.toInt(&ok, 16);
+
+                            if (ok)
+                            {
+                                message.append(hex);
+                            }
+                            else
+                            {
+                                emit out("Error: Not a valid hex input.\n");
+                                return;
+                            }
+                        }
+
                         emit out("Transmitting... ");
-                        emit out("In ASCII: " + message);
+                        emit out("Raw data: " + utils::readableByteArray(message.toHex()) + "\n");
                         port_->transmit(message);
                     }
                 }

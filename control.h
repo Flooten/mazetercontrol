@@ -26,12 +26,10 @@ namespace MC
         QString help_message_;
         QMap<QString, QString> help_texts_;
 
-        QString help_message_set_;
         SerialPort* port_;
 
         // Funktioner
         void parseIniFile(const QString& ini_file);
-
         void readLine(QString& str, QString& command, QString& argument);
         void readAssignArgument(const QString& argument, QString& name, QString& value);
         QString readUntilEnd(QTextStream& is);
