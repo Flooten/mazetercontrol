@@ -1,0 +1,4 @@
+A simple application for the purpose of sending och recieving data from a serial port.
+Relies on the QextSerialPort library (v1.2rc) and Qt5.
+
+Developed by Marcus Eriksson.
