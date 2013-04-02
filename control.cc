@@ -106,14 +106,46 @@ namespace MC
                             bool ok;
                             int hex = arg.toInt(&ok, 16);
 
-                            if (ok)
+                            if (hex > 255)
                             {
-                                message.append(hex);
+                                if (arg.length() % 2 == 0)
+                                {
+                                    // Jämnt antal tecken
+                                    for (int i = 0; i < arg.length(); i += 2)
+                                    {
+                                        bool partial_ok;
+                                        QString partial_string = arg.mid(i, 2);
+
+                                        int partial_hex = partial_string.toInt(&partial_ok, 16);
+
+                                        if (ok)
+                                        {
+                                            message.append(partial_hex);
+                                        }
+                                        else
+                                        {
+                                            emit out("Error: Not a valid hex input.\n");
+                                            return;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    emit out("Not an even number of characters.\n");
+                                    return;
+                                }
                             }
                             else
                             {
-                                emit out("Error: Not a valid hex input.\n");
-                                return;
+                                if (ok)
+                                {
+                                    message.append(hex);
+                                }
+                                else
+                                {
+                                    emit out("Error: Not a valid hex input.\n");
+                                    return;
+                                }
                             }
                         }
 
