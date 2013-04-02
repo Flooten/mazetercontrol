@@ -101,6 +101,7 @@ namespace MC
 
                         for (int i = 0; i < input.argumentCount(); ++i)
                         {
+                            // Gå igenom alla angivna argument
                             QString arg = input.argument(i);
 
                             bool ok;
@@ -108,6 +109,7 @@ namespace MC
 
                             if (hex > 255)
                             {
+                                // Ej byteseparerad input
                                 if (arg.length() % 2 == 0)
                                 {
                                     // Jämnt antal tecken
@@ -473,7 +475,6 @@ namespace MC
         qint64 bytes_available = port_->bytesAvailable();
         QByteArray message = port_->readAll();
         emit out("Recieved " + QString::number(bytes_available) + " bytes.");
-        emit out("In ASCII: " + message);
         emit out("Raw data: " + utils::readableByteArray(message.toHex()) + "\n");
     }
 
