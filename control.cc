@@ -36,6 +36,18 @@ namespace MC
     {        
         switch (input.command())
         {
+        case UserInput::INVALID_COMMAND:
+        {
+            emit out("Invalid command '" + input.commandString() + "'\n");
+            break;
+        }
+
+        case UserInput::INVALID_ARGUMENT:
+        {
+            emit out("Invalid argument(s) for command '" + input.commandString() + "'\n");
+            break;
+        }
+
         case UserInput::HELP:
         {
             if (input.argumentCount() == 0)
@@ -300,7 +312,6 @@ namespace MC
             break;
         }
 
-        case UserInput::INVALID:
         default:
             break;
         }

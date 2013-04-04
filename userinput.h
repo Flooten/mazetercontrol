@@ -25,7 +25,8 @@ namespace MC
 
         enum Command
         {
-            INVALID,
+            INVALID_COMMAND,
+            INVALID_ARGUMENT,
             HELP,
             EXIT,
             TRANSMIT,

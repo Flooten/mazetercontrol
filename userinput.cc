@@ -36,7 +36,7 @@ namespace MC
 
     bool UserInput::isValid() const
     {
-        return !(command_ == INVALID);
+        return !(command_ == INVALID_COMMAND);
     }
 
     bool UserInput::isEmpty() const
@@ -96,7 +96,7 @@ namespace MC
         else if (command == "read")
             return READ;
         else
-            return INVALID;
+            return INVALID_COMMAND;
     }
 
     void UserInput::checkValid()
@@ -104,7 +104,8 @@ namespace MC
         int argument_count = argumentCount();
         switch (command_)
         {
-        case INVALID:
+        case INVALID_COMMAND:
+        case INVALID_ARGUMENT:
             break;
 
         case STATUS:
@@ -114,25 +115,25 @@ namespace MC
         case EXIT:
             if (argument_count > 0)
                 // Inget argument
-                command_ = INVALID;
+                command_ = INVALID_ARGUMENT;
             break;
 
         case HELP:
             if (argument_count > 1)
                 // Ett eller inget argument
-                command_ = INVALID;
+                command_ = INVALID_ARGUMENT;
             break;
 
         case READ:
             if (argument_count != 1)
                 // Exakt ett argument
-                command_ = INVALID;
+                command_ = INVALID_ARGUMENT;
             break;
 
         case SET:
             if (argument_count != 2)
                 // Exakt två argument
-                command_ = INVALID;
+                command_ = INVALID_ARGUMENT;
             break;
 
         case TRANSMIT:

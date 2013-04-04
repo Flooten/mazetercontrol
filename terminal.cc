@@ -48,7 +48,6 @@ namespace MC
             }
         }
 
-
         ui->lineEdit_command->installEventFilter(this);
 
         // Skriv ut välkomstmeddelande
@@ -137,12 +136,12 @@ namespace MC
                 stream << input_string << endl;
                 file.close();
             }
-
-            if (input.isValid())
-                // Parsa kommandot
-                mc->parseCommand(input);
             else
-                ui->textEdit_history->append("Invalid command: " + input.commandString());
+            {
+                emit out("Unable to open history file.");
+            }
+
+            mc->parseCommand(input);
         }
     }
 
