@@ -36,9 +36,9 @@ namespace MC
     private:
         // Variabler
         Ui::Terminal* ui;
-        Control* mc;
-        int current_line = 0;
-        QStringList history;
+        Control* mc_;
+        int current_line_ = 0;
+        QStringList history_;
 
         // Konstanter
         const QString INI_FILE = "mc.ini";
@@ -53,6 +53,7 @@ namespace MC
 
     private slots:
         void handleCommand();
+        void resetCurrentLine();
 
     };
 } // namespace MC

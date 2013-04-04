@@ -30,12 +30,13 @@ namespace MC
         setWindowTitle(windowTitle() + " " + utils::VERSION);
 
         // Skapa en instans av Control
-        mc = new Control(INI_FILE);
+        mc_ = new Control(INI_FILE);
 
         // Anslutningar
         connect(ui->lineEdit_command, SIGNAL(returnPressed()), this, SLOT(handleCommand()));
-        connect(mc, SIGNAL(out(QString)), this, SLOT(out(QString)));
-        connect(mc, SIGNAL(clear()), this, SLOT(clear()));
+        connect(ui->lineEdit_command, SIGNAL(editingFinished()), this, SLOT(resetCurrentLine()));
+        connect(mc_, SIGNAL(out(QString)), this, SLOT(out(QString)));
+        connect(mc_, SIGNAL(clear()), this, SLOT(clear()));
 
         // Historik
         QFile file(HIST_FILE);
@@ -44,14 +45,14 @@ namespace MC
         {
             while(!file.atEnd())
             {
-                history.prepend(file.readLine().trimmed());
+                history_.prepend(file.readLine().trimmed());
             }
         }
 
         ui->lineEdit_command->installEventFilter(this);
 
         // Skriv ut välkomstmeddelande
-        mc->printWelcomeMessage();
+        mc_->printWelcomeMessage();
     }
 
     Terminal::~Terminal()
@@ -63,44 +64,38 @@ namespace MC
      *  Private
      */
 
-    /*  */
+    /* Filter som fångar knapptryckningar för kommandoraden */
     bool Terminal::eventFilter(QObject* obj, QEvent *event)
     {
         if (obj == ui->lineEdit_command)
         {
             if (event->type() == QEvent::KeyPress)
             {
-                QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
-                if (keyEvent->key() == Qt::Key_Up)
-                {
-                    current_line++;
+                QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
 
-                    if(current_line <= history.size())
-                    {
-                        QString line = history[current_line - 1];
-                        ui->lineEdit_command->setText(line);
-                    }
-                    else
-                        current_line = history.size() - 1;
+                if (key_event->key() == Qt::Key_Up)
+                {
+                    // Mot äldre kommandon
+
+                    if (current_line_ != history_.size() - 1)
+                    // Öka om ej sista elementet
+                        ++current_line_;
+
+                    QString line = history_[current_line_].trimmed();
+                    ui->lineEdit_command->setText(line);
 
                     return true;
                 }
-                else if(keyEvent->key() == Qt::Key_Down)
+                else if(key_event->key() == Qt::Key_Down)
                 {
+                    // Mot nyare kommandon
 
-                    if(current_line > 0)
-                    {
-                        current_line--;
-                        QString line;
-                        line.trimmed();
+                    if (current_line_ != 0)
+                        // Minska om ej sista elementet
+                        --current_line_;
 
-                        if (current_line != 0)
-                            line = history[current_line - 1];
-
-                        ui->lineEdit_command->setText(line);
-                    }
-                    else
-                        current_line = 2;
+                    QString line = history_[current_line_].trimmed();
+                    ui->lineEdit_command->setText(line);
 
                     return true;
                 }
@@ -125,7 +120,7 @@ namespace MC
         {
             UserInput input(input_string);
 
-            history.prepend(input_string);
+            history_.prepend(input_string);
 
             // Sparar kommando i historiken
             QFile file(HIST_FILE);
@@ -141,8 +136,14 @@ namespace MC
                 emit out("Unable to open history file.");
             }
 
-            mc->parseCommand(input);
+            mc_->parseCommand(input);
         }
+    }
+
+    /* Slot för att återställa current_line_ när fokus lämnar kommandoraden */
+    void Terminal::resetCurrentLine()
+    {
+        current_line_ = 0;
     }
 
     /* Slot för att tillåta skrivning från andra objekt */
