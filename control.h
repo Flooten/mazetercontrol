@@ -1,3 +1,15 @@
+/*
+ * FILNAMN:       control.h
+ * PROJEKT:       MazeterControl
+ * PROGRAMMERARE: Marcus Eriksson
+ *                Herman Ekwall
+ * DATUM:         2013-04-03
+ *
+ * BESKRIVNING:   Control tillhandahåller all interface mot serieporten
+ *                från terminalen.
+ *
+ */
+
 #ifndef MAZETERCONTROL_H
 #define MAZETERCONTROL_H
 

@@ -1,9 +1,17 @@
+/*
+ * FILNAMN:       control.h
+ * PROJEKT:       MazeterControl
+ * PROGRAMMERARE: Marcus Eriksson
+ *                Herman Ekwall
+ * DATUM:         2013-04-03
+ *
+ */
+
 #include "control.h"
+#include "utils.h"
 
 #include <QStringList>
 #include <QFile>
-
-#include "utils.h"
 
 namespace MC
 {

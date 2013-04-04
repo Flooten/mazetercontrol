@@ -1,10 +1,18 @@
+/*
+ * FILNAMN:       terminal.h
+ * PROJEKT:       MazeterControl
+ * PROGRAMMERARE: Marcus Eriksson
+ *                Herman Ekwall
+ * DATUM:         2013-04-03
+ *
+ */
+
 #include "terminal.h"
 #include "ui_terminal.h"
-
-#include <QTextStream>
-
 #include "utils.h"
 #include "userinput.h"
+
+#include <QTextStream>
 
 namespace MC
 {

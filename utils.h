@@ -1,3 +1,15 @@
+/*
+ * FILNAMN:       utils.h
+ * PROJEKT:       MazeterControl
+ * PROGRAMMERARE: Marcus Eriksson
+ *                Herman Ekwall
+ * DATUM:         2013-04-03
+ *
+ * BESKRIVNING:   Definierar stödfunktioner som används av fler
+ *                än en klass.
+ *
+ */
+
 #ifndef UTILS_H
 #define UTILS_H
 

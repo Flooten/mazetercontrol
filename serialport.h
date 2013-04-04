@@ -1,3 +1,15 @@
+/*
+ * FILNAMN:       serialport.h
+ * PROJEKT:       MazeterControl
+ * PROGRAMMERARE: Marcus Eriksson
+ *                Herman Ekwall
+ * DATUM:         2013-04-03
+ *
+ * BESKRIVNING:   SerialPort är en wrapper för QextSerialPort
+ *                som tillhandahåller all interface mot serieporten.
+ *
+ */
+
 #ifndef SERIALPORT_H
 #define SERIALPORT_H
 

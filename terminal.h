@@ -1,3 +1,14 @@
+/*
+ * FILNAMN:       terminal.h
+ * PROJEKT:       MazeterControl
+ * PROGRAMMERARE: Marcus Eriksson
+ *                Herman Ekwall
+ * DATUM:         2013-04-03
+ *
+ * BESKRIVNING:   Terminal är den klass som innehåller det grafiska gränssnittet.
+ *
+ */
+
 #ifndef MAZETERCONTROLDIALOG_H
 #define MAZETERCONTROLDIALOG_H
 

@@ -1,3 +1,15 @@
+/*
+ * FILNAMN:       userinput.h
+ * PROJEKT:       MazeterControl
+ * PROGRAMMERARE: Marcus Eriksson
+ *                Herman Ekwall
+ * DATUM:         2013-04-03
+ *
+ * BESKRIVNING:   UserInput är en stödklass för att möjliggöra enkel
+ *                hantering av de kommandon som användaren matar in.
+ *
+ */
+
 #ifndef USERINPUT_H
 #define USERINPUT_H
 

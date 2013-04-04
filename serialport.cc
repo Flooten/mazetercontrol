@@ -1,5 +1,13 @@
-#include "serialport.h"
+/*
+ * FILNAMN:       serialport.h
+ * PROJEKT:       MazeterControl
+ * PROGRAMMERARE: Marcus Eriksson
+ *                Herman Ekwall
+ * DATUM:         2013-04-03
+ *
+ */
 
+#include "serialport.h"
 #include "utils.h"
 
 namespace MC
