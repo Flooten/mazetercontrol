@@ -3,7 +3,7 @@
  * PROJEKT:       MazeterControl
  * PROGRAMMERARE: Marcus Eriksson
  *                Herman Ekwall
- * DATUM:         2013-04-03
+ * DATUM:         2013-04-04
  *
  */
 
@@ -28,15 +28,10 @@ namespace MC
             command_string_.toLower();
 
             command_ = toCommand(command_string_);
-
-            // Kolla giltighet
-            checkValid();
         }
-    }
 
-    bool UserInput::isValid() const
-    {
-        return !(command_ == INVALID_COMMAND);
+        // Kolla giltighet
+        checkValid();
     }
 
     bool UserInput::isEmpty() const

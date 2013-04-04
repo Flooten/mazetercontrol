@@ -3,7 +3,7 @@
  * PROJEKT:       MazeterControl
  * PROGRAMMERARE: Marcus Eriksson
  *                Herman Ekwall
- * DATUM:         2013-04-03
+ * DATUM:         2013-04-04
  *
  * BESKRIVNING:   SerialPort är en wrapper för QextSerialPort
  *                som tillhandahåller all interface mot serieporten.

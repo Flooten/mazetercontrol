@@ -3,7 +3,7 @@
  * PROJEKT:       MazeterControl
  * PROGRAMMERARE: Marcus Eriksson
  *                Herman Ekwall
- * DATUM:         2013-04-03
+ * DATUM:         2013-04-04
  *
  * BESKRIVNING:   UserInput är en stödklass för att möjliggöra enkel
  *                hantering av de kommandon som användaren matar in.
@@ -38,7 +38,6 @@ namespace MC
             READ
         };
 
-        bool isValid() const;
         bool isEmpty() const;
 
         int argumentCount() const;
