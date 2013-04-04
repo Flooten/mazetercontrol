@@ -93,6 +93,8 @@ namespace MC
             return SET;
         else if (command == "status")
             return STATUS;
+        else if (command == "read")
+            return READ;
         else
             return INVALID;
     }
@@ -117,13 +119,19 @@ namespace MC
 
         case HELP:
             if (argument_count > 1)
-                // Ett argument
+                // Ett eller inget argument
+                command_ = INVALID;
+            break;
+
+        case READ:
+            if (argument_count != 1)
+                // Exakt ett argument
                 command_ = INVALID;
             break;
 
         case SET:
-            if (argument_count > 2)
-                // Två argument
+            if (argument_count != 2)
+                // Exakt två argument
                 command_ = INVALID;
             break;
 

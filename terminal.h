@@ -16,6 +16,7 @@
 
 #include <QDialog>
 #include <QString>
+#include <QKeyEvent>
 
 namespace Ui
 {
@@ -36,11 +37,15 @@ namespace MC
         // Variabler
         Ui::Terminal* ui;
         Control* mc;
+        int current_line = 0;
+        QStringList history;
 
         // Konstanter
         const QString INI_FILE = "mc.ini";
+        const QString HIST_FILE = ".mc_history";
 
         // Funktioner
+        bool eventFilter(QObject* obj, QEvent *event);
 
     public slots:
         void out(const QString& str);

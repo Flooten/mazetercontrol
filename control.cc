@@ -275,6 +275,31 @@ namespace MC
             break;
         }
 
+        case UserInput::READ:
+        {
+            // Läs en fil med kommandon på varje rad.
+            QFile file(input.argument(0));
+
+            emit out("Parsing file '" + input.argument(0) + "'\n");
+
+            if (file.open(QFile::ReadOnly))
+            {
+                while(!file.atEnd())
+                {
+                    QString line = file.readLine().trimmed();
+                    UserInput input(line);
+                    parseCommand(input);
+                }
+
+                emit out("Finished parsing the file.\n");
+            }
+            else
+            {
+                emit out("Error: Could not open the file.\n");
+            }
+            break;
+        }
+
         case UserInput::INVALID:
         default:
             break;

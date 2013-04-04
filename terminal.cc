@@ -13,6 +13,7 @@
 #include "userinput.h"
 
 #include <QTextStream>
+#include <QFile>
 
 namespace MC
 {
@@ -36,6 +37,20 @@ namespace MC
         connect(mc, SIGNAL(out(QString)), this, SLOT(out(QString)));
         connect(mc, SIGNAL(clear()), this, SLOT(clear()));
 
+        // Historik
+        QFile file(HIST_FILE);
+
+        if(file.open(QFile::ReadOnly | QFile::Text))
+        {
+            while(!file.atEnd())
+            {
+                history.prepend(file.readLine().trimmed());
+            }
+        }
+
+
+        ui->lineEdit_command->installEventFilter(this);
+
         // Skriv ut välkomstmeddelande
         mc->printWelcomeMessage();
     }
@@ -48,6 +63,53 @@ namespace MC
     /*
      *  Private
      */
+
+    /*  */
+    bool Terminal::eventFilter(QObject* obj, QEvent *event)
+    {
+        if (obj == ui->lineEdit_command)
+        {
+            if (event->type() == QEvent::KeyPress)
+            {
+                QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+                if (keyEvent->key() == Qt::Key_Up)
+                {
+                    current_line++;
+
+                    if(current_line <= history.size())
+                    {
+                        QString line = history[current_line - 1];
+                        ui->lineEdit_command->setText(line);
+                    }
+                    else
+                        current_line = history.size() - 1;
+
+                    return true;
+                }
+                else if(keyEvent->key() == Qt::Key_Down)
+                {
+
+                    if(current_line > 0)
+                    {
+                        current_line--;
+                        QString line;
+                        line.trimmed();
+
+                        if (current_line != 0)
+                            line = history[current_line - 1];
+
+                        ui->lineEdit_command->setText(line);
+                    }
+                    else
+                        current_line = 2;
+
+                    return true;
+                }
+            }
+            return false;
+        }
+        return QDialog::eventFilter(obj, event);
+    }
 
     /*
      *  Slots
@@ -63,6 +125,18 @@ namespace MC
         if (!input_string.isEmpty())
         {
             UserInput input(input_string);
+
+            history.prepend(input_string);
+
+            // Sparar kommando i historiken
+            QFile file(HIST_FILE);
+
+            if(file.open(QFile::Append | QFile::Text))
+            {
+                QTextStream stream(&file);
+                stream << input_string << endl;
+                file.close();
+            }
 
             if (input.isValid())
                 // Parsa kommandot

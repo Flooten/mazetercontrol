@@ -33,7 +33,8 @@ namespace MC
             OPEN,
             CLOSE,
             CLEAR,
-            SET
+            SET,
+            READ
         };
 
         bool isValid() const;
