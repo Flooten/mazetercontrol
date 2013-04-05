@@ -3,7 +3,7 @@
  * PROJEKT:       MazeterControl
  * PROGRAMMERARE: Marcus Eriksson
  *                Herman Ekwall
- * DATUM:         2013-04-04
+ * DATUM:         2013-04-05
  *
  */
 
@@ -38,7 +38,7 @@ namespace MC
         connect(mc_, SIGNAL(out(QString)), this, SLOT(out(QString)));
         connect(mc_, SIGNAL(clear()), this, SLOT(clear()));
 
-        // Historik
+        // Läs in historikfilen
         QFile file(HIST_FILE);
 
         if(file.open(QFile::ReadOnly | QFile::Text))
@@ -74,12 +74,18 @@ namespace MC
                 QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
 
                 if (key_event->key() == Qt::Key_Up)
-                {
+                {                  
                     // Mot äldre kommandon
-
-                    if (current_line_ != history_.size() - 1)
-                    // Öka om ej sista elementet
-                        ++current_line_;
+                    if (history_reset_)
+                    {
+                        history_reset_ = false;
+                    }
+                    else
+                    {
+                        if (current_line_ != history_.size() - 1)
+                        // Öka om ej sista elementet
+                            ++current_line_;
+                    }
 
                     QString line = history_[current_line_].trimmed();
                     ui->lineEdit_command->setText(line);
@@ -108,6 +114,8 @@ namespace MC
     /*
      *  Slots
      */
+
+    /* Hanterar ett nytt kommando */
     void Terminal::handleCommand()
     {
         // Hämta kommando
@@ -144,6 +152,7 @@ namespace MC
     void Terminal::resetCurrentLine()
     {
         current_line_ = 0;
+        history_reset_ = true;
     }
 
     /* Slot för att tillåta skrivning från andra objekt */
