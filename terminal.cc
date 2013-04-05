@@ -76,12 +76,15 @@ namespace MC
                 if (key_event->key() == Qt::Key_Up)
                 {
                     // Mot äldre kommandon
+                    QString line;
 
                     if (current_line_ != history_.size() - 1)
                     // Öka om ej sista elementet
                         ++current_line_;
 
-                    QString line = history_[current_line_].trimmed();
+                    if (!history_.isEmpty())
+                        line = history_[current_line_].trimmed();
+
                     ui->lineEdit_command->setText(line);
 
                     return true;
@@ -89,12 +92,16 @@ namespace MC
                 else if(key_event->key() == Qt::Key_Down)
                 {
                     // Mot nyare kommandon
+                    QString line;
 
                     if (current_line_ != 0)
                         // Minska om ej sista elementet
                         --current_line_;
 
-                    QString line = history_[current_line_].trimmed();
+
+                    if (!history_.isEmpty())
+                        line = history_[current_line_].trimmed();
+
                     ui->lineEdit_command->setText(line);
 
                     return true;
