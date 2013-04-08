@@ -3,7 +3,7 @@
  * PROJEKT:       MazeterControl
  * PROGRAMMERARE: Marcus Eriksson
  *                Herman Ekwall
- * DATUM:         2013-04-04
+ * DATUM:         2013-04-05
  *
  * BESKRIVNING:   Terminal är den klass som innehåller det grafiska gränssnittet.
  *
@@ -38,6 +38,7 @@ namespace MC
         Ui::Terminal* ui;
         Control* mc_;
         int current_line_ = 0;
+        bool history_reset_ = true;
         QStringList history_;
 
         // Konstanter
