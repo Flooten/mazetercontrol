@@ -116,58 +116,40 @@ namespace MC
                     }
                     else
                     {
-                        // Tolka som hex
+                        // Tolka som hex.
                         QByteArray message;
 
                         for (int i = 0; i < input.argumentCount(); ++i)
                         {
-                            // Gå igenom alla angivna argument
+                            // Gå igenom alla angivna argument.
                             QString arg = input.argument(i);
 
-                            bool ok;
-                            int hex = arg.toInt(&ok, 16);
-
-                            if (hex > 255)
+                            // Stöd för ej byteseparerad input.
+                            if (arg.length() % 2 == 0)
                             {
-                                // Ej byteseparerad input
-                                if (arg.length() % 2 == 0)
+                                // Jämnt antal tecken.
+                                for (int i = 0; i < arg.length(); i += 2)
                                 {
-                                    // Jämnt antal tecken
-                                    for (int i = 0; i < arg.length(); i += 2)
+                                    bool partial_ok;
+                                    QString partial_string = arg.mid(i, 2);
+
+                                    int partial_hex = partial_string.toInt(&partial_ok, 16);
+
+                                    if (partial_ok)
                                     {
-                                        bool partial_ok;
-                                        QString partial_string = arg.mid(i, 2);
-
-                                        int partial_hex = partial_string.toInt(&partial_ok, 16);
-
-                                        if (ok)
-                                        {
-                                            message.append(partial_hex);
-                                        }
-                                        else
-                                        {
-                                            emit out("Error: Not a valid hex input.\n");
-                                            return;
-                                        }
+                                        message.append(partial_hex);
                                     }
-                                }
-                                else
-                                {
-                                    emit out("Not an even number of characters.\n");
-                                    return;
+                                    else
+                                    {
+                                        emit out("Error: Not a valid hex input.\n");
+                                        return;
+                                    }
                                 }
                             }
                             else
                             {
-                                if (ok)
-                                {
-                                    message.append(hex);
-                                }
-                                else
-                                {
-                                    emit out("Error: Not a valid hex input.\n");
-                                    return;
-                                }
+                                emit out("Not an even number of characters.\n");
+                                return;
                             }
                         }
 

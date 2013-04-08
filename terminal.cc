@@ -76,7 +76,6 @@ namespace MC
                 QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
 
                 if (key_event->key() == Qt::Key_Up)
-                {
                 {                  
                     // Mot äldre kommandon
 
@@ -90,10 +89,6 @@ namespace MC
                         // Öka om ej sista elementet
                             ++current_line_;
                     }
-
-                    if (current_line_ != history_.size() - 1)
-                    // Öka om ej sista elementet
-                        ++current_line_;
 
                     QString line = history_[current_line_].trimmed();
                     ui->lineEdit_command->setText(line);
