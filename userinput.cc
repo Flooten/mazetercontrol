@@ -90,6 +90,8 @@ namespace MC
             return STATUS;
         else if (command == "read")
             return READ;
+        else if (command == "ffconfig")
+            return FIREFLY_CONFIG;
         else
             return INVALID_COMMAND;
     }
@@ -108,6 +110,7 @@ namespace MC
         case CLOSE:
         case CLEAR:
         case EXIT:
+        case FIREFLY_CONFIG:
             if (argument_count > 0)
                 // Inget argument
                 command_ = INVALID_ARGUMENT;

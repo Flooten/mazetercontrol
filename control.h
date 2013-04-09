@@ -34,6 +34,8 @@ namespace MC
 
     private:
         // Variabler
+        bool firefly_config_mode_ = false;
+
         QString welcome_message_;
         QString help_message_;
         QMap<QString, QString> help_texts_;

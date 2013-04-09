@@ -78,7 +78,24 @@ namespace MC
             {
                 if (port_->isOpen())
                 {
-                    if (input.argument(0).startsWith("0b"))
+                    if (firefly_config_mode_)
+                    {
+                        // Tolka som sträng
+                        QString message = input.argument(0);
+
+                        if (message.endsWith("&&"))
+                        {
+                            message.remove("&&");
+                            message.append("\r\n");
+                        }
+
+                        emit out("Transmitting configuration command...");
+                        emit out("In ASCII:" + message);
+
+                        port_->transmit(message);
+
+                    }
+                    else if (input.argument(0).startsWith("0b"))
                     {
                         // Binärt skall skickas
                         QByteArray message;
@@ -294,6 +311,20 @@ namespace MC
             break;
         }
 
+        case UserInput::FIREFLY_CONFIG:
+        {
+            if (firefly_config_mode_)
+            {
+                emit out("Leaving firefly configuration mode...\n");
+                firefly_config_mode_ = false;
+            }
+            else
+            {
+                emit out("Entering firefly configuration mode...\n");
+                firefly_config_mode_ = true;
+            }
+        }
+
         default:
             break;
         }
@@ -361,6 +392,10 @@ namespace MC
                         else if (argument == "help_transmit")
                         {
                             help_texts_.insert("transmit", readUntilEnd(stream));
+                        }
+                        else if (argument == "help_ffconfig")
+                        {
+                            help_texts_.insert("ffconfig", readUntilEnd(stream));
                         }
                         else if (argument == "port")
                         {
@@ -500,8 +535,16 @@ namespace MC
     {
         qint64 bytes_available = port_->bytesAvailable();
         QByteArray message = port_->readAll();
-        emit out("Recieved " + QString::number(bytes_available) + " bytes.");
-        emit out("Raw data: " + utils::readableByteArray(message.toHex()) + "\n");
+
+        if (firefly_config_mode_)
+        {
+            emit out(message);
+        }
+        else
+        {
+            emit out("Recieved " + QString::number(bytes_available) + " bytes.\n");
+            emit out("Raw data: " + utils::readableByteArray(message.toHex()) + "\n");
+        }
     }
 
     /* Rapportera om fullbordad sändning */

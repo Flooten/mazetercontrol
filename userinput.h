@@ -35,7 +35,8 @@ namespace MC
             CLOSE,
             CLEAR,
             SET,
-            READ
+            READ,
+            FIREFLY_CONFIG
         };
 
         bool isEmpty() const;
