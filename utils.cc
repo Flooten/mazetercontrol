@@ -146,6 +146,14 @@ namespace MC
             }
         }
 
+        QString toString(const bool logic)
+        {
+            if (logic)
+                return "On";
+            else
+                return "Off";
+        }
+
         QString readableByteArray(const QByteArray& ba)
         {
             QString str(ba);

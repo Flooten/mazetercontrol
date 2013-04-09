@@ -34,6 +34,7 @@ namespace MC
         QString toString(DataBitsType data_bits);
         QString toString(ParityType parity);
         QString toString(StopBitsType stop_bits);
+        QString toString(const bool logic);
 
         // Stycka upp en QByteArray i ett mer läsligt format
         QString readableByteArray(const QByteArray& ba);

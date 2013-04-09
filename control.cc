@@ -190,7 +190,8 @@ namespace MC
                      "\nBaud rate: \t\t" + utils::toString(port_->baudRate()) +
                      "\nData bits: \t\t" + utils::toString(port_->dataBits()) +
                      "\nParity: \t\t" + utils::toString(port_->parity()) +
-                     "\nStop bits: \t\t" + utils::toString(port_->stopBits()) + "\n");
+                     "\nStop bits: \t\t" + utils::toString(port_->stopBits()) +
+                     "\nFirefly config. mode: \t" + utils::toString(firefly_config_mode_) + "\n");
             break;
         }
 
