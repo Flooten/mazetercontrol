@@ -17,7 +17,7 @@ namespace MC
         , port_(new QextSerialPort())
     {
         setupConnections();
-        //port_->setTimeout(TIMEOUT);
+        port_->setTimeout(TIMEOUT);
     }
 
     SerialPort::SerialPort(const QString& port_name, const QString& baud_rate, const QString& data_bits, const QString& parity, const QString& stop_bits)
@@ -29,7 +29,7 @@ namespace MC
         port_ = new QextSerialPort(port_name, port_settings_, QextSerialPort::EventDriven);
 
         setupConnections();
-        //port_->setTimeout(TIMEOUT);
+        port_->setTimeout(TIMEOUT);
     }
 
     SerialPort::~SerialPort()

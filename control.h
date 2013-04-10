@@ -21,6 +21,7 @@
 #include <QMap>
 #include <QTextStream>
 #include <QKeyEvent>
+#include <QByteArray>
 
 namespace MC
 {
@@ -44,7 +45,11 @@ namespace MC
 
         SerialPort* port_;
 
+        QByteArray data_;
+        int received_byte_count_ = 0;
+
         // Funktioner
+        void transmit(int command);
         void parseIniFile(const QString& ini_file);
         void readLine(QString& str, QString& command, QString& argument);
         void readAssignArgument(const QString& argument, QString& name, QString& value);

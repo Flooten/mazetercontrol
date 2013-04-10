@@ -9,6 +9,7 @@
 
 #include "control.h"
 #include "utils.h"
+#include "commandtable.h"
 
 #include <QStringList>
 #include <QFile>
@@ -333,17 +334,14 @@ namespace MC
 
     void Control::handleKeyPressEvent(const QKeyEvent* event)
     {
+        // Hantera knapptryckningar.
         switch(event->key())
         {
         case Qt::Key_Up:
-        {
-            UserInput input("transmit 20 03 01 01 01");
-
-            parseCommand(input);
-
+            emit out("Command: Steer straight.");
+            transmit(STEER_ROTATE_RIGHT);
             break;
-        }
-            // Hantera knapptryckningar.
+
         default:
             break;
         }
@@ -358,6 +356,22 @@ namespace MC
     /*
      *  Private
      */
+
+    /* Skicka fördefinierade meddelanden */
+    void Control::transmit(int command)
+    {
+        QByteArray message;
+
+        // Lägg till kommandot
+        message.append(command);
+
+        // Sätt size = 0
+        int size = 0;
+        message.append(size);
+
+        emit out("Transmitting... ");
+        port_->transmit(message);
+    }
 
     /*  Parsar ini-filen angiven i ini_file */
     void Control::parseIniFile(const QString& ini_file)
@@ -553,16 +567,37 @@ namespace MC
     void Control::readData()
     {
         qint64 bytes_available = port_->bytesAvailable();
-        QByteArray message = port_->readAll();
 
-        if (firefly_config_mode_)
+        data_.append(port_->readAll());
+        received_byte_count_ += bytes_available;
+
+        if (received_byte_count_ >= 2)
         {
-            emit out(message);
-        }
-        else
-        {
-            emit out("Recieved " + QString::number(bytes_available) + " bytes.\n");
-            emit out("Raw data: " + utils::readableByteArray(message.toHex()) + "\n");
+            if (received_byte_count_ - 2 == data_[1])
+            {
+                // Mottagning färdig
+                if (firefly_config_mode_)
+                {
+                    emit out(data_);
+                }
+                else
+                {
+                    emit out("Recieved " + QString::number(bytes_available) + " bytes.\n");
+
+                    if (data_.at(0) == SEND_STRING)
+                    {
+                        // Tolka resten som sträng
+                        data_.remove(0, 1);
+                        emit out("In ASCII: " + data_);
+                    }
+
+                    emit out("Raw data: " + utils::readableByteArray(data_.toHex()) + "\n");
+                }
+
+                // Nollställ
+                data_.clear();
+                received_byte_count_ = 0;
+            }
         }
     }
 

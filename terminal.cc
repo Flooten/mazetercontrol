@@ -116,6 +116,7 @@ namespace MC
         return QDialog::eventFilter(obj, event);
     }
 
+    /* Fångar knapptryckningar */
     void Terminal::keyPressEvent(QKeyEvent *event)
     {
         // Vidarebefordra till MC
