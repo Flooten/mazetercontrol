@@ -26,6 +26,9 @@ background-color: rgb(31, 31, 31);</string>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QTextEdit" name="textEdit_history">
+       <property name="focusPolicy">
+        <enum>Qt::WheelFocus</enum>
+       </property>
        <property name="styleSheet">
         <string notr="true">QTextEdit {
 background-color: rgb(0, 0, 0);

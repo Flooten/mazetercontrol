@@ -3,7 +3,7 @@
  * PROJEKT:       MazeterControl
  * PROGRAMMERARE: Marcus Eriksson
  *                Herman Ekwall
- * DATUM:         2013-04-04
+ * DATUM:         2013-04-10
  *
  */
 
@@ -326,6 +326,24 @@ namespace MC
             }
         }
 
+        default:
+            break;
+        }
+    }
+
+    void Control::handleKeyPressEvent(const QKeyEvent* event)
+    {
+        switch(event->key())
+        {
+        case Qt::Key_Up:
+        {
+            UserInput input("transmit 20 03 01 01 01");
+
+            parseCommand(input);
+
+            break;
+        }
+            // Hantera knapptryckningar.
         default:
             break;
         }

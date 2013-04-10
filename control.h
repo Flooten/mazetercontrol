@@ -20,6 +20,7 @@
 #include <QString>
 #include <QMap>
 #include <QTextStream>
+#include <QKeyEvent>
 
 namespace MC
 {
@@ -30,6 +31,7 @@ namespace MC
         explicit Control(const QString& ini_file, QObject *parent = 0);
 
         void parseCommand(const UserInput& input);
+        void handleKeyPressEvent(const QKeyEvent* event);
         void printWelcomeMessage();
 
     private:

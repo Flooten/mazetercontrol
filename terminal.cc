@@ -30,6 +30,8 @@ namespace MC
         // Uppdatera fönsterrubriken
         setWindowTitle(windowTitle() + " " + utils::VERSION);
 
+        this->setFocusPolicy(Qt::StrongFocus);
+
         // Skapa en instans av Control
         mc_ = new Control(INI_FILE);
 
@@ -114,6 +116,15 @@ namespace MC
         return QDialog::eventFilter(obj, event);
     }
 
+    void Terminal::keyPressEvent(QKeyEvent *event)
+    {
+        // Vidarebefordra till MC
+        mc_->handleKeyPressEvent(event);
+
+        // Förhindra att eventet kaskadar nedåt.
+        event->accept();
+    }
+
     /*
      *  Slots
      */
@@ -156,6 +167,7 @@ namespace MC
     {
         current_line_ = 0;
         history_reset_ = true;
+        //setFocus();
     }
 
     /* Slot för att tillåta skrivning från andra objekt */
