@@ -566,10 +566,9 @@ namespace MC
     /* Läs den inkomna datan och skriv den till terminalen */
     void Control::readData()
     {
-        qint64 bytes_available = port_->bytesAvailable();
-
+        // Läs porten
+        received_byte_count_ += port_->bytesAvailable();
         data_.append(port_->readAll());
-        received_byte_count_ += bytes_available;
 
         if (received_byte_count_ >= 2)
         {
@@ -582,7 +581,7 @@ namespace MC
                 }
                 else
                 {
-                    emit out("Recieved " + QString::number(bytes_available) + " bytes.\n");
+                    emit out("Recieved " + QString::number(received_byte_count_) + " bytes.\n");
 
                     if (data_.at(0) == SEND_STRING)
                     {
