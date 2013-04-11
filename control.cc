@@ -339,7 +339,47 @@ namespace MC
         {
         case Qt::Key_Up:
             emit out("Command: Steer straight.");
-            transmit(STEER_ROTATE_RIGHT);
+            transmitCommand(STEER_STRAIGHT);
+            break;
+
+        case Qt::Key_Down:
+            emit out("Command: Steer back.");
+            transmitCommand(STEER_BACK);
+            break;
+
+        case Qt::Key_S:
+            emit out("Command: Steer stop.");
+            transmitCommand(STEER_STOP);
+            break;
+
+        case Qt::Key_Left:
+            emit out("Command: Steer left.");
+            transmitCommand(STEER_STRAIGHT_LEFT);
+            break;
+
+        case Qt::Key_Right:
+            emit out("Command: Steer right.");
+            transmitCommand(STEER_STRAIGHT_RIGHT);
+            break;
+
+        case Qt::Key_A:
+            emit out("Command: Steer left.");
+            transmitCommand(STEER_ROTATE_LEFT);
+            break;
+
+        case Qt::Key_D:
+            emit out("Command: Steer right.");
+            transmitCommand(STEER_ROTATE_RIGHT);
+            break;
+
+        case Qt::Key_G:
+            emit out("Command: Close Claw.");
+            transmitCommand(CLAW_CLOSE);
+            break;
+
+        case Qt::Key_B:
+            emit out("Command: Open Claw.");
+            transmitCommand(CLAW_OPEN);
             break;
 
         default:

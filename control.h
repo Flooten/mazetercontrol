@@ -49,7 +49,7 @@ namespace MC
         int received_byte_count_ = 0;
 
         // Funktioner
-        void transmit(int command);
+        void transmitCommand(int command);
         void parseIniFile(const QString& ini_file);
         void readLine(QString& str, QString& command, QString& argument);
         void readAssignArgument(const QString& argument, QString& name, QString& value);
