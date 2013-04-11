@@ -117,19 +117,17 @@ namespace MC
                 }
 
                 default:
+                    // Hantera inte eventet.
                     return false;
                 }
             }
             case QEvent::KeyRelease:
-            {
-                QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
-                key_event->accept();
-            }
+                event->accept();
+                return true;
 
             default:
-                break;
+                return false;
             }
-            return false;
         }
         return QDialog::eventFilter(obj, event);
     }
@@ -137,21 +135,35 @@ namespace MC
     /* Fångar knapptryckningar */
     void Terminal::keyPressEvent(QKeyEvent* event)
     {
-        // Vidarebefordra till MC
-        mc_->handleKeyPressEvent(event);
-
-        // Förhindra att eventet kaskadar nedåt.
-        event->accept();
+        if (event->isAutoRepeat())
+        {
+            // Ignorera eventet om återupprepat event.
+            event->ignore();
+        }
+        else
+        {
+            // Vidarebefordra till MC
+            mc_->handleKeyPressEvent(event);
+            // Förhindra att eventet kaskadar vidare.
+            event->accept();
+        }
     }
 
     /* Fångar knappsläppningar */
     void Terminal::keyReleaseEvent(QKeyEvent* event)
     {
-        // Vidarebefordra till MC
-        mc_->handleKeyReleaseEvent(event);
-
-        // Förhindra att eventet kaskadar nedåt.
-        event->accept();
+        if (event->isAutoRepeat())
+        {
+            // Ignorera eventet om återupprepat event.
+            event->ignore();
+        }
+        else
+        {
+            // Vidarebefordra till MC
+            mc_->handleKeyReleaseEvent(event);
+            // Förhindra att eventet kaskadar vidare.
+            event->accept();
+        }
     }
 
     /*

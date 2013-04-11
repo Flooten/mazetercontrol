@@ -46,14 +46,12 @@ namespace MC
         QString welcome_message_;
         QString help_message_;
         QMap<QString, QString> help_texts_;
-        QTimer* key_timer_;
-        bool accept_key_presses_ = true;
+
+        QByteArray data_;
+        QByteArray acknowledge_message_;
         bool bt_connected_ = false;
 
         SerialPort* port_;
-
-        QByteArray data_;
-        int received_byte_count_ = 0;
 
         // Funktioner
         void transmitCommand(int command);
@@ -70,9 +68,6 @@ namespace MC
     public slots:
         void readData();
         void reportWrite(qint64 bytes_written);
-
-    private slots:
-        void acceptKeyPresses();
     };
 } // namespace MC
 

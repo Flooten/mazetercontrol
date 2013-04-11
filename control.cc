@@ -23,23 +23,23 @@ namespace MC
     Control::Control(const QString &ini_file, QObject *parent)
         : QObject(parent)
     {
+        // Parsa ini-filen
         parseIniFile(ini_file);
 
-        key_timer_ = new QTimer();
-
-        key_timer_->start(1000);
+        // Skapa ett acknowledge-meddelade att lyssna efter.
+        acknowledge_message_.resize(2);
+        acknowledge_message_[0] = BT_CONNECT;
+        acknowledge_message_[1] = 0x0;
 
         // Anslutningar
         connect(port_, SIGNAL(readyRead()), this, SLOT(readData()));
         connect(port_, SIGNAL(bytesWritten(qint64)), this, SLOT(reportWrite(qint64)));
-        connect(key_timer_, SIGNAL(timeout()), this, SLOT(acceptKeyPresses()));
     }
 
     Control::~Control()
     {
         // Underrätta kommunikationsenheten.
         transmitCommand(BT_DISCONNECT);
-        delete key_timer_;
         delete port_;
     }
 
@@ -361,62 +361,56 @@ namespace MC
     /* Hantera knapptryckningar */
     void Control::handleKeyPressEvent(QKeyEvent* event)
     {
-        if (accept_key_presses_)
+        // Hantera knapptryckningar.
+        switch(event->key())
         {
-            // Hantera knapptryckningar.
-            switch(event->key())
-            {
-            case Qt::Key_Up:
-                emit out("Command: Steer straight.");
-                transmitCommand(STEER_STRAIGHT);
-                break;
+        case Qt::Key_Up:
+            emit out("Command: Steer straight.");
+            transmitCommand(STEER_STRAIGHT);
+            break;
 
-            case Qt::Key_Down:
-                emit out("Command: Steer back.");
-                transmitCommand(STEER_BACK);
-                break;
+        case Qt::Key_Down:
+            emit out("Command: Steer back.");
+            transmitCommand(STEER_BACK);
+            break;
 
-            case Qt::Key_S:
-                emit out("Command: Steer stop.");
-                transmitCommand(STEER_STOP);
-                break;
+        case Qt::Key_S:
+            emit out("Command: Steer stop.");
+            transmitCommand(STEER_STOP);
+            break;
 
-            case Qt::Key_Left:
-                emit out("Command: Steer left.");
-                transmitCommand(STEER_STRAIGHT_LEFT);
-                break;
+        case Qt::Key_Left:
+            emit out("Command: Steer left.");
+            transmitCommand(STEER_STRAIGHT_LEFT);
+            break;
 
-            case Qt::Key_Right:
-                emit out("Command: Steer right.");
-                transmitCommand(STEER_STRAIGHT_RIGHT);
-                break;
+        case Qt::Key_Right:
+            emit out("Command: Steer right.");
+            transmitCommand(STEER_STRAIGHT_RIGHT);
+            break;
 
-            case Qt::Key_A:
-                emit out("Command: Steer left.");
-                transmitCommand(STEER_ROTATE_LEFT);
-                break;
+        case Qt::Key_A:
+            emit out("Command: Steer left.");
+            transmitCommand(STEER_ROTATE_LEFT);
+            break;
 
-            case Qt::Key_D:
-                emit out("Command: Steer right.");
-                transmitCommand(STEER_ROTATE_RIGHT);
-                break;
+        case Qt::Key_D:
+            emit out("Command: Steer right.");
+            transmitCommand(STEER_ROTATE_RIGHT);
+            break;
 
-            case Qt::Key_G:
-                emit out("Command: Close Claw.");
-                transmitCommand(CLAW_CLOSE);
-                break;
+        case Qt::Key_G:
+            emit out("Command: Close Claw.");
+            transmitCommand(CLAW_CLOSE);
+            break;
 
-            case Qt::Key_B:
-                emit out("Command: Open Claw.");
-                transmitCommand(CLAW_OPEN);
-                break;
+        case Qt::Key_B:
+            emit out("Command: Open Claw.");
+            transmitCommand(CLAW_OPEN);
+            break;
 
-            default:
-                break;
-            }
-
-            event->accept();
-            accept_key_presses_ = false;
+        default:
+            break;
         }
     }
 
@@ -434,8 +428,6 @@ namespace MC
         default:
             break;
         }
-
-        event->accept();
     }
 
     /* Skriv ut hjälptexten */
@@ -688,14 +680,9 @@ namespace MC
         data_.append(port_->readAll());
 
         // Lyssna efter acc från kommunikationsenheten.
-        QByteArray acc;
-        acc.resize(2);
-        acc[0] = BT_CONNECT;
-        acc[1] = 0x0;
-
-        if (!bt_connected_ && data_.contains(acc))
+        if (!bt_connected_ && data_.contains(acknowledge_message_))
         {
-            int index = data_.indexOf(acc);
+            int index = data_.indexOf(acknowledge_message_);
             data_.remove(0, index + 2);
             bt_connected_ = true;
         }
@@ -737,10 +724,5 @@ namespace MC
             emit out("Transmission succeeded. " + QString::number(bytes_written) + " bytes were sent.\n");
         else
             emit out("Transmission failed. No bytes were sent.\n");
-    }
-
-    void Control::acceptKeyPresses()
-    {
-        accept_key_presses_ = true;
     }
 } // namespace MC
