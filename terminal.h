@@ -47,7 +47,8 @@ namespace MC
 
         // Funktioner
         bool eventFilter(QObject* obj, QEvent *event);
-        void keyPressEvent(QKeyEvent *event);
+        void keyPressEvent(QKeyEvent* event);
+        void keyReleaseEvent(QKeyEvent* event);
 
     public slots:
         void out(const QString& str);

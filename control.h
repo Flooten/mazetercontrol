@@ -22,6 +22,7 @@
 #include <QTextStream>
 #include <QKeyEvent>
 #include <QByteArray>
+#include <QTimer>
 
 namespace MC
 {
@@ -31,8 +32,11 @@ namespace MC
     public:
         explicit Control(const QString& ini_file, QObject *parent = 0);
 
+        ~Control();
+
         void parseCommand(const UserInput& input);
-        void handleKeyPressEvent(const QKeyEvent* event);
+        void handleKeyPressEvent(QKeyEvent *event);
+        void handleKeyReleaseEvent(QKeyEvent* event);
         void printWelcomeMessage();
 
     private:
@@ -42,6 +46,9 @@ namespace MC
         QString welcome_message_;
         QString help_message_;
         QMap<QString, QString> help_texts_;
+        QTimer* key_timer_;
+        bool accept_key_presses_ = true;
+        bool bt_connected_ = false;
 
         SerialPort* port_;
 
@@ -50,6 +57,7 @@ namespace MC
 
         // Funktioner
         void transmitCommand(int command);
+        void printData(QByteArray data);
         void parseIniFile(const QString& ini_file);
         void readLine(QString& str, QString& command, QString& argument);
         void readAssignArgument(const QString& argument, QString& name, QString& value);
@@ -62,6 +70,9 @@ namespace MC
     public slots:
         void readData();
         void reportWrite(qint64 bytes_written);
+
+    private slots:
+        void acceptKeyPresses();
     };
 } // namespace MC
 

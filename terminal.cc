@@ -73,12 +73,16 @@ namespace MC
     {
         if (obj == ui->lineEdit_command)
         {
-            if (event->type() == QEvent::KeyPress)
+            switch (event->type())
+            {
+            case QEvent::KeyPress:
             {
                 QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
 
-                if (key_event->key() == Qt::Key_Up)
-                {                  
+                switch (key_event->key())
+                {
+                case Qt::Key_Up:
+                {
                     // Mot äldre kommandon
 
                     if (history_reset_)
@@ -97,7 +101,8 @@ namespace MC
 
                     return true;
                 }
-                else if(key_event->key() == Qt::Key_Down)
+
+                case Qt::Key_Down:
                 {
                     // Mot nyare kommandon
 
@@ -110,6 +115,19 @@ namespace MC
 
                     return true;
                 }
+
+                default:
+                    return false;
+                }
+            }
+            case QEvent::KeyRelease:
+            {
+                QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
+                key_event->accept();
+            }
+
+            default:
+                break;
             }
             return false;
         }
@@ -117,10 +135,20 @@ namespace MC
     }
 
     /* Fångar knapptryckningar */
-    void Terminal::keyPressEvent(QKeyEvent *event)
+    void Terminal::keyPressEvent(QKeyEvent* event)
     {
         // Vidarebefordra till MC
         mc_->handleKeyPressEvent(event);
+
+        // Förhindra att eventet kaskadar nedåt.
+        event->accept();
+    }
+
+    /* Fångar knappsläppningar */
+    void Terminal::keyReleaseEvent(QKeyEvent* event)
+    {
+        // Vidarebefordra till MC
+        mc_->handleKeyReleaseEvent(event);
 
         // Förhindra att eventet kaskadar nedåt.
         event->accept();

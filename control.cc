@@ -10,6 +10,7 @@
 #include "control.h"
 #include "utils.h"
 #include "commandtable.h"
+#include <windows.h> // Sleep
 
 #include <QStringList>
 #include <QFile>
@@ -24,9 +25,22 @@ namespace MC
     {
         parseIniFile(ini_file);
 
+        key_timer_ = new QTimer();
+
+        key_timer_->start(1000);
+
         // Anslutningar
         connect(port_, SIGNAL(readyRead()), this, SLOT(readData()));
         connect(port_, SIGNAL(bytesWritten(qint64)), this, SLOT(reportWrite(qint64)));
+        connect(key_timer_, SIGNAL(timeout()), this, SLOT(acceptKeyPresses()));
+    }
+
+    Control::~Control()
+    {
+        // Underrätta kommunikationsenheten.
+        transmitCommand(BT_DISCONNECT);
+        delete key_timer_;
+        delete port_;
     }
 
     /*
@@ -208,16 +222,28 @@ namespace MC
 
             // Öppna porten
             if (port_->open())
+            {
                 emit out("Port " + port_->portName() + " open.\n");
+
+                // Underrätta kommunikationsenheten.
+                transmitCommand(BT_CONNECT);
+            }
             else
+            {
                 emit out("Unable to open port " +  port_->portName() + ".\n");
+            }
             break;
         }
 
         case UserInput::CLOSE:
         {
             emit out("Closing port " + port_->portName());
+
+            // Underrätta kommunikationsenheten.
+            transmitCommand(BT_DISCONNECT);
+            port_->flush();
             port_->close();
+            bt_connected_ = false;
             emit out("Port " + port_->portName() + " closed.\n");
             break;
         }
@@ -332,59 +358,84 @@ namespace MC
         }
     }
 
-    void Control::handleKeyPressEvent(const QKeyEvent* event)
+    /* Hantera knapptryckningar */
+    void Control::handleKeyPressEvent(QKeyEvent* event)
     {
-        // Hantera knapptryckningar.
+        if (accept_key_presses_)
+        {
+            // Hantera knapptryckningar.
+            switch(event->key())
+            {
+            case Qt::Key_Up:
+                emit out("Command: Steer straight.");
+                transmitCommand(STEER_STRAIGHT);
+                break;
+
+            case Qt::Key_Down:
+                emit out("Command: Steer back.");
+                transmitCommand(STEER_BACK);
+                break;
+
+            case Qt::Key_S:
+                emit out("Command: Steer stop.");
+                transmitCommand(STEER_STOP);
+                break;
+
+            case Qt::Key_Left:
+                emit out("Command: Steer left.");
+                transmitCommand(STEER_STRAIGHT_LEFT);
+                break;
+
+            case Qt::Key_Right:
+                emit out("Command: Steer right.");
+                transmitCommand(STEER_STRAIGHT_RIGHT);
+                break;
+
+            case Qt::Key_A:
+                emit out("Command: Steer left.");
+                transmitCommand(STEER_ROTATE_LEFT);
+                break;
+
+            case Qt::Key_D:
+                emit out("Command: Steer right.");
+                transmitCommand(STEER_ROTATE_RIGHT);
+                break;
+
+            case Qt::Key_G:
+                emit out("Command: Close Claw.");
+                transmitCommand(CLAW_CLOSE);
+                break;
+
+            case Qt::Key_B:
+                emit out("Command: Open Claw.");
+                transmitCommand(CLAW_OPEN);
+                break;
+
+            default:
+                break;
+            }
+
+            event->accept();
+            accept_key_presses_ = false;
+        }
+    }
+
+    /* Hantera knappsläppning */
+    void Control::handleKeyReleaseEvent(QKeyEvent* event)
+    {
         switch(event->key())
         {
         case Qt::Key_Up:
-            emit out("Command: Steer straight.");
-            transmitCommand(STEER_STRAIGHT);
-            break;
-
         case Qt::Key_Down:
-            emit out("Command: Steer back.");
-            transmitCommand(STEER_BACK);
-            break;
-
-        case Qt::Key_S:
-            emit out("Command: Steer stop.");
+            emit out("Command: Stop.");
             transmitCommand(STEER_STOP);
-            break;
-
-        case Qt::Key_Left:
-            emit out("Command: Steer left.");
-            transmitCommand(STEER_STRAIGHT_LEFT);
-            break;
-
-        case Qt::Key_Right:
-            emit out("Command: Steer right.");
-            transmitCommand(STEER_STRAIGHT_RIGHT);
-            break;
-
-        case Qt::Key_A:
-            emit out("Command: Steer left.");
-            transmitCommand(STEER_ROTATE_LEFT);
-            break;
-
-        case Qt::Key_D:
-            emit out("Command: Steer right.");
-            transmitCommand(STEER_ROTATE_RIGHT);
-            break;
-
-        case Qt::Key_G:
-            emit out("Command: Close Claw.");
-            transmitCommand(CLAW_CLOSE);
-            break;
-
-        case Qt::Key_B:
-            emit out("Command: Open Claw.");
-            transmitCommand(CLAW_OPEN);
             break;
 
         default:
             break;
         }
+
+        event->accept();
     }
 
     /* Skriv ut hjälptexten */
@@ -398,7 +449,7 @@ namespace MC
      */
 
     /* Skicka fördefinierade meddelanden */
-    void Control::transmit(int command)
+    void Control::transmitCommand(int command)
     {
         QByteArray message;
 
@@ -409,8 +460,35 @@ namespace MC
         int size = 0;
         message.append(size);
 
+        if (command == BT_DISCONNECT)
+        {
+            bt_connected_ = false;
+        }
+
         emit out("Transmitting... ");
         port_->transmit(message);
+    }
+
+    void Control::printData(QByteArray data)
+    {
+        if (firefly_config_mode_)
+        {
+            emit out(data);
+        }
+        else
+        {
+            if (data.at(0) == SEND_STRING)
+            {
+                // Tolka resten som en sträng
+                data.remove(0, 2);
+                emit out("In ASCII: " + data);
+            }
+            else
+            {
+                emit out("Recieved " + QString::number(data.length()) + " bytes.");
+                emit out("Raw data: " + utils::readableByteArray(data.toHex()) + "\n");
+            }
+        }
     }
 
     /*  Parsar ini-filen angiven i ini_file */
@@ -607,35 +685,47 @@ namespace MC
     void Control::readData()
     {
         // Läs porten
-        received_byte_count_ += port_->bytesAvailable();
         data_.append(port_->readAll());
 
-        if (received_byte_count_ >= 2)
+        // Lyssna efter acc från kommunikationsenheten.
+        QByteArray acc;
+        acc.resize(2);
+        acc[0] = BT_CONNECT;
+        acc[1] = 0x0;
+
+        if (!bt_connected_ && data_.contains(acc))
         {
-            if (received_byte_count_ - 2 == data_[1])
+            int index = data_.indexOf(acc);
+            data_.remove(0, index + 2);
+            bt_connected_ = true;
+        }
+
+        while (data_.length() >= 2)
+        {
+            // Hantera fallet att det sista meddelandet har size 0
+            if (data_.length() == 2 && data_.at(1) == 0)
             {
-                // Mottagning färdig
-                if (firefly_config_mode_)
-                {
-                    emit out(data_);
-                }
-                else
-                {
-                    emit out("Recieved " + QString::number(received_byte_count_) + " bytes.\n");
-
-                    if (data_.at(0) == SEND_STRING)
-                    {
-                        // Tolka resten som sträng
-                        data_.remove(0, 1);
-                        emit out("In ASCII: " + data_);
-                    }
-
-                    emit out("Raw data: " + utils::readableByteArray(data_.toHex()) + "\n");
-                }
+                // Presentera
+                printData(data_);
 
                 // Nollställ
                 data_.clear();
-                received_byte_count_ = 0;
+            }
+            else
+            {
+                // Avsluta om data_ innehåller ett ofullständigt meddelande.
+                if (data_.at(1) > data_.length() - 2)
+                    return;
+
+                // Ett helt eller mer än ett helt meddelande emottaget.
+                if (data_.length() - 2 >= data_.at(1))
+                {
+                    int message_length = data_.at(1) + 2;
+                    // Presentera och ta bort ur data_
+                    printData(data_.left(message_length));
+
+                    data_.remove(0, message_length);
+                }
             }
         }
     }
@@ -647,5 +737,10 @@ namespace MC
             emit out("Transmission succeeded. " + QString::number(bytes_written) + " bytes were sent.\n");
         else
             emit out("Transmission failed. No bytes were sent.\n");
+    }
+
+    void Control::acceptKeyPresses()
+    {
+        accept_key_presses_ = true;
     }
 } // namespace MC

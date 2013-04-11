@@ -30,6 +30,8 @@
 #define CLAW_CLOSE 0x2A
 
 #define SEND_STRING 0x30
+#define BT_CONNECT 0x31
+#define BT_DISCONNECT 0x32
 
 #define FLAG_AUTO 0x41
 #define FLAG_MAN 0x42

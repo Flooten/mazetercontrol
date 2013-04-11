@@ -46,6 +46,8 @@ namespace MC
         bool open();
         void close();
 
+        void flush();
+
         bool isOpen() const;
 
         void transmit(const QString& msg);

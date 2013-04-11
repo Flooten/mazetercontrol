@@ -58,6 +58,11 @@ namespace MC
             port_->close();
     }
 
+    void SerialPort::flush()
+    {
+        port_->flush();
+    }
+
     bool SerialPort::isOpen() const
     {
         return port_->isOpen();
