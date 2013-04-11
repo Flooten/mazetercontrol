@@ -37,7 +37,7 @@ namespace MC
         void parseCommand(const UserInput& input);
         void handleKeyPressEvent(QKeyEvent *event);
         void handleKeyReleaseEvent(QKeyEvent* event);
-        void printWelcomeMessage();
+        void printWelcomeMessage() const;
 
     private:
         // Variabler

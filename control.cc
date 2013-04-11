@@ -13,6 +13,7 @@
 
 #include <QStringList>
 #include <QFile>
+#include <QMessageBox>
 
 namespace MC
 {
@@ -430,7 +431,7 @@ namespace MC
     }
 
     /* Skriv ut hjälptexten */
-    void Control::printWelcomeMessage()
+    void Control::printWelcomeMessage() const
     {
         emit out(welcome_message_);
     }
@@ -496,8 +497,7 @@ namespace MC
 
             if (!file.exists())
             {
-                emit out("Error: " + file.fileName() + " does not exist.");
-                return;
+                exit(1);
             }
 
             if (!file.open(QIODevice::ReadOnly))
