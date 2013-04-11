@@ -10,7 +10,6 @@
 #include "control.h"
 #include "utils.h"
 #include "commandtable.h"
-#include <windows.h> // Sleep
 
 #include <QStringList>
 #include <QFile>
