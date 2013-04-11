@@ -389,12 +389,12 @@ namespace MC
             break;
 
         case Qt::Key_A:
-            emit out("Command: Steer left.");
+            emit out("Command: Rotate left.");
             transmitCommand(STEER_ROTATE_LEFT);
             break;
 
         case Qt::Key_D:
-            emit out("Command: Steer right.");
+            emit out("Command: Rotate right.");
             transmitCommand(STEER_ROTATE_RIGHT);
             break;
 
@@ -452,12 +452,17 @@ namespace MC
         message.append(size);
 
         if (command == BT_DISCONNECT)
-        {
             bt_connected_ = false;
-        }
 
-        emit out("Transmitting... ");
-        port_->transmit(message);
+        if (port_->isOpen())
+        {
+            emit out("Transmitting... ");
+            port_->transmit(message);
+        }
+        else
+        {
+            emit out("Error: Unable to transmit, the port is closed.\n");
+        }
     }
 
     void Control::printData(QByteArray data)
@@ -489,9 +494,16 @@ namespace MC
         {
             QFile file(ini_file);
 
+            if (!file.exists())
+            {
+                emit out("Error: " + file.fileName() + " does not exist.");
+                return;
+            }
+
             if (!file.open(QIODevice::ReadOnly))
             {
-               emit out("Unable to open file " + file.fileName() + " for reading.");
+                emit out("Error: Unable to open file " + file.fileName() + " for reading.");
+                return;
             }
 
             QTextStream stream(&file);
