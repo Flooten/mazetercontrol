@@ -1,4 +1,6 @@
-A simple application for the purpose of sending och recieving data from a serial port.
+An application for the purpose of controlling the robot 'The Mazeter'.
 Relies on the QextSerialPort library (v1.2rc) and Qt5.
 
-Developed by Marcus Eriksson.
+Developed at LiTH spring 2013 as a part of the course TSEA27 by
+
+Martin Andersson, Joel Davidsson, Herman Ekwall, Marcus Eriksson, Mattias Fransson and Fredrik Stenmark.
