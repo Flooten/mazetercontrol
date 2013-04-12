@@ -51,10 +51,18 @@ namespace MC
         QByteArray acknowledge_message_;
         bool bt_connected_ = false;
 
+        // Robotvariabler
+        char throttle_value_ = 50;
+        const int THROTTLE_INCREMENT_ = 5;
+
         SerialPort* port_;
 
         // Funktioner
-        void transmitCommand(int command);
+        void transmitCommand(char command);
+        void transmitCommand(char command, char size, const char *data);
+        void increaseThrottle();
+        void decreaseThrottle();
+
         void printData(QByteArray data);
         void parseIniFile(const QString& ini_file);
         void readLine(QString& str, QString& command, QString& argument);

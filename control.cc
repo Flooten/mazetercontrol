@@ -409,6 +409,18 @@ namespace MC
             transmitCommand(CLAW_OPEN);
             break;
 
+        case Qt::Key_Plus:
+            increaseThrottle();
+            emit out("Command: Increasing speed. Current value: " + QString::number(throttle_value_));
+            transmitCommand(CONTROL_THROTTLE, 1, &throttle_value_);
+            break;
+
+        case Qt::Key_Minus:
+            decreaseThrottle();
+            emit out("Command: Increasing speed. Current value: " + QString::number(throttle_value_));
+            transmitCommand(CONTROL_THROTTLE, 1, &throttle_value_);
+            break;
+
         default:
             break;
         }
@@ -441,7 +453,7 @@ namespace MC
      */
 
     /* Skicka fördefinierade meddelanden */
-    void Control::transmitCommand(int command)
+    void Control::transmitCommand(char command)
     {
         QByteArray message;
 
@@ -463,6 +475,59 @@ namespace MC
         else
         {
             emit out("Error: Unable to transmit, the port is closed.\n");
+        }
+    }
+
+    void Control::transmitCommand(char command, char size, const char* data)
+    {
+        QByteArray message;
+
+        // Lägg till kommandot
+        message.append(command);
+
+        // Sätt size
+        message.append(size);
+
+        // Lägg till data
+        message.append(data, size);
+
+        if (command == BT_DISCONNECT)
+            bt_connected_ = false;
+
+        if (port_->isOpen())
+        {
+            emit out("Transmitting... ");
+            port_->transmit(message);
+        }
+        else
+        {
+            emit out("Error: Unable to transmit, the port is closed.\n");
+        }
+    }
+
+    /* Öka hastigheten */
+    void Control::increaseThrottle()
+    {
+        if (throttle_value_ == 95)
+        {
+            throttle_value_ = 98;
+        }
+        else if (throttle_value_ <= 90)
+        {
+            throttle_value_ += THROTTLE_INCREMENT_;
+        }
+    }
+
+    /* Minska hastigheten */
+    void Control::decreaseThrottle()
+    {
+        if (throttle_value_ == 98)
+        {
+            throttle_value_ = 95;
+        }
+        else if (throttle_value_ >= THROTTLE_INCREMENT_)
+        {
+            throttle_value_ -= THROTTLE_INCREMENT_;
         }
     }
 

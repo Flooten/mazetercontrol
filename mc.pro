@@ -12,7 +12,8 @@ HEADERS += \
     userinput.h \
     terminal.h \
     serialport.h \
-    control.h
+    control.h \
+    commandtable.h
 
 SOURCES += \
     utils.cc \
