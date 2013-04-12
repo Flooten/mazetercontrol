@@ -431,7 +431,7 @@ namespace MC
     }
 
     /* Skriv ut hjälptexten */
-    void Control::printWelcomeMessage() const
+    void Control::printWelcomeMessage()
     {
         emit out(welcome_message_);
     }
