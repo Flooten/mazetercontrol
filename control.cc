@@ -433,6 +433,8 @@ namespace MC
         {
         case Qt::Key_Up:
         case Qt::Key_Down:
+        case Qt::Key_A:
+        case Qt::Key_D:
             emit out("Command: Stop.");
             transmitCommand(STEER_STOP);
             break;
