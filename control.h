@@ -15,6 +15,7 @@
 
 #include "serialport.h"
 #include "userinput.h"
+#include "controlsignals.h"
 
 #include <QObject>
 #include <QString>
@@ -30,6 +31,12 @@ namespace MC
     {
         Q_OBJECT
     public:
+        enum Mode
+        {
+            AUTO,
+            MANUAL
+        };
+
         explicit Control(const QString& ini_file, QObject *parent = 0);
 
         ~Control();
@@ -38,6 +45,9 @@ namespace MC
         void handleKeyPressEvent(QKeyEvent *event);
         void handleKeyReleaseEvent(QKeyEvent* event);
         void printWelcomeMessage();
+
+        // Getters
+        bool isConnected() const;
 
     private:
         // Variabler
@@ -50,17 +60,21 @@ namespace MC
         QByteArray data_;
         QByteArray acknowledge_message_;
         bool bt_connected_ = false;
+        Mode mode_ = MANUAL;
+
+        SerialPort* port_;
 
         // Robotvariabler
         char throttle_value_ = 50;
         const char THROTTLE_INCREMENT_ = 5;
-
-        SerialPort* port_;
+        ControlSignals control_signals_;
 
         // Funktioner
         void transmitCommand(char command, char size = 0, char* data = 0);
         void increaseThrottle();
         void decreaseThrottle();
+        void parseMessage(const QByteArray &data);
+        void updateControlSignals(const QByteArray& control_signals_data);
 
         void printData(QByteArray data);
         void parseIniFile(const QString& ini_file);
@@ -73,9 +87,9 @@ namespace MC
         void log(const QString&);
         void btConnected();
         void btDisconnected();
+        void modeChanged(Mode);
+        void controlSignalsChanged(ControlSignals);
         void clear();
-
-        void throttleValueChanged(char throttle_value);
 
     public slots:
         void readData();

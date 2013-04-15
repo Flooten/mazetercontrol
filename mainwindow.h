@@ -32,9 +32,6 @@ namespace MC
         Control* mc_;
         Terminal* terminal_;
 
-        const QString CONNECTION_OPEN = "Connection established.";
-        const QString CONNECTION_CLOSED = "No active connection.";
-
         void enableWidgets();
         void disableWidgets();
 
@@ -46,6 +43,9 @@ namespace MC
         void closeTerminal();
         void btConnected();
         void btDisconnected();
+
+        void setEngineGagues(ControlSignals control_signals);
+        void setMode(Control::Mode mode);
 
     private slots:
     };

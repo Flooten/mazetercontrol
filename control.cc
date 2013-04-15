@@ -353,12 +353,14 @@ namespace MC
     /* Hantera knapptryckningar */
     void Control::handleKeyPressEvent(QKeyEvent* event)
     {
+        if (!bt_connected_)
+            return;
+
         // Hantera knapptryckningar.
         switch(event->key())
         {
         case Qt::Key_Up:
             emit out("Command: Steer straight.");
-            emit log("Steer straight.");
             transmitCommand(STEER_STRAIGHT);
             break;
 
@@ -422,6 +424,9 @@ namespace MC
     /* Hantera knappsläppning */
     void Control::handleKeyReleaseEvent(QKeyEvent* event)
     {
+        if (!bt_connected_)
+            return;
+
         switch(event->key())
         {
         case Qt::Key_Up:
@@ -441,6 +446,11 @@ namespace MC
     void Control::printWelcomeMessage()
     {
         emit out(welcome_message_);
+    }
+
+    bool Control::isConnected() const
+    {
+        return bt_connected_;
     }
 
     /*
@@ -505,6 +515,47 @@ namespace MC
         }
     }
 
+    /* Tolkar det meddelande som är lagrat i data_ */
+    void Control::parseMessage(const QByteArray& data)
+    {
+        switch (data.at(0))
+        {
+        case CONTROL_SIGNALS:
+            updateControlSignals(data);
+            emit controlSignalsChanged(control_signals_);
+            break;
+
+        case FLAG_AUTO:
+            mode_ = AUTO;
+            emit modeChanged(mode_);
+            break;
+
+        case FLAG_MAN:
+            mode_ = MANUAL;
+            emit modeChanged(mode_);
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    /* Uppdatera control_signals_ */
+    void Control::updateControlSignals(const QByteArray& control_signals_data)
+    {
+        if (control_signals_data.size() == 7)
+        {
+            control_signals_.right_value = data_.at(2);
+            control_signals_.left_value = data_.at(3);
+            control_signals_.right_direction = data_.at(4);
+            control_signals_.left_direction = data_.at(5);
+            control_signals_.claw_value = data_.at(6);
+        }
+        else
+            emit out("Error: Did not receive a complete control signal struct.");
+    }
+
+    /* Skriver ut data till terminalen */
     void Control::printData(QByteArray data)
     {
         if (firefly_config_mode_)
@@ -747,6 +798,9 @@ namespace MC
                 // Presentera
                 printData(data_);
 
+                // Hantera meddelandet
+                parseMessage(data_);
+
                 // Nollställ
                 data_.clear();
             }
@@ -760,9 +814,16 @@ namespace MC
                 if (data_.length() - 2 >= data_.at(1))
                 {
                     int message_length = data_.at(1) + 2;
-                    // Presentera och ta bort ur data_
-                    printData(data_.left(message_length));
 
+                    QByteArray message = data_.left(message_length);
+
+                    // Presentera och ta bort ur data_
+                    printData(message);
+
+                    // Hantera meddelandet
+                    parseMessage(message);
+
+                    // Ta bort ur data_
                     data_.remove(0, message_length);
                 }
             }

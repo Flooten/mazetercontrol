@@ -14,7 +14,8 @@ HEADERS += \
     serialport.h \
     control.h \
     commandtable.h \
-    mainwindow.h
+    mainwindow.h \
+    controlsignals.h
 
 SOURCES += \
     utils.cc \
