@@ -5,7 +5,6 @@
 #include "terminal.h"
 
 #include <QMainWindow>
-#include <QtGui>
 #include <QtCore>
 
 namespace Ui
@@ -48,6 +47,7 @@ namespace MC
         void setMode(Control::Mode mode);
 
     private slots:
+        void openTerminal();
     };
 } // namespace MC
 

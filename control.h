@@ -87,7 +87,7 @@ namespace MC
         void log(const QString&);
         void btConnected();
         void btDisconnected();
-        void modeChanged(Mode);
+        void modeChanged(Control::Mode);
         void controlSignalsChanged(ControlSignals);
         void clear();
 

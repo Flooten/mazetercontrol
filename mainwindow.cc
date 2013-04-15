@@ -35,6 +35,7 @@ namespace MC
         connect(mc_, SIGNAL(btDisconnected()), this, SLOT(btDisconnected()));
         connect(mc_, SIGNAL(modeChanged(Control::Mode)), this, SLOT(setMode(Control::Mode)));
         connect(mc_, SIGNAL(controlSignalsChanged(ControlSignals)), this, SLOT(setEngineGagues(ControlSignals)));
+        connect(ui->actionOpenTerminal, SIGNAL(triggered()), this, SLOT(openTerminal()));
 
         // Disabla de widgets som är beroende av en aktiv länk
         disableWidgets();
@@ -61,7 +62,7 @@ namespace MC
             switch (event->key())
             {
             case Qt::Key_section:
-                terminal_->show();
+                openTerminal();
                 break;
 
             default:
@@ -233,6 +234,12 @@ namespace MC
                 break;
             }
         }
+    }
+
+    /* Öppna terminalen */
+    void MainWindow::openTerminal()
+    {
+        terminal_->show();
     }
 
 } // namespace MC

@@ -34,4 +34,8 @@ win32{
 QMAKE_CXXFLAGS += -std=c++11
 }
 
+unix{
+QMAKE_CXXFLAGS += -std=c++11
+}
+
 RC_FILE += icon.rc

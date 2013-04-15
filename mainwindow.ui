@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Mazeter Control</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>resources/usb-bt.ico</normaloff>resources/usb-bt.ico</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">/*QLabel {
 font: 9pt &quot;Consolas&quot;;
@@ -488,7 +492,7 @@ selection-background-color: rgb(255, 255, 255);
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>28</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -501,6 +505,7 @@ selection-background-color: rgb(255, 255, 255);
      <string>Edit</string>
     </property>
     <addaction name="actionPreferences"/>
+    <addaction name="actionOpenTerminal"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -521,6 +526,14 @@ selection-background-color: rgb(255, 255, 255);
   <action name="actionPreferences">
    <property name="text">
     <string>Preferences...</string>
+   </property>
+  </action>
+  <action name="actionOpenTerminal">
+   <property name="text">
+    <string>Open terminal...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
    </property>
   </action>
  </widget>
