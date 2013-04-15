@@ -53,7 +53,7 @@ namespace MC
 
         // Robotvariabler
         char throttle_value_ = 50;
-        const int THROTTLE_INCREMENT_ = 5;
+        const char THROTTLE_INCREMENT_ = 5;
 
         SerialPort* port_;
 
@@ -70,7 +70,12 @@ namespace MC
 
     signals:
         void out(const QString&);
+        void log(const QString&);
+        void btConnected();
+        void btDisconnected();
         void clear();
+
+        void throttleValueChanged(char throttle_value);
 
     public slots:
         void readData();

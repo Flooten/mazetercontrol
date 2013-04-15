@@ -82,11 +82,6 @@ namespace MC
             break;
         }
 
-        case UserInput::EXIT:
-        {
-            exit(0);
-        }
-
         case UserInput::TRANSMIT:
         {
             if (input.argumentCount() > 0)
@@ -210,12 +205,6 @@ namespace MC
             break;
         }
 
-        case UserInput::CLEAR:
-        {
-            emit clear();
-            break;
-        }
-
         case UserInput::OPEN:
         {
             emit out("Opening port " + port_->portName() + "...");
@@ -243,7 +232,10 @@ namespace MC
             transmitCommand(BT_DISCONNECT);
             port_->flush();
             port_->close();
+
             bt_connected_ = false;
+            emit btDisconnected();
+
             emit out("Port " + port_->portName() + " closed.\n");
             break;
         }
@@ -366,6 +358,7 @@ namespace MC
         {
         case Qt::Key_Up:
             emit out("Command: Steer straight.");
+            emit log("Steer straight.");
             transmitCommand(STEER_STRAIGHT);
             break;
 
@@ -470,11 +463,14 @@ namespace MC
             message.append(data, size);
 
         if (command == BT_DISCONNECT)
+        {
             bt_connected_ = false;
+            emit btDisconnected();
+        }
 
         if (port_->isOpen())
         {
-            emit out("Transmitting... ");
+            emit out("Transmitting " + QString::number(message.size()) + " bytes: " + utils::readableByteArray(message.toHex()));
             port_->transmit(message);
         }
         else
@@ -738,7 +734,9 @@ namespace MC
         {
             int index = data_.indexOf(acknowledge_message_);
             data_.remove(0, index + 2);
+
             bt_connected_ = true;
+            emit btConnected();
         }
 
         while (data_.length() >= 2)
@@ -775,8 +773,8 @@ namespace MC
     void Control::reportWrite(qint64 bytes_written)
     {
         if (bytes_written != -1)
-            emit out("Transmission succeeded. " + QString::number(bytes_written) + " bytes were sent.\n");
+            emit out("Transmission succeeded.\n");
         else
-            emit out("Transmission failed. No bytes were sent.\n");
+            emit out("Transmission failed.\n");
     }
 } // namespace MC

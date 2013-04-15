@@ -13,6 +13,7 @@
 #define MAZETERCONTROLDIALOG_H
 
 #include "control.h"
+#include "terminal.h"
 
 #include <QDialog>
 #include <QString>
@@ -30,7 +31,7 @@ namespace MC
         Q_OBJECT
 
     public:
-        explicit Terminal(QWidget *parent = 0);
+        explicit Terminal(Control* control, QWidget *parent = 0);
         ~Terminal();
 
     private:
@@ -42,17 +43,15 @@ namespace MC
         QStringList history_;
 
         // Konstanter
-        const QString INI_FILE = "mc.ini";
-        const QString HIST_FILE = ".mc_history";
 
-        // Funktioner
         bool eventFilter(QObject* obj, QEvent *event);
-        void keyPressEvent(QKeyEvent* event);
-        void keyReleaseEvent(QKeyEvent* event);
+        void clear();
+
+    signals:
+        void terminalClosing();
 
     public slots:
         void out(const QString& str);
-        void clear();
 
     private slots:
         void handleCommand();

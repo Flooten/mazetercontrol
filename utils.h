@@ -23,6 +23,8 @@ namespace MC
     {
         /* Konstanter */
         const QString VERSION = "v0.1";
+        const QString HIST_FILE = ".mc_history";
+        const QString INI_FILE = "mc.ini";
 
         // Konverteringsfunktioner portspecifikationer <->
         BaudRateType toBaudRateType(const QString& baud_rate);

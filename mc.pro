@@ -13,7 +13,8 @@ HEADERS += \
     terminal.h \
     serialport.h \
     control.h \
-    commandtable.h
+    commandtable.h \
+    mainwindow.h
 
 SOURCES += \
     utils.cc \
@@ -21,10 +22,12 @@ SOURCES += \
     terminal.cc \
     serialport.cc \
     main.cc \
-    control.cc
+    control.cc \
+    mainwindow.cc
 
 FORMS += \
-    terminal.ui
+    terminal.ui \
+    mainwindow.ui
 
 win32{
 QMAKE_CXXFLAGS += -std=c++11

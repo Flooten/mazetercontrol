@@ -21,29 +21,21 @@ namespace MC
     /*
      *  Public
      */
-    Terminal::Terminal(QWidget *parent)
+    Terminal::Terminal(Control* control, QWidget *parent)
         : QDialog(parent)
         , ui(new Ui::Terminal)
+        , mc_(control)
     {
         ui->setupUi(this);
-
-        // Uppdatera fönsterrubriken
-        setWindowTitle(windowTitle() + " " + utils::VERSION);
-
-        this->setFocusPolicy(Qt::StrongFocus);
-
-        // Skapa en instans av Control
-        mc_ = new Control(INI_FILE);
 
         // Anslutningar
         connect(ui->lineEdit_command, SIGNAL(returnPressed()), this, SLOT(handleCommand()));
         connect(ui->lineEdit_command, SIGNAL(editingFinished()), this, SLOT(resetCurrentLine()));
         connect(mc_, SIGNAL(out(QString)), this, SLOT(out(QString)));
-        connect(mc_, SIGNAL(clear()), this, SLOT(clear()));
 
         // Historik
         // Läs in historikfilen
-        QFile file(HIST_FILE);
+        QFile file(utils::HIST_FILE);
 
         if(file.open(QFile::ReadOnly | QFile::Text))
         {
@@ -54,9 +46,6 @@ namespace MC
         }
 
         ui->lineEdit_command->installEventFilter(this);
-
-        // Skriv ut välkomstmeddelande
-        mc_->printWelcomeMessage();
     }
 
     Terminal::~Terminal()
@@ -132,44 +121,15 @@ namespace MC
         return QDialog::eventFilter(obj, event);
     }
 
-    /* Fångar knapptryckningar */
-    void Terminal::keyPressEvent(QKeyEvent* event)
+    /* Rensa fönstret */
+    void Terminal::clear()
     {
-        if (event->isAutoRepeat())
-        {
-            // Ignorera eventet om återupprepat event.
-            event->ignore();
-        }
-        else
-        {
-            // Vidarebefordra till MC
-            mc_->handleKeyPressEvent(event);
-            // Förhindra att eventet kaskadar vidare.
-            event->accept();
-        }
-    }
-
-    /* Fångar knappsläppningar */
-    void Terminal::keyReleaseEvent(QKeyEvent* event)
-    {
-        if (event->isAutoRepeat())
-        {
-            // Ignorera eventet om återupprepat event.
-            event->ignore();
-        }
-        else
-        {
-            // Vidarebefordra till MC
-            mc_->handleKeyReleaseEvent(event);
-            // Förhindra att eventet kaskadar vidare.
-            event->accept();
-        }
+        ui->textEdit_history->clear();
     }
 
     /*
      *  Slots
      */
-
     /* Hanterar ett nytt kommando */
     void Terminal::handleCommand()
     {
@@ -186,7 +146,7 @@ namespace MC
             history_.prepend(input_string);
 
             // Sparar kommando i historiken
-            QFile file(HIST_FILE);
+            QFile file(utils::HIST_FILE);
 
             if(file.open(QFile::Append | QFile::Text))
             {
@@ -199,7 +159,20 @@ namespace MC
                 emit out("Unable to open history file.");
             }
 
-            mc_->parseCommand(input);
+            // Fånga fall som utförs av Terminal
+            switch (input.command())
+            {
+            case UserInput::EXIT:
+                emit terminalClosing();
+                break;
+
+            case UserInput::CLEAR:
+                clear();
+                break;
+
+            default:
+                mc_->parseCommand(input);
+            }
         }
     }
 
@@ -208,7 +181,6 @@ namespace MC
     {
         current_line_ = 0;
         history_reset_ = true;
-        //setFocus();
     }
 
     /* Slot för att tillåta skrivning från andra objekt */
@@ -216,11 +188,4 @@ namespace MC
     {
         ui->textEdit_history->append(str);
     }
-
-    /* Rensa fönstret */
-    void Terminal::clear()
-    {
-        ui->textEdit_history->clear();
-    }
-
 } // namespace MC
