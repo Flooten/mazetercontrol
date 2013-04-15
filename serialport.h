@@ -23,7 +23,7 @@ namespace MC
     {
         Q_OBJECT
     public:
-        SerialPort(QObject* parent = nullptr);
+        SerialPort(QObject* parent = NULL);
         SerialPort(const QString& port_name, const QString& baud_rate, const QString& data_bits, const QString& parity, const QString& stop_bits);
         ~SerialPort();
 
