@@ -455,32 +455,7 @@ namespace MC
      */
 
     /* Skicka fördefinierade meddelanden */
-    void Control::transmitCommand(char command)
-    {
-        QByteArray message;
-
-        // Lägg till kommandot
-        message.append(command);
-
-        // Sätt size = 0
-        int size = 0;
-        message.append(size);
-
-        if (command == BT_DISCONNECT)
-            bt_connected_ = false;
-
-        if (port_->isOpen())
-        {
-            emit out("Transmitting... ");
-            port_->transmit(message);
-        }
-        else
-        {
-            emit out("Error: Unable to transmit, the port is closed.\n");
-        }
-    }
-
-    void Control::transmitCommand(char command, char size, const char* data)
+    void Control::transmitCommand(char command, char size, char* data)
     {
         QByteArray message;
 
@@ -491,7 +466,8 @@ namespace MC
         message.append(size);
 
         // Lägg till data
-        message.append(data, size);
+        if (data != 0)
+            message.append(data, size);
 
         if (command == BT_DISCONNECT)
             bt_connected_ = false;

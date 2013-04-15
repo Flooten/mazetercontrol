@@ -58,8 +58,7 @@ namespace MC
         SerialPort* port_;
 
         // Funktioner
-        void transmitCommand(char command);
-        void transmitCommand(char command, char size, const char *data);
+        void transmitCommand(char command, char size = 0, char* data = 0);
         void increaseThrottle();
         void decreaseThrottle();
 
