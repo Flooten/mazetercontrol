@@ -1,3 +1,13 @@
+/*
+ * FILNAMN:       mainwindow.h
+ * PROJEKT:       MazeterControl
+ * PROGRAMMERARE: Marcus Eriksson
+ * DATUM:         2013-04-16
+ *
+ * BESKRIVNING:   MainWindow är klassen som representerar huvudfönstret.
+ *
+ */
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -48,6 +58,7 @@ namespace MC
 
     private slots:
         void openTerminal();
+        void openPreferences();
     };
 } // namespace MC
 

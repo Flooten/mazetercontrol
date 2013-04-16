@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>resources/usb-bt.ico</file>
+    </qresource>
+</RCC>

@@ -15,7 +15,8 @@ HEADERS += \
     control.h \
     commandtable.h \
     mainwindow.h \
-    controlsignals.h
+    controlsignals.h \
+    preferencesdialog.h
 
 SOURCES += \
     utils.cc \
@@ -24,11 +25,13 @@ SOURCES += \
     serialport.cc \
     main.cc \
     control.cc \
-    mainwindow.cc
+    mainwindow.cc \
+    preferencesdialog.cc
 
 FORMS += \
     terminal.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    preferencesdialog.ui
 
 win32{
 QMAKE_CXXFLAGS += -std=c++11
@@ -39,3 +42,6 @@ QMAKE_CXXFLAGS += -std=c++11
 }
 
 RC_FILE += icon.rc
+
+RESOURCES += \
+    resources.qrc

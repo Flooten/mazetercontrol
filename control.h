@@ -48,6 +48,7 @@ namespace MC
 
         // Getters
         bool isConnected() const;
+        SerialPort* port() const;
 
     private:
         // Variabler

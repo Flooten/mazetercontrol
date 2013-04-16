@@ -1,7 +1,16 @@
+/*
+ * FILNAMN:       mainwindow.cc
+ * PROJEKT:       MazeterControl
+ * PROGRAMMERARE: Marcus Eriksson
+ * DATUM:         2013-04-16
+ *
+ */
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "utils.h"
 #include "controlsignals.h"
+#include "preferencesdialog.h"
 
 namespace MC
 {
@@ -35,7 +44,9 @@ namespace MC
         connect(mc_, SIGNAL(btDisconnected()), this, SLOT(btDisconnected()));
         connect(mc_, SIGNAL(modeChanged(Control::Mode)), this, SLOT(setMode(Control::Mode)));
         connect(mc_, SIGNAL(controlSignalsChanged(ControlSignals)), this, SLOT(setEngineGagues(ControlSignals)));
+
         connect(ui->actionOpenTerminal, SIGNAL(triggered()), this, SLOT(openTerminal()));
+        connect(ui->actionOpenPreferences, SIGNAL(triggered()), this, SLOT(openPreferences()));
 
         // Disabla de widgets som är beroende av en aktiv länk
         disableWidgets();
@@ -100,8 +111,8 @@ namespace MC
     /* Enablar alla widgets som kräver en aktiv länk */
     void MainWindow::enableWidgets()
     {
-        ui->lineEdit_mode->setEnabled(true);
-        ui->lineEdit_claw->setEnabled(true);
+        ui->label_mode_status->setEnabled(true);
+        ui->label_claw_status->setEnabled(true);
         ui->doubleSpinBox_speed->setEnabled(true);
         ui->progressBar_left_engine_fwd->setEnabled(true);
         ui->progressBar_left_engine_rev->setEnabled(true);
@@ -114,10 +125,10 @@ namespace MC
     /* Disablar alla widgets som kräver en aktiv länk */
     void MainWindow::disableWidgets()
     {
-        ui->lineEdit_mode->setEnabled(false);
-        ui->lineEdit_mode->clear();
-        ui->lineEdit_claw->setEnabled(false);
-        ui->lineEdit_claw->clear();
+        ui->label_mode_status->setEnabled(false);
+        ui->label_mode_status->setText("N/A");
+        ui->label_claw_status->setEnabled(false);
+        ui->label_claw_status->setText("N/A");
         ui->doubleSpinBox_speed->setEnabled(false);
         ui->doubleSpinBox_speed->setValue(0);
         ui->progressBar_left_engine_fwd->setEnabled(false);
@@ -154,6 +165,7 @@ namespace MC
         ui->textEdit_log->clear();
     }
 
+    /* Stänger terminalen */
     void MainWindow::closeTerminal()
     {
         terminal_->hide();
@@ -209,9 +221,9 @@ namespace MC
             }
 
             if (control_signals.claw_value == 0)
-                ui->lineEdit_claw->setText("Closed");
+                ui->label_claw_status->setText("Closed");
             else
-                ui->lineEdit_claw->setText("Open");
+                ui->label_claw_status->setText("Open");
         }
     }
 
@@ -223,11 +235,11 @@ namespace MC
             switch (mode)
             {
             case Control::AUTO:
-                ui->lineEdit_mode->setText("Auto");
+                ui->label_mode_status->setText("Auto");
                 break;
 
             case Control::MANUAL:
-                ui->lineEdit_mode->setText("Manual");
+                ui->label_mode_status->setText("Manual");
                 break;
 
             default:
@@ -236,10 +248,29 @@ namespace MC
         }
     }
 
-    /* Öppna terminalen */
+    /* Öppnar terminalen */
     void MainWindow::openTerminal()
     {
         terminal_->show();
     }
 
+    /* Öppnar preferences */
+    void MainWindow::openPreferences()
+    {
+        PreferencesDialog dlg;
+        dlg.setPortName(mc_->port()->portName());
+        dlg.setBaudRate(mc_->port()->baudRate());
+        dlg.setDataBits(mc_->port()->dataBits());
+        dlg.setParity(mc_->port()->parity());
+        dlg.setStopBits(mc_->port()->stopBits());
+
+        if (dlg.exec() == QDialog::Accepted)
+        {
+            mc_->port()->setPortName(dlg.portName());
+            mc_->port()->setBaudRate(dlg.baudRate());
+            mc_->port()->setDataBits(dlg.dataBits());
+            mc_->port()->setParity(dlg.parity());
+            mc_->port()->setStopBits(dlg.stopBits());
+        }
+    }
 } // namespace MC

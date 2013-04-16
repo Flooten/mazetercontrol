@@ -234,7 +234,6 @@ namespace MC
             port_->close();
 
             bt_connected_ = false;
-            emit btDisconnected();
 
             emit out("Port " + port_->portName() + " closed.\n");
             break;
@@ -453,6 +452,12 @@ namespace MC
         return bt_connected_;
     }
 
+    /* Returnerar port_ för publik åtkomst */
+    SerialPort* Control::port() const
+    {
+        return port_;
+    }
+
     /*
      *  Private
      */
@@ -492,11 +497,7 @@ namespace MC
     /* Öka hastigheten */
     void Control::increaseThrottle()
     {
-        if (throttle_value_ == 95)
-        {
-            throttle_value_ = 98;
-        }
-        else if (throttle_value_ <= 90)
+        if (throttle_value_ <= 100)
         {
             throttle_value_ += THROTTLE_INCREMENT_;
         }
@@ -505,11 +506,7 @@ namespace MC
     /* Minska hastigheten */
     void Control::decreaseThrottle()
     {
-        if (throttle_value_ == 98)
-        {
-            throttle_value_ = 95;
-        }
-        else if (throttle_value_ >= THROTTLE_INCREMENT_)
+        if (throttle_value_ >= THROTTLE_INCREMENT_)
         {
             throttle_value_ -= THROTTLE_INCREMENT_;
         }

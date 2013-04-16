@@ -52,15 +52,15 @@ namespace MC
 
         ParityType toParityType(const QString& parity)
         {
-            parity.toLower();
+            QString tmp = parity.toLower();
 
-            if (parity == "even")
+            if (tmp == "even")
                 return PAR_EVEN;
-            else if (parity == "none")
+            else if (tmp == "none")
                 return PAR_NONE;
-            else if (parity == "odd")
+            else if (tmp == "odd")
                 return PAR_ODD;
-            else if (parity == "space")
+            else if (tmp == "space")
                 return PAR_SPACE;
             else
                 return PARINVALID;

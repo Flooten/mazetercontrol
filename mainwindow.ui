@@ -14,8 +14,8 @@
    <string>Mazeter Control</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>resources/usb-bt.ico</normaloff>resources/usb-bt.ico</iconset>
+   <iconset resource="resources.qrc">
+    <normaloff>:/icons/resources/usb-bt.ico</normaloff>:/icons/resources/usb-bt.ico</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">/*QLabel {
@@ -49,34 +49,22 @@ background-color: rgb(31, 31, 31);
      <layout class="QVBoxLayout" name="verticalLayout_4">
       <item>
        <layout class="QFormLayout" name="formLayout">
-        <property name="fieldGrowthPolicy">
-         <enum>QFormLayout::ExpandingFieldsGrow</enum>
-        </property>
-        <property name="horizontalSpacing">
-         <number>10</number>
-        </property>
-        <property name="verticalSpacing">
-         <number>6</number>
-        </property>
         <item row="0" column="0">
-         <widget class="QLabel" name="label_7">
+         <widget class="QLabel" name="label_mode">
           <property name="text">
            <string>Mode:</string>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="lineEdit_mode">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="readOnly">
-           <bool>true</bool>
+         <widget class="QLabel" name="label_mode_status">
+          <property name="text">
+           <string>N/A</string>
           </property>
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QLabel" name="label_8">
+         <widget class="QLabel" name="label_claw">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>3</horstretch>
@@ -89,18 +77,9 @@ background-color: rgb(31, 31, 31);
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="lineEdit_claw">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>1</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="readOnly">
-           <bool>true</bool>
+         <widget class="QLabel" name="label_claw_status">
+          <property name="text">
+           <string>N/A</string>
           </property>
          </widget>
         </item>
@@ -492,7 +471,7 @@ selection-background-color: rgb(255, 255, 255);
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>28</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -504,7 +483,7 @@ selection-background-color: rgb(255, 255, 255);
     <property name="title">
      <string>Edit</string>
     </property>
-    <addaction name="actionPreferences"/>
+    <addaction name="actionOpenPreferences"/>
     <addaction name="actionOpenTerminal"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
@@ -523,7 +502,7 @@ selection-background-color: rgb(255, 255, 255);
     <string>About Mazeter Control...</string>
    </property>
   </action>
-  <action name="actionPreferences">
+  <action name="actionOpenPreferences">
    <property name="text">
     <string>Preferences...</string>
    </property>
@@ -537,6 +516,8 @@ selection-background-color: rgb(255, 255, 255);
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
