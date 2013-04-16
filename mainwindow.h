@@ -44,6 +44,9 @@ namespace MC
         void enableWidgets();
         void disableWidgets();
 
+        void setRightEngineGauge(int value, char direction);
+        void setLeftEngineGauge(int value, char direction);
+
         void statusMessage(const QString& str);
 
     public slots:

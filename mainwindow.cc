@@ -143,6 +143,138 @@ namespace MC
         ui->pushButton_calibrate->setEnabled(false);
     }
 
+    /* Tillåter mjuk övergång mellan olika nivåer */
+    void MainWindow::setRightEngineGauge(int value, char direction)
+    {
+        int right_fwd_value = ui->progressBar_right_engine_fwd->value();
+        int right_rev_value = ui->progressBar_right_engine_rev->value();
+
+        if (direction == 1)
+        {
+            // Ska framåt
+            if (right_fwd_value > 0)
+            {
+                // Åker framåt
+                if (value > right_fwd_value)
+                {
+                    // Ökar hastigheten
+                    for (int i = 0; i < value - right_fwd_value; ++i)
+                        ui->progressBar_right_engine_fwd->setValue(ui->progressBar_right_engine_fwd->value() + 1);
+                }
+                else
+                {
+                    // Minskar hastigheten
+                    for (int i = 0; i < right_fwd_value - value; ++i)
+                        ui->progressBar_right_engine_fwd->setValue(ui->progressBar_right_engine_fwd->value() - 1);
+                }
+            }
+            else
+            {
+                // Åker bakåt
+                for (int i = 0; i < right_rev_value; ++i)
+                    ui->progressBar_right_engine_rev->setValue(ui->progressBar_right_engine_rev->value() - 1);
+
+                for (int i = 0; i < value; ++i)
+                    ui->progressBar_right_engine_fwd->setValue(ui->progressBar_right_engine_fwd->value() + 1);
+            }
+        }
+        else
+        {
+            // Ska bakåt
+            if (right_rev_value > 0)
+            {
+                // Åker bakåt
+                if (value > right_rev_value)
+                {
+                    // Ökar hastigheten
+                    for (int i = 0; i < value - right_rev_value; ++i)
+                        ui->progressBar_right_engine_rev->setValue(ui->progressBar_right_engine_rev->value() + 1);
+                }
+                else
+                {
+                    // Minskar hastigheten
+                    for (int i = 0; i < right_rev_value - value; ++i)
+                        ui->progressBar_right_engine_rev->setValue(ui->progressBar_right_engine_rev->value() - 1);
+                }
+            }
+            else
+            {
+                // Åker framåt
+                for (int i = 0; i < right_fwd_value; ++i)
+                    ui->progressBar_right_engine_fwd->setValue(ui->progressBar_right_engine_fwd->value() - 1);
+
+                for (int i = 0; i < value; ++i)
+                    ui->progressBar_right_engine_rev->setValue(ui->progressBar_right_engine_rev->value() + 1);
+            }
+        }
+    }
+
+    /* Tillåter mjuk övergång mellan olika nivåer */
+    void MainWindow::setLeftEngineGauge(int value, char direction)
+    {
+        int left_fwd_value = ui->progressBar_left_engine_fwd->value();
+        int left_rev_value = ui->progressBar_left_engine_rev->value();
+
+        if (direction == 1)
+        {
+            // Ska framåt
+            if (left_fwd_value > 0)
+            {
+                // Åker framåt
+                if (value > left_fwd_value)
+                {
+                    // Ökar hastigheten
+                    for (int i = 0; i < value - left_fwd_value; ++i)
+                        ui->progressBar_left_engine_fwd->setValue(ui->progressBar_left_engine_fwd->value() + 1);
+                }
+                else
+                {
+                    // Minskar hastigheten
+                    for (int i = 0; i < left_fwd_value - value; ++i)
+                        ui->progressBar_left_engine_fwd->setValue(ui->progressBar_left_engine_fwd->value() - 1);
+                }
+            }
+            else
+            {
+                // Åker bakåt
+                for (int i = 0; i < left_rev_value; ++i)
+                    ui->progressBar_left_engine_rev->setValue(ui->progressBar_left_engine_rev->value() - 1);
+
+                for (int i = 0; i < value; ++i)
+                    ui->progressBar_left_engine_fwd->setValue(ui->progressBar_left_engine_fwd->value() + 1);
+            }
+        }
+        else
+        {
+            // Ska bakåt
+            if (left_rev_value > 0)
+            {
+                // Åker bakåt
+                if (value > left_rev_value)
+                {
+                    // Ökar hastigheten
+                    for (int i = 0; i < value - left_rev_value; ++i)
+                        ui->progressBar_left_engine_rev->setValue(ui->progressBar_left_engine_rev->value() + 1);
+                }
+                else
+                {
+                    // Minskar hastigheten
+                    for (int i = 0; i < left_rev_value - value; ++i)
+                        ui->progressBar_left_engine_rev->setValue(ui->progressBar_left_engine_rev->value() - 1);
+                }
+            }
+            else
+            {
+                // Åker framåt
+                for (int i = 0; i < left_fwd_value; ++i)
+                    ui->progressBar_left_engine_fwd->setValue(ui->progressBar_left_engine_fwd->value() - 1);
+
+                for (int i = 0; i < value; ++i)
+                    ui->progressBar_left_engine_rev->setValue(ui->progressBar_left_engine_rev->value() + 1);
+            }
+        }
+    }
+
     /* Skriv ett statusmeddelande */
     void MainWindow::statusMessage(const QString &str)
     {
@@ -193,32 +325,10 @@ namespace MC
         if (mc_->isConnected())
         {
             // Höger hjulpar
-            if (control_signals.right_direction == 1)
-            {
-                // Kör framåt
-                ui->progressBar_right_engine_fwd->setValue((int)control_signals.right_value);
-                ui->progressBar_right_engine_rev->setValue(0);
-            }
-            else
-            {
-                // Kör bakåt
-                ui->progressBar_right_engine_fwd->setValue(0);
-                ui->progressBar_right_engine_rev->setValue((int)control_signals.right_value);
-            }
+            setRightEngineGauge((int)control_signals.right_value, control_signals.right_direction);
 
             // Vänster hjulpar
-            if (control_signals.left_direction == 1)
-            {
-                // Kör framåt
-                ui->progressBar_left_engine_fwd->setValue((int)control_signals.left_value);
-                ui->progressBar_left_engine_rev->setValue(0);
-            }
-            else
-            {
-                // Kör bakåt
-                ui->progressBar_left_engine_fwd->setValue(0);
-                ui->progressBar_left_engine_rev->setValue((int)control_signals.left_value);
-            }
+            setLeftEngineGauge((int)control_signals.left_value, control_signals.left_direction);
 
             if (control_signals.claw_value == 0)
                 ui->label_claw_status->setText("Closed");
