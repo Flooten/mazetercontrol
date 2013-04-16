@@ -56,12 +56,13 @@ namespace MC
         void btConnected();
         void btDisconnected();
 
-        void setEngineGagues(ControlSignals control_signals);
+        void setControlGagues(ControlSignals control_signals);
         void setMode(Control::Mode mode);
 
     private slots:
         void openTerminal();
         void openPreferences();
+        void toggleConnection();
     };
 } // namespace MC
 

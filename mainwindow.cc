@@ -43,10 +43,11 @@ namespace MC
         connect(mc_, SIGNAL(btConnected()), this, SLOT(btConnected()));
         connect(mc_, SIGNAL(btDisconnected()), this, SLOT(btDisconnected()));
         connect(mc_, SIGNAL(modeChanged(Control::Mode)), this, SLOT(setMode(Control::Mode)));
-        connect(mc_, SIGNAL(controlSignalsChanged(ControlSignals)), this, SLOT(setEngineGagues(ControlSignals)));
+        connect(mc_, SIGNAL(controlSignalsChanged(ControlSignals)), this, SLOT(setControlGagues(ControlSignals)));
 
         connect(ui->actionOpenTerminal, SIGNAL(triggered()), this, SLOT(openTerminal()));
         connect(ui->actionOpenPreferences, SIGNAL(triggered()), this, SLOT(openPreferences()));
+        connect(ui->pushButton_toggle_connection, SIGNAL(clicked()), this, SLOT(toggleConnection()));
 
         // Disabla de widgets som är beroende av en aktiv länk
         disableWidgets();
@@ -118,6 +119,8 @@ namespace MC
         ui->progressBar_left_engine_rev->setEnabled(true);
         ui->progressBar_right_engine_fwd->setEnabled(true);
         ui->progressBar_right_engine_rev->setEnabled(true);
+        ui->doubleSpinBox_kd->setEnabled(true);
+        ui->doubleSpinBox_kp->setEnabled(true);
         ui->pushButton_transfer->setEnabled(true);
         ui->pushButton_calibrate->setEnabled(true);
     }
@@ -139,6 +142,10 @@ namespace MC
         ui->progressBar_right_engine_fwd->setValue(0);
         ui->progressBar_right_engine_rev->setEnabled(false);
         ui->progressBar_right_engine_rev->setValue(0);
+        ui->doubleSpinBox_kd->setEnabled(false);
+        ui->doubleSpinBox_kd->setValue(0);
+        ui->doubleSpinBox_kp->setEnabled(false);
+        ui->doubleSpinBox_kp->setValue(0);
         ui->pushButton_transfer->setEnabled(false);
         ui->pushButton_calibrate->setEnabled(false);
     }
@@ -320,7 +327,7 @@ namespace MC
     }
 
     /* Uppdaterar mätarna för kontrollsignalerna */
-    void MainWindow::setEngineGagues(ControlSignals control_signals)
+    void MainWindow::setControlGagues(ControlSignals control_signals)
     {
         if (mc_->isConnected())
         {
@@ -330,10 +337,17 @@ namespace MC
             // Vänster hjulpar
             setLeftEngineGauge((int)control_signals.left_value, control_signals.left_direction);
 
+            // Klo
             if (control_signals.claw_value == 0)
                 ui->label_claw_status->setText("Closed");
             else
                 ui->label_claw_status->setText("Open");
+
+            // Fart
+            ui->doubleSpinBox_speed->setValue((((double)control_signals.right_value / 100) +
+                                               ((double)control_signals.left_value / 100)) / 2);
+
+            // Sätt värden till KP och KD
         }
     }
 
@@ -381,6 +395,27 @@ namespace MC
             mc_->port()->setDataBits(dlg.dataBits());
             mc_->port()->setParity(dlg.parity());
             mc_->port()->setStopBits(dlg.stopBits());
+        }
+    }
+
+    /* Öppnar och stänger länken */
+    void MainWindow::toggleConnection()
+    {
+        if (ui->pushButton_toggle_connection->text() == "Connect")
+        {
+            // Upprätta anslutning
+
+            // Uppdatera knappen
+            ui->pushButton_toggle_connection->setText("Disconnect");
+            ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/stop.ico"));
+        }
+        else if (ui->pushButton_toggle_connection->text() == "Disconnect")
+        {
+            // Bryt anslutning
+
+            // Uppdatera knappen
+            ui->pushButton_toggle_connection->setText("Connect");
+            ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/start.ico"));
         }
     }
 } // namespace MC
