@@ -33,9 +33,13 @@ namespace MC
         // Uppdatera fönsterrubrik
         setWindowTitle(windowTitle() + " " + utils::VERSION);
 
-        // Skapa instanser av Control och Terminal
+        // Skapa instanser av Control, Terminal och MCGraphicsScene
         mc_ = new Control(utils::INI_FILE);
         terminal_ = new Terminal(mc_, this);
+        scene_ = new MCGraphicsScene(this);
+
+        // Installera scene_ i GraphicsView
+        ui->graphicsView->setScene(scene_);
 
         // Anslutningar
         connect(terminal_, SIGNAL(terminalClosing()), this, SLOT(closeTerminal()));
@@ -59,6 +63,9 @@ namespace MC
     MainWindow::~MainWindow()
     {
         delete ui;
+        delete mc_;
+        delete terminal_;
+        delete scene_;
     }
 
     /* Fångar knapptryckningar */
@@ -316,6 +323,10 @@ namespace MC
         enableWidgets();
         log("Connection established.");
         statusMessage("Connection established.");
+
+        // Uppdatera knappen
+        ui->pushButton_toggle_connection->setText("Disconnect");
+        ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/stop.ico"));
     }
 
     /* Blåtandslänk stängd */
@@ -324,6 +335,10 @@ namespace MC
         disableWidgets();
         log("Connection closed.");
         statusMessage("No active connection.");
+
+        // Uppdatera knappen
+        ui->pushButton_toggle_connection->setText("Connect");
+        ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/start.ico"));
     }
 
     /* Uppdaterar mätarna för kontrollsignalerna */
@@ -342,10 +357,6 @@ namespace MC
                 ui->label_claw_status->setText("Closed");
             else
                 ui->label_claw_status->setText("Open");
-
-            // Fart
-            ui->doubleSpinBox_speed->setValue((((double)control_signals.right_value / 100) +
-                                               ((double)control_signals.left_value / 100)) / 2);
 
             // Sätt värden till KP och KD
         }
@@ -398,24 +409,14 @@ namespace MC
         }
     }
 
-    /* Öppnar och stänger länken */
+    /* Togglar blåtandslänkens läge */
     void MainWindow::toggleConnection()
     {
         if (ui->pushButton_toggle_connection->text() == "Connect")
-        {
             // Upprätta anslutning
-
-            // Uppdatera knappen
-            ui->pushButton_toggle_connection->setText("Disconnect");
-            ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/stop.ico"));
-        }
+            mc_->parseCommand(UserInput("open"));
         else if (ui->pushButton_toggle_connection->text() == "Disconnect")
-        {
             // Bryt anslutning
-
-            // Uppdatera knappen
-            ui->pushButton_toggle_connection->setText("Connect");
-            ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/start.ico"));
-        }
+            mc_->parseCommand(UserInput("close"));
     }
 } // namespace MC

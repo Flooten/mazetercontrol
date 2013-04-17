@@ -4,4 +4,7 @@
         <file>resources/start.ico</file>
         <file>resources/stop.ico</file>
     </qresource>
+    <qresource prefix="/images">
+        <file>resources/skiss.png</file>
+    </qresource>
 </RCC>

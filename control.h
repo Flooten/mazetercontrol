@@ -86,11 +86,11 @@ namespace MC
     signals:
         void out(const QString&);
         void log(const QString&);
+        void clear();
         void btConnected();
         void btDisconnected();
         void modeChanged(Control::Mode);
         void controlSignalsChanged(ControlSignals);
-        void clear();
 
     public slots:
         void readData();

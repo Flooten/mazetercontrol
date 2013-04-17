@@ -16,7 +16,9 @@ HEADERS += \
     commandtable.h \
     mainwindow.h \
     controlsignals.h \
-    preferencesdialog.h
+    preferencesdialog.h \
+    mcgraphicsscene.h \
+    sensordata.h
 
 SOURCES += \
     utils.cc \
@@ -26,7 +28,8 @@ SOURCES += \
     main.cc \
     control.cc \
     mainwindow.cc \
-    preferencesdialog.cc
+    preferencesdialog.cc \
+    mcgraphicsscene.cc
 
 FORMS += \
     terminal.ui \

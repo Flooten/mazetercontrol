@@ -54,6 +54,9 @@ background-color: rgb(31, 31, 31);
         </property>
         <item>
          <layout class="QFormLayout" name="formLayout">
+          <property name="fieldGrowthPolicy">
+           <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+          </property>
           <item row="0" column="0">
            <widget class="QLabel" name="label_mode">
             <property name="text">
@@ -85,44 +88,6 @@ background-color: rgb(31, 31, 31);
            <widget class="QLabel" name="label_claw_status">
             <property name="text">
              <string>N/A</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_9">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Speed:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_speed">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>1</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-            <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::NoButtons</enum>
-            </property>
-            <property name="suffix">
-             <string> m/s</string>
-            </property>
-            <property name="decimals">
-             <number>1</number>
             </property>
            </widget>
           </item>
@@ -450,7 +415,7 @@ selection-background-color: rgb(255, 255, 255);
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Transfer</string>
+             <string>Transfer parameters</string>
             </property>
            </widget>
           </item>
@@ -484,7 +449,7 @@ selection-background-color: rgb(255, 255, 255);
              <bool>true</bool>
             </property>
             <property name="text">
-             <string>Calibrate</string>
+             <string>Calibrate line sensor</string>
             </property>
            </widget>
           </item>

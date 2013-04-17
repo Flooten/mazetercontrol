@@ -13,6 +13,7 @@
 
 #include "control.h"
 #include "terminal.h"
+#include "mcgraphicsscene.h"
 
 #include <QMainWindow>
 #include <QtCore>
@@ -40,6 +41,7 @@ namespace MC
         Ui::MainWindow *ui;
         Control* mc_;
         Terminal* terminal_;
+        MCGraphicsScene* scene_;
 
         void enableWidgets();
         void disableWidgets();
