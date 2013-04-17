@@ -59,6 +59,7 @@ namespace MC
         void btDisconnected();
 
         void setControlGagues(ControlSignals control_signals);
+        void setSensorValues(SensorData sensor_data);
         void setMode(Control::Mode mode);
 
     private slots:

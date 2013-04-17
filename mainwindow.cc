@@ -48,6 +48,7 @@ namespace MC
         connect(mc_, SIGNAL(btDisconnected()), this, SLOT(btDisconnected()));
         connect(mc_, SIGNAL(modeChanged(Control::Mode)), this, SLOT(setMode(Control::Mode)));
         connect(mc_, SIGNAL(controlSignalsChanged(ControlSignals)), this, SLOT(setControlGagues(ControlSignals)));
+        connect(mc_, SIGNAL(sensorDataChanged(SensorData)), this, SLOT(setSensorValues(SensorData)));
 
         connect(ui->actionOpenTerminal, SIGNAL(triggered()), this, SLOT(openTerminal()));
         connect(ui->actionOpenPreferences, SIGNAL(triggered()), this, SLOT(openPreferences()));
@@ -121,7 +122,6 @@ namespace MC
     {
         ui->label_mode_status->setEnabled(true);
         ui->label_claw_status->setEnabled(true);
-        ui->doubleSpinBox_speed->setEnabled(true);
         ui->progressBar_left_engine_fwd->setEnabled(true);
         ui->progressBar_left_engine_rev->setEnabled(true);
         ui->progressBar_right_engine_fwd->setEnabled(true);
@@ -139,8 +139,6 @@ namespace MC
         ui->label_mode_status->setText("N/A");
         ui->label_claw_status->setEnabled(false);
         ui->label_claw_status->setText("N/A");
-        ui->doubleSpinBox_speed->setEnabled(false);
-        ui->doubleSpinBox_speed->setValue(0);
         ui->progressBar_left_engine_fwd->setEnabled(false);
         ui->progressBar_left_engine_fwd->setValue(0);
         ui->progressBar_left_engine_rev->setEnabled(false);
@@ -360,6 +358,12 @@ namespace MC
 
             // Sätt värden till KP och KD
         }
+    }
+
+    /* Uppdaterar sensordatan som visas i scene_ */
+    void MainWindow::setSensorValues(SensorData sensor_data)
+    {
+
     }
 
     /* Uppdaterar operationsläget */

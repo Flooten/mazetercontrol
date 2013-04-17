@@ -16,6 +16,7 @@
 #include "serialport.h"
 #include "userinput.h"
 #include "controlsignals.h"
+#include "sensordata.h"
 
 #include <QObject>
 #include <QString>
@@ -61,7 +62,6 @@ namespace MC
         QByteArray data_;
         QByteArray acknowledge_message_;
         bool bt_connected_ = false;
-        Mode mode_ = MANUAL;
 
         SerialPort* port_;
 
@@ -69,6 +69,8 @@ namespace MC
         char throttle_value_ = 50;
         const char THROTTLE_INCREMENT_ = 5;
         ControlSignals control_signals_;
+        SensorData sensor_data_;
+        Mode mode_ = MANUAL;
 
         // Funktioner
         void transmitCommand(char command, char size = 0, char* data = 0);
@@ -76,6 +78,7 @@ namespace MC
         void decreaseThrottle();
         void parseMessage(const QByteArray &data);
         void updateControlSignals(const QByteArray& control_signals_data);
+        void updateSensorData(const QByteArray& sensor_data);
 
         void printData(QByteArray data);
         void parseIniFile(const QString& ini_file);
@@ -91,6 +94,7 @@ namespace MC
         void btDisconnected();
         void modeChanged(Control::Mode);
         void controlSignalsChanged(ControlSignals);
+        void sensorDataChanged(SensorData);
 
     public slots:
         void readData();

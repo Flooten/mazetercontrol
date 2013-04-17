@@ -532,24 +532,49 @@ namespace MC
             emit modeChanged(mode_);
             break;
 
+        case SENSOR_DATA_ALL:
+            updateSensorData(data);
+            emit sensorDataChanged(sensor_data_);
+            break;
+
         default:
             break;
         }
     }
 
-    /* Uppdatera control_signals_ */
+    /* Uppdaterar control_signals_ */
     void Control::updateControlSignals(const QByteArray& control_signals_data)
     {
         if (control_signals_data.size() == 7)
         {
-            control_signals_.right_value = data_.at(2);
-            control_signals_.left_value = data_.at(3);
-            control_signals_.right_direction = data_.at(4);
-            control_signals_.left_direction = data_.at(5);
-            control_signals_.claw_value = data_.at(6);
+            control_signals_.right_value = control_signals_data.at(2);
+            control_signals_.left_value = control_signals_data.at(3);
+            control_signals_.right_direction = control_signals_data.at(4);
+            control_signals_.left_direction = control_signals_data.at(5);
+            control_signals_.claw_value = control_signals_data.at(6);
         }
         else
             emit out("Error: Did not receive a complete control signal struct.");
+    }
+
+    /* Uppdaterar sensor_data_ */
+    void Control::updateSensorData(const QByteArray& sensor_data)
+    {
+        if (sensor_data.size() == 12)
+        {
+            sensor_data_.distance1 = sensor_data.at(2);
+            sensor_data_.distance2 = sensor_data.at(3);
+            sensor_data_.distance3 = sensor_data.at(4);
+            sensor_data_.distance4 = sensor_data.at(5);
+            sensor_data_.distance5 = sensor_data.at(6);
+            sensor_data_.distance6 = sensor_data.at(7);
+            sensor_data_.distance7 = sensor_data.at(8);
+            sensor_data_.angle = sensor_data.at(9);
+            sensor_data_.line_deviation = sensor_data.at(10);
+            sensor_data_.line_type = sensor_data.at(11);
+        }
+        else
+            emit out("Error: Did not receive a complete sensor data struct.");
     }
 
     /* Skriver ut data till terminalen */
