@@ -16,8 +16,11 @@
 *.pro.user.*
 moc_*.cpp
 qrc_*.cpp
-Makefile
+Makefile*
+object_script*
 *-build-*
 ui_*
 .mc_history
 mc
+release/
+debug/

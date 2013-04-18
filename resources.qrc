@@ -1,12 +1,12 @@
 <RCC>
     <qresource prefix="/icons">
-        <file>resources/usb-bt.ico</file>
         <file>resources/start.ico</file>
         <file>resources/stop.ico</file>
+        <file>resources/usb-bt.ico</file>
     </qresource>
     <qresource prefix="/images">
-        <file>resources/skiss.png</file>
         <file>resources/logga-small.png</file>
+        <file>resources/skiss.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>resources/consolas.ttf</file>

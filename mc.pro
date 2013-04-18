@@ -7,41 +7,43 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = mc
 TEMPLATE = app
 
+INCLUDEPATH += include/
+
 HEADERS += \
-    utils.h \
-    userinput.h \
-    terminal.h \
-    serialport.h \
-    control.h \
-    commandtable.h \
-    mainwindow.h \
-    controlsignals.h \
-    preferencesdialog.h \
-    mcgraphicsscene.h \
-    sensordata.h \
-    aboutdialog.h \
-    controlsignalsplotscene.h \
-    sensordataplotscene.h
+    include/utils.h \
+    include/userinput.h \
+    include/terminal.h \
+    include/serialport.h \
+    include/control.h \
+    include/commandtable.h \
+    include/mainwindow.h \
+    include/controlsignals.h \
+    include/preferencesdialog.h \
+    include/mcgraphicsscene.h \
+    include/sensordata.h \
+    include/aboutdialog.h \
+    include/controlsignalsplotscene.h \
+    include/sensordataplotscene.h \
 
 SOURCES += \
-    utils.cc \
-    userinput.cc \
-    terminal.cc \
-    serialport.cc \
-    main.cc \
-    control.cc \
-    mainwindow.cc \
-    preferencesdialog.cc \
-    mcgraphicsscene.cc \
-    aboutdialog.cc \
-    controlsignalsplotscene.cc \
-    sensordataplotscene.cc
+    src/utils.cc \
+    src/userinput.cc \
+    src/terminal.cc \
+    src/serialport.cc \
+    src/main.cc \
+    src/control.cc \
+    src/mainwindow.cc \
+    src/preferencesdialog.cc \
+    src/mcgraphicsscene.cc \
+    src/aboutdialog.cc \
+    src/controlsignalsplotscene.cc \
+    src/sensordataplotscene.cc
 
 FORMS += \
-    terminal.ui \
-    mainwindow.ui \
-    preferencesdialog.ui \
-    aboutdialog.ui
+    forms/terminal.ui \
+    forms/mainwindow.ui \
+    forms/preferencesdialog.ui \
+    forms/aboutdialog.ui
 
 win32{
 QMAKE_CXXFLAGS += -std=c++11

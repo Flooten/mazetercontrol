@@ -17,7 +17,7 @@
    <string>About Mazeter Control</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset resource="../resources.qrc">
     <normaloff>:/icons/resources/usb-bt.ico</normaloff>:/icons/resources/usb-bt.ico</iconset>
   </property>
   <property name="styleSheet">
@@ -146,15 +146,9 @@
     </layout>
    </item>
   </layout>
-  <zorder>pushButton_close</zorder>
-  <zorder>label_title</zorder>
-  <zorder>label_image</zorder>
-  <zorder>label</zorder>
-  <zorder>horizontalSpacer</zorder>
-  <zorder>horizontalSpacer</zorder>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections/>
 </ui>

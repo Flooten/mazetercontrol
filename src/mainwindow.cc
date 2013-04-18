@@ -356,7 +356,7 @@ namespace MC
 
         // Uppdatera knappen
         ui->pushButton_toggle_connection->setText("Disconnect");
-        ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/stop.ico"));
+        ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/stop.ico"));
 
         // Starta plot_timer_
         plot_timer_->start(PLOT_DELTA_T);
@@ -371,7 +371,7 @@ namespace MC
 
         // Uppdatera knappen
         ui->pushButton_toggle_connection->setText("Connect");
-        ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/start.ico"));
+        ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/start.ico"));
 
         // Stanna plot_timer_
         plot_timer_->stop();

@@ -1,5 +1,6 @@
 #include "terminal.h"
 #include "mainwindow.h"
+
 #include <QApplication>
 #include <QFontDatabase>
 

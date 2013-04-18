@@ -26,7 +26,7 @@
    <string>Mazeter Control</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset resource="../resources.qrc">
     <normaloff>:/icons/resources/usb-bt.ico</normaloff>:/icons/resources/usb-bt.ico</iconset>
   </property>
   <property name="styleSheet">
@@ -218,7 +218,7 @@ font: 10pt &quot;JackInput&quot;;</string>
            <string>Connect</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
+           <iconset resource="../resources.qrc">
             <normaloff>:/icons/resources/start.ico</normaloff>:/icons/resources/start.ico</iconset>
           </property>
          </widget>
@@ -630,7 +630,7 @@ selection-background-color: rgb(255, 255, 255);
   </action>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections/>
 </ui>

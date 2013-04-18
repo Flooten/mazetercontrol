@@ -12,13 +12,14 @@
 #ifndef MCGRAPHICSSCENE_H
 #define MCGRAPHICSSCENE_H
 
+#include "sensordata.h"
+
 #include <QGraphicsScene>
 #include <QString>
 #include <QMap>
 #include <QGraphicsTextItem>
 #include <QGraphicsRectItem>
 #include <QKeyEvent>
-#include "sensordata.h"
 
 namespace MC
 {

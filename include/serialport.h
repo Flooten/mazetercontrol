@@ -13,9 +13,10 @@
 #ifndef SERIALPORT_H
 #define SERIALPORT_H
 
-#include "qextserialport.h"
 #include <QString>
 #include <QObject>
+
+#include "qextserialport.h"
 
 namespace MC
 {
