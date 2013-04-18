@@ -15,6 +15,7 @@
 #include "terminal.h"
 #include "mcgraphicsscene.h"
 #include "controlsignalsplotscene.h"
+#include "sensordataplotscene.h"
 
 #include <QMainWindow>
 #include <QtCore>
@@ -45,6 +46,7 @@ namespace MC
         Terminal* terminal_;
         MCGraphicsScene* scene_;
         ControlSignalsPlotScene* cs_scene_;
+        SensorDataPlotScene* sd_scene_;
         QTimer* plot_timer_;
 
         const int PLOT_DELTA_T = 50;

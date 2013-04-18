@@ -20,7 +20,8 @@ HEADERS += \
     mcgraphicsscene.h \
     sensordata.h \
     aboutdialog.h \
-    controlsignalsplotscene.h
+    controlsignalsplotscene.h \
+    sensordataplotscene.h
 
 SOURCES += \
     utils.cc \
@@ -33,7 +34,8 @@ SOURCES += \
     preferencesdialog.cc \
     mcgraphicsscene.cc \
     aboutdialog.cc \
-    controlsignalsplotscene.cc
+    controlsignalsplotscene.cc \
+    sensordataplotscene.cc
 
 FORMS += \
     terminal.ui \

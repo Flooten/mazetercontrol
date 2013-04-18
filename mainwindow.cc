@@ -32,6 +32,7 @@ namespace MC
 
         scene_ = new MCGraphicsScene(this);
         cs_scene_ = new ControlSignalsPlotScene(this);
+        sd_scene_ = new SensorDataPlotScene(this);
 
         // Subscriptad text
         ui->label_kd->setText("K<sub>D</sub>");
@@ -40,10 +41,13 @@ namespace MC
         // Uppdatera fönsterrubrik
         setWindowTitle(windowTitle() + " " + utils::VERSION);
 
-        // Installera scene_ i GraphicsView
+        // Installera scener i GraphicsView
         ui->graphicsView_overview->setScene(scene_);
         ui->graphicsView_control_signals->setScene(cs_scene_);
+        ui->graphicsView_sensor_data->setScene(sd_scene_);
+
         cs_scene_->setSceneRect(0, 0, ui->graphicsView_control_signals->width(), ui->graphicsView_control_signals->height());
+        sd_scene_->setSceneRect(0, 0, ui->graphicsView_sensor_data->width(), ui->graphicsView_sensor_data->height());
 
         // Anslutningar
         connect(terminal_, SIGNAL(terminalClosing()), this, SLOT(closeTerminal()));
@@ -465,5 +469,6 @@ namespace MC
     void MainWindow::clearPlots()
     {
         cs_scene_->clear();
+        sd_scene_->clear();
     }
 } // namespace MC

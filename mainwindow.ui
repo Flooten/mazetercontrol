@@ -136,7 +136,14 @@ font: 10pt &quot;JackInput&quot;;</string>
            </widget>
           </item>
           <item>
-           <widget class="QGraphicsView" name="graphicsView_sensor_data"/>
+           <widget class="QGraphicsView" name="graphicsView_sensor_data">
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
