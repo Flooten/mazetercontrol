@@ -1,5 +1,5 @@
 /*
- * FILNAMN:       mcgraphicsscene.h
+ * FILNAMN:       mcgraphicsscene.cc
  * PROJEKT:       MazeterControl
  * PROGRAMMERARE: Marcus Eriksson
  * DATUM:         2013-04-18

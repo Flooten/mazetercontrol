@@ -18,6 +18,7 @@
 
 #include <QMainWindow>
 #include <QtCore>
+#include <QTimer>
 
 namespace Ui
 {
@@ -44,6 +45,9 @@ namespace MC
         Terminal* terminal_;
         MCGraphicsScene* scene_;
         ControlSignalsPlotScene* cs_scene_;
+        QTimer* plot_timer_;
+
+        const int PLOT_DELTA_T = 50;
 
         void enableWidgets();
         void disableWidgets();

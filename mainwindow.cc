@@ -18,9 +18,14 @@ namespace MC
     /*
      *  Public
      */
-    MainWindow::MainWindow(QWidget *parent) :
-        QMainWindow(parent),
-        ui(new Ui::MainWindow)
+    MainWindow::MainWindow(QWidget *parent)
+        : QMainWindow(parent)
+        , ui(new Ui::MainWindow)
+        , mc_(new Control(utils::INI_FILE))
+        , terminal_(new Terminal(mc_, this))
+        , scene_(new MCGraphicsScene(this))
+        , cs_scene_(new ControlSignalsPlotScene(this))
+        , plot_timer_(new QTimer(this))
     {
         ui->setupUi(this);
 
@@ -33,12 +38,6 @@ namespace MC
 
         // Uppdatera fönsterrubrik
         setWindowTitle(windowTitle() + " " + utils::VERSION);
-
-        // Skapa instanser av Control, Terminal och MCGraphicsScene
-        mc_ = new Control(utils::INI_FILE);
-        terminal_ = new Terminal(mc_, this);
-        scene_ = new MCGraphicsScene(this);
-        cs_scene_ = new ControlSignalsPlotScene(this);
 
         // Installera scene_ i GraphicsView
         ui->graphicsView_overview->setScene(scene_);
@@ -53,6 +52,7 @@ namespace MC
         connect(mc_, SIGNAL(modeChanged(Control::Mode)), this, SLOT(setMode(Control::Mode)));
         connect(mc_, SIGNAL(controlSignalsChanged(ControlSignals)), this, SLOT(setControlGagues(ControlSignals)));
         connect(mc_, SIGNAL(sensorDataChanged(SensorData)), this, SLOT(setSensorValues(SensorData)));
+        connect(plot_timer_, SIGNAL(timeout()), cs_scene_, SLOT(draw()));
 
         connect(ui->actionOpenTerminal, SIGNAL(triggered()), this, SLOT(openTerminal()));
         connect(ui->actionOpenPreferences, SIGNAL(triggered()), this, SLOT(openPreferences()));
@@ -346,6 +346,9 @@ namespace MC
         // Uppdatera knappen
         ui->pushButton_toggle_connection->setText("Disconnect");
         ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/stop.ico"));
+
+        // Starta plot_timer_
+        plot_timer_->start(PLOT_DELTA_T);
     }
 
     /* Blåtandslänk stängd */
@@ -358,6 +361,9 @@ namespace MC
         // Uppdatera knappen
         ui->pushButton_toggle_connection->setText("Connect");
         ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/start.ico"));
+
+        // Stanna plot_timer_
+        plot_timer_->stop();
     }
 
     /* Uppdaterar mätarna för kontrollsignalerna */

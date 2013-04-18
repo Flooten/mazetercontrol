@@ -17,7 +17,6 @@
 #include <QGraphicsScene>
 #include <QGraphicsEllipseItem>
 #include <QObject>
-#include <QTimer>
 
 namespace MC
 {
@@ -32,16 +31,15 @@ namespace MC
 
     private:
         QVector<ControlSignals> control_signals_;
-        QTimer* timer_;
         int zero_level_left_ = 50;
         int zero_level_right_ = 150;
         int time_ = 0;
-        int delta_t_ = 1;
+
+        QPen* lpen;
+        QPen* rpen;
 
     public slots:
         void clear();
-
-    private slots:
         void draw();
     };
 } // namespace MC

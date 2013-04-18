@@ -1,5 +1,5 @@
 /*
- * FILNAMN:       controlsignalsplotscene.h
+ * FILNAMN:       controlsignalsplotscene.cc
  * PROJEKT:       MazeterControl
  * PROGRAMMERARE: Marcus Eriksson
  * DATUM:         2013-04-18
@@ -12,11 +12,9 @@ namespace MC
 {
     ControlSignalsPlotScene::ControlSignalsPlotScene(QObject* parent)
         : QGraphicsScene(parent)
+        , lpen(new QPen(Qt::red))
+        , rpen(new QPen(Qt::blue))
     {
-        timer_ = new QTimer(this);
-
-        connect(timer_, SIGNAL(timeout()), this, SLOT(draw()));
-
         // Lägg in ett idle-element
         ControlSignals cs;
         cs.left_direction = 1;
@@ -25,12 +23,12 @@ namespace MC
         cs.right_value = 0;
 
         control_signals_.append(cs);
-        timer_->start(100);
     }
 
     ControlSignalsPlotScene::~ControlSignalsPlotScene()
     {
-        delete timer_;
+        delete lpen;
+        delete rpen;
     }
 
     /*
@@ -73,6 +71,7 @@ namespace MC
             ypos_l += control_signals_.last().left_value / 2;
 
         ldot->setPos(time_, ypos_l);
+        ldot->setPen(*lpen);
         addItem(ldot);
 
         // Höger
@@ -87,6 +86,7 @@ namespace MC
             ypos_r += control_signals_.last().right_value / 2;
 
         rdot->setPos(time_, ypos_r);
+        rdot->setPen(*rpen);
         addItem(rdot);
     }
 } // namespace MC
