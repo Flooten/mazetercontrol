@@ -18,7 +18,8 @@ HEADERS += \
     controlsignals.h \
     preferencesdialog.h \
     mcgraphicsscene.h \
-    sensordata.h
+    sensordata.h \
+    aboutdialog.h
 
 SOURCES += \
     utils.cc \
@@ -29,12 +30,14 @@ SOURCES += \
     control.cc \
     mainwindow.cc \
     preferencesdialog.cc \
-    mcgraphicsscene.cc
+    mcgraphicsscene.cc \
+    aboutdialog.cc
 
 FORMS += \
     terminal.ui \
     mainwindow.ui \
-    preferencesdialog.ui
+    preferencesdialog.ui \
+    aboutdialog.ui
 
 win32{
 QMAKE_CXXFLAGS += -std=c++11

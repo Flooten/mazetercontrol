@@ -6,5 +6,6 @@
     </qresource>
     <qresource prefix="/images">
         <file>resources/skiss.png</file>
+        <file>resources/logga-small.png</file>
     </qresource>
 </RCC>

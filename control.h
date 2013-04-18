@@ -35,7 +35,8 @@ namespace MC
         enum Mode
         {
             AUTO,
-            MANUAL
+            MANUAL,
+            NO_MODE
         };
 
         explicit Control(const QString& ini_file, QObject *parent = 0);
@@ -70,7 +71,7 @@ namespace MC
         const char THROTTLE_INCREMENT_ = 5;
         ControlSignals control_signals_;
         SensorData sensor_data_;
-        Mode mode_ = MANUAL;
+        Mode mode_ = NO_MODE;
 
         // Funktioner
         void transmitCommand(char command, char size = 0, char* data = 0);

@@ -512,30 +512,44 @@ namespace MC
         }
     }
 
-    /* Tolkar det meddelande som är lagrat i data_ */
+    /* Tolkar det meddelande som är lagrat i data */
     void Control::parseMessage(const QByteArray& data)
     {
         switch (data.at(0))
         {
         case CONTROL_SIGNALS:
+        {
             updateControlSignals(data);
             emit controlSignalsChanged(control_signals_);
             break;
+        }
 
         case FLAG_AUTO:
-            mode_ = AUTO;
-            emit modeChanged(mode_);
+        {
+            if (mode_ != AUTO)
+            {
+                mode_ = AUTO;
+                emit modeChanged(mode_);
+            }
             break;
+        }
 
         case FLAG_MAN:
-            mode_ = MANUAL;
-            emit modeChanged(mode_);
+        {
+            if (mode_ != MANUAL)
+            {
+                mode_ = MANUAL;
+                emit modeChanged(mode_);
+            }
             break;
+        }
 
         case SENSOR_DATA_ALL:
+        {
             updateSensorData(data);
             emit sensorDataChanged(sensor_data_);
             break;
+        }
 
         default:
             break;

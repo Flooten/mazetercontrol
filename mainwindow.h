@@ -54,7 +54,6 @@ namespace MC
     public slots:
         void log(const QString& str);
         void clear();
-        void closeTerminal();
         void btConnected();
         void btDisconnected();
 
@@ -64,6 +63,8 @@ namespace MC
 
     private slots:
         void openTerminal();
+        void closeTerminal();
+        void openAboutDialog();
         void openPreferences();
         void toggleConnection();
     };

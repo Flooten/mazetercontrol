@@ -11,6 +11,7 @@
 #include "utils.h"
 #include "controlsignals.h"
 #include "preferencesdialog.h"
+#include "aboutdialog.h"
 
 namespace MC
 {
@@ -53,6 +54,7 @@ namespace MC
         connect(ui->actionOpenTerminal, SIGNAL(triggered()), this, SLOT(openTerminal()));
         connect(ui->actionOpenPreferences, SIGNAL(triggered()), this, SLOT(openPreferences()));
         connect(ui->pushButton_toggle_connection, SIGNAL(clicked()), this, SLOT(toggleConnection()));
+        connect(ui->actionAboutMazeterControl, SIGNAL(triggered()), this, SLOT(openAboutDialog()));
 
         // Disabla de widgets som är beroende av en aktiv länk
         disableWidgets();
@@ -315,6 +317,13 @@ namespace MC
         terminal_->hide();
     }
 
+    /* Öppnar AboutDialog */
+    void MainWindow::openAboutDialog()
+    {
+        AboutDialog dlg;
+        dlg.exec();
+    }
+
     /* Blåtandslänk öppen */
     void MainWindow::btConnected()
     {
@@ -375,10 +384,12 @@ namespace MC
             {
             case Control::AUTO:
                 ui->label_mode_status->setText("Auto");
+                log("Mode changed to: Auto");
                 break;
 
             case Control::MANUAL:
                 ui->label_mode_status->setText("Manual");
+                log("Mode changed to: Manual");
                 break;
 
             default:
