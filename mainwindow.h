@@ -14,6 +14,7 @@
 #include "control.h"
 #include "terminal.h"
 #include "mcgraphicsscene.h"
+#include "controlsignalsplotscene.h"
 
 #include <QMainWindow>
 #include <QtCore>
@@ -42,6 +43,7 @@ namespace MC
         Control* mc_;
         Terminal* terminal_;
         MCGraphicsScene* scene_;
+        ControlSignalsPlotScene* cs_scene_;
 
         void enableWidgets();
         void disableWidgets();

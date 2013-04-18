@@ -38,9 +38,12 @@ namespace MC
         mc_ = new Control(utils::INI_FILE);
         terminal_ = new Terminal(mc_, this);
         scene_ = new MCGraphicsScene(this);
+        cs_scene_ = new ControlSignalsPlotScene(this);
 
         // Installera scene_ i GraphicsView
         ui->graphicsView_overview->setScene(scene_);
+        ui->graphicsView_control_signals->setScene(cs_scene_);
+        cs_scene_->setSceneRect(0, 0, ui->graphicsView_control_signals->width(), ui->graphicsView_control_signals->height());
 
         // Anslutningar
         connect(terminal_, SIGNAL(terminalClosing()), this, SLOT(closeTerminal()));
@@ -55,6 +58,7 @@ namespace MC
         connect(ui->actionOpenPreferences, SIGNAL(triggered()), this, SLOT(openPreferences()));
         connect(ui->pushButton_toggle_connection, SIGNAL(clicked()), this, SLOT(toggleConnection()));
         connect(ui->actionAboutMazeterControl, SIGNAL(triggered()), this, SLOT(openAboutDialog()));
+        connect(ui->pushButton_clear_plots, SIGNAL(clicked()), cs_scene_, SLOT(clear()));
 
         // Disabla de widgets som är beroende av en aktiv länk
         disableWidgets();
@@ -69,6 +73,7 @@ namespace MC
         delete mc_;
         delete terminal_;
         delete scene_;
+        delete cs_scene_;
     }
 
     /* Fångar knapptryckningar */
@@ -373,6 +378,7 @@ namespace MC
                 ui->label_claw_status->setText("Open");
 
             // Sätt värden till KP och KD
+            cs_scene_->newControlSignals(control_signals);
         }
     }
 

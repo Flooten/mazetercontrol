@@ -1,3 +1,14 @@
+/*
+ * FILNAMN:       mcgraphicsscene.h
+ * PROJEKT:       MazeterControl
+ * PROGRAMMERARE: Marcus Eriksson
+ * DATUM:         2013-04-18
+ *
+ * BESKRIVNING:   MCGraphicsScene är klassen som representerar den scen
+ *                som presenterar översikten av roboten.
+ *
+ */
+
 #ifndef MCGRAPHICSSCENE_H
 #define MCGRAPHICSSCENE_H
 
