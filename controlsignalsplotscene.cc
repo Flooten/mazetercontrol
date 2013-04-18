@@ -12,24 +12,20 @@ namespace MC
 {
     ControlSignalsPlotScene::ControlSignalsPlotScene(QObject* parent)
         : QGraphicsScene(parent)
-        , lpen(new QPen(Qt::red))
-        , rpen(new QPen(Qt::blue))
+        , lpen_(QPen(Qt::red))
+        , rpen_(QPen(Qt::blue))
+        , standard_pen_(QPen(Qt::black))
     {
         // Lägg in ett idle-element
         ControlSignals cs;
-        cs.left_direction = 1;
-        cs.right_direction = 1;
-        cs.left_value = 0;
-        cs.right_value = 0;
-
         control_signals_.append(cs);
+
+        // Penstyles
+        standard_pen_.setStyle(Qt::DashLine);
     }
 
     ControlSignalsPlotScene::~ControlSignalsPlotScene()
-    {
-        delete lpen;
-        delete rpen;
-    }
+    {}
 
     /*
      *  Public
@@ -41,12 +37,27 @@ namespace MC
         control_signals_.append(control_signals);
     }
 
+    /* Ritar stödlinjer */
+    void ControlSignalsPlotScene::drawScale()
+    {
+        // Skala för vänster motorsignal
+        addLine(0, MAX_LEVEL_LEFT_, width(), MAX_LEVEL_LEFT_, standard_pen_);
+        addLine(0, ZERO_LEVEL_LEFT_, width(), ZERO_LEVEL_LEFT_, standard_pen_);
+        addLine(0, MIN_LEVEL_LEFT_, width(), MIN_LEVEL_LEFT_, standard_pen_);
+
+        // Skala för höger motorsignal
+        addLine(0, MAX_LEVEL_RIGHT_, width(), MAX_LEVEL_RIGHT_, standard_pen_);
+        addLine(0, ZERO_LEVEL_RIGHT_, width(), ZERO_LEVEL_RIGHT_, standard_pen_);
+        addLine(0, MIN_LEVEL_RIGHT_, width(), MIN_LEVEL_RIGHT_, standard_pen_);
+    }
+
     void ControlSignalsPlotScene::clear()
     {
         foreach (QGraphicsItem* item, items())
             removeItem(item);
 
         time_ = 0;
+        drawScale();
     }
 
     /*
@@ -57,11 +68,10 @@ namespace MC
     void ControlSignalsPlotScene::draw()
     {
         QRect rect(0, 0, 1, 1);
-        ++time_;
 
         // Vänster
         QGraphicsEllipseItem* ldot = new QGraphicsEllipseItem(rect);
-        int ypos_l = zero_level_left_;
+        int ypos_l = ZERO_LEVEL_LEFT_;
 
         if (control_signals_.last().left_direction == 1)
             // Åker framåt
@@ -71,12 +81,12 @@ namespace MC
             ypos_l += control_signals_.last().left_value / 2;
 
         ldot->setPos(time_, ypos_l);
-        ldot->setPen(*lpen);
+        ldot->setPen(lpen_);
         addItem(ldot);
 
         // Höger
         QGraphicsEllipseItem* rdot = new QGraphicsEllipseItem(rect);
-        int ypos_r = zero_level_right_;
+        int ypos_r = ZERO_LEVEL_RIGHT_;
 
         if (control_signals_.last().right_direction == 1)
             // Åker framåt
@@ -86,7 +96,10 @@ namespace MC
             ypos_r += control_signals_.last().right_value / 2;
 
         rdot->setPos(time_, ypos_r);
-        rdot->setPen(*rpen);
+        rdot->setPen(rpen_);
         addItem(rdot);
+
+        // Räkna upp
+        ++time_;
     }
 } // namespace MC

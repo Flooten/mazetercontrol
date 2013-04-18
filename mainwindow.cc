@@ -23,14 +23,15 @@ namespace MC
         , ui(new Ui::MainWindow)
         , mc_(new Control(utils::INI_FILE))
         , terminal_(new Terminal(mc_, this))
-        , scene_(new MCGraphicsScene(this))
-        , cs_scene_(new ControlSignalsPlotScene(this))
         , plot_timer_(new QTimer(this))
     {
         ui->setupUi(this);
 
         this->setFocusPolicy(Qt::StrongFocus);
         this->setFocus();
+
+        scene_ = new MCGraphicsScene(this);
+        cs_scene_ = new ControlSignalsPlotScene(this);
 
         // Subscriptad text
         ui->label_kd->setText("K<sub>D</sub>");
@@ -58,10 +59,14 @@ namespace MC
         connect(ui->actionOpenPreferences, SIGNAL(triggered()), this, SLOT(openPreferences()));
         connect(ui->pushButton_toggle_connection, SIGNAL(clicked()), this, SLOT(toggleConnection()));
         connect(ui->actionAboutMazeterControl, SIGNAL(triggered()), this, SLOT(openAboutDialog()));
-        connect(ui->pushButton_clear_plots, SIGNAL(clicked()), cs_scene_, SLOT(clear()));
+        connect(ui->pushButton_clear_plots, SIGNAL(clicked()), this, SLOT(clearPlots()));
 
         // Disabla de widgets som är beroende av en aktiv länk
         disableWidgets();
+        clearPlots();
+
+        // Visa overview
+        ui->tabWidget->setCurrentIndex(0);
 
         // Statusmeddelande
         statusMessage("No active connection.");
@@ -69,11 +74,13 @@ namespace MC
 
     MainWindow::~MainWindow()
     {
-        delete ui;
         delete mc_;
         delete terminal_;
         delete scene_;
         delete cs_scene_;
+
+        // Alltid sist VIKTIGT!
+        delete ui;
     }
 
     /* Fångar knapptryckningar */
@@ -452,5 +459,11 @@ namespace MC
         else if (ui->pushButton_toggle_connection->text() == "Disconnect")
             // Bryt anslutning
             mc_->parseCommand(UserInput("close"));
+    }
+
+    /* Rensar plots */
+    void MainWindow::clearPlots()
+    {
+        cs_scene_->clear();
     }
 } // namespace MC

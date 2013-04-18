@@ -31,12 +31,22 @@ namespace MC
 
     private:
         QVector<ControlSignals> control_signals_;
-        int zero_level_left_ = 50;
-        int zero_level_right_ = 150;
+
+        const int MAX_LEVEL_LEFT_ = -5;
+        const int ZERO_LEVEL_LEFT_ = 45;
+        const int MIN_LEVEL_LEFT_ = 95;
+
+        const int MAX_LEVEL_RIGHT_ = 105;
+        const int ZERO_LEVEL_RIGHT_ = 155;
+        const int MIN_LEVEL_RIGHT_ = 205;
+
         int time_ = 0;
 
-        QPen* lpen;
-        QPen* rpen;
+        QPen lpen_;
+        QPen rpen_;
+        QPen standard_pen_;
+
+        void drawScale();
 
     public slots:
         void clear();

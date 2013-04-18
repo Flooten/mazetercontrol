@@ -73,6 +73,7 @@ namespace MC
         void openAboutDialog();
         void openPreferences();
         void toggleConnection();
+        void clearPlots();
     };
 } // namespace MC
 
