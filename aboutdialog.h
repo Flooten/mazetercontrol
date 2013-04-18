@@ -1,3 +1,14 @@
+/*
+ * FILNAMN:       preferencesdialog.h
+ * PROJEKT:       MazeterControl
+ * PROGRAMMERARE: Marcus Eriksson
+ * DATUM:         2013-04-18
+ *
+ * BESKRIVNING:   AboutDialog representerar det dialogfönster som
+ *                visar information om programmer för användaren.
+ *
+ */
+
 #ifndef ABOUTDIALOG_H
 #define ABOUTDIALOG_H
 

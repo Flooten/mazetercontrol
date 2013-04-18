@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>448</width>
-    <height>154</height>
+    <height>170</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,6 +19,9 @@
   <property name="windowIcon">
    <iconset resource="resources.qrc">
     <normaloff>:/icons/resources/usb-bt.ico</normaloff>:/icons/resources/usb-bt.ico</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">font: 8pt &quot;JackInput&quot;;</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_3">
    <item>

@@ -40,7 +40,7 @@ namespace MC
         scene_ = new MCGraphicsScene(this);
 
         // Installera scene_ i GraphicsView
-        ui->graphicsView->setScene(scene_);
+        ui->graphicsView_overview->setScene(scene_);
 
         // Anslutningar
         connect(terminal_, SIGNAL(terminalClosing()), this, SLOT(closeTerminal()));
@@ -93,6 +93,9 @@ namespace MC
                 break;
             }
 
+            // Tänd knappen
+            scene_->buttonPressed(event);
+
             // Förhindra att eventet kaskadar vidare.
             event->accept();
         }
@@ -110,6 +113,10 @@ namespace MC
         {
             // Vidarebefordra till MC
             mc_->handleKeyReleaseEvent(event);
+
+            // Släck knappen
+            scene_->buttonReleased(event);
+
             // Förhindra att eventet kaskadar vidare.
             event->accept();
         }
@@ -372,7 +379,7 @@ namespace MC
     /* Uppdaterar sensordatan som visas i scene_ */
     void MainWindow::setSensorValues(SensorData sensor_data)
     {
-
+        scene_->updateSensorData(sensor_data);
     }
 
     /* Uppdaterar operationsläget */

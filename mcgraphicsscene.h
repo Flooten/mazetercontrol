@@ -5,6 +5,8 @@
 #include <QString>
 #include <QMap>
 #include <QGraphicsTextItem>
+#include <QGraphicsRectItem>
+#include <QKeyEvent>
 #include "sensordata.h"
 
 namespace MC
@@ -16,12 +18,35 @@ namespace MC
         MCGraphicsScene(QObject *parent = NULL);
         ~MCGraphicsScene();
 
-        void update(const SensorData& sensor_data);
+        void updateSensorData(const SensorData& sensor_data);
+        void buttonPressed(QKeyEvent* event);
+        void buttonReleased(QKeyEvent* event);
 
     private:
-        QPixmap* background_image_;
-        QMap<QString,QGraphicsTextItem*> sensor_values_;
+        enum SensorDataIndex
+        {
 
+        };
+
+        enum ButtonIndex
+        {
+            KEY_UP,
+            KEY_DOWN,
+            KEY_LEFT,
+            KEY_RIGHT,
+            KEY_INVALID
+        };
+
+        QPixmap* background_image_;
+        QMap<QString, QGraphicsTextItem*> sensor_data_;
+        QMap<ButtonIndex, QGraphicsRectItem*> buttons_;
+
+        const QString UNIT_CM = " cm";
+        const QString UNIT_DEG = " degrees";
+
+        void createButtons();
+        void createTextItems();
+        void placeTextItems();
     };
 } // namespace MC
 

@@ -8,4 +8,7 @@
         <file>resources/skiss.png</file>
         <file>resources/logga-small.png</file>
     </qresource>
+    <qresource prefix="/fonts">
+        <file>resources/consolas.ttf</file>
+    </qresource>
 </RCC>
