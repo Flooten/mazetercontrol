@@ -129,11 +129,74 @@ font: 10pt &quot;JackInput&quot;;</string>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
-           <widget class="QLabel" name="label_sensor_data">
-            <property name="text">
-             <string>Sensor data:</string>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <item>
+             <widget class="QLabel" name="label_sensor_data">
+              <property name="text">
+               <string>Sensor data:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_plot_data">
+              <property name="text">
+               <string>Data:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBox_sensor_data">
+              <item>
+               <property name="text">
+                <string>Front left</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Front right</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Back</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Angle</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Line deviation</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Line type</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Right 4-20 cm</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
            <widget class="QGraphicsView" name="graphicsView_sensor_data">
@@ -573,7 +636,7 @@ selection-background-color: rgb(255, 255, 255);
      <x>0</x>
      <y>0</y>
      <width>825</width>
-     <height>22</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
