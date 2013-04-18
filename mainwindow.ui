@@ -28,7 +28,8 @@ font: 9pt &quot;Consolas&quot;;
 
 QMenuBar::item {
 background-color: rgb(31, 31, 31);
-}*/</string>
+}*/
+font: 10pt &quot;Alte Haas Grotesk&quot;;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -467,7 +468,7 @@ selection-background-color: rgb(255, 255, 255);
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>28</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -493,6 +494,17 @@ selection-background-color: rgb(255, 255, 255);
    <addaction name="menuAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
   <action name="actionAboutMazeterControl">
    <property name="text">
     <string>About Mazeter Control...</string>

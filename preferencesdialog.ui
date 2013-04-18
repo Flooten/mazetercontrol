@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>174</width>
-    <height>206</height>
+    <width>194</width>
+    <height>243</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,9 +17,15 @@
    <iconset resource="resources.qrc">
     <normaloff>:/icons/resources/usb-bt.ico</normaloff>:/icons/resources/usb-bt.ico</iconset>
   </property>
+  <property name="styleSheet">
+   <string notr="true">font: 10pt &quot;Alte Haas Grotesk&quot;;</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QGroupBox" name="groupBox">
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <property name="title">
       <string>Port Settings</string>
      </property>
@@ -53,7 +59,7 @@
         <item row="1" column="1">
          <widget class="QComboBox" name="comboBox_baud_rate">
           <property name="currentText">
-           <string>9600</string>
+           <string>1200</string>
           </property>
           <item>
            <property name="text">
@@ -102,7 +108,7 @@
         <item row="2" column="1">
          <widget class="QComboBox" name="comboBox_data_bits">
           <property name="currentText">
-           <string>8</string>
+           <string>5</string>
           </property>
           <item>
            <property name="text">
