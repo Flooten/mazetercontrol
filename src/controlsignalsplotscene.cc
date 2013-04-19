@@ -11,21 +11,14 @@
 namespace MC
 {
     ControlSignalsPlotScene::ControlSignalsPlotScene(QObject* parent)
-        : QGraphicsScene(parent)
+        : PlotScene(parent)
         , lpen_(QPen(Qt::red))
         , rpen_(QPen(Qt::blue))
-        , standard_pen_(QPen(Qt::black))
     {
         // Lägg in ett idle-element
         ControlSignals cs;
         control_signals_.append(cs);
-
-        // Penstyles
-        standard_pen_.setStyle(Qt::DashLine);
     }
-
-    ControlSignalsPlotScene::~ControlSignalsPlotScene()
-    {}
 
     /*
      *  Public
@@ -38,26 +31,17 @@ namespace MC
     }
 
     /* Ritar stödlinjer */
-    void ControlSignalsPlotScene::drawScale()
+    void ControlSignalsPlotScene::drawGrid()
     {
         // Skala för vänster motorsignal
-        addLine(0, MAX_LEVEL_LEFT_, width(), MAX_LEVEL_LEFT_, standard_pen_);
-        addLine(0, ZERO_LEVEL_LEFT_, width(), ZERO_LEVEL_LEFT_, standard_pen_);
-        addLine(0, MIN_LEVEL_LEFT_, width(), MIN_LEVEL_LEFT_, standard_pen_);
+        addLine(0, MAX_LEVEL_LEFT_, width(), MAX_LEVEL_LEFT_, dashed_pen_);
+        addLine(0, ZERO_LEVEL_LEFT_, width(), ZERO_LEVEL_LEFT_, dashed_pen_);
+        addLine(0, MIN_LEVEL_LEFT_, width(), MIN_LEVEL_LEFT_, dashed_pen_);
 
         // Skala för höger motorsignal
-        addLine(0, MAX_LEVEL_RIGHT_, width(), MAX_LEVEL_RIGHT_, standard_pen_);
-        addLine(0, ZERO_LEVEL_RIGHT_, width(), ZERO_LEVEL_RIGHT_, standard_pen_);
-        addLine(0, MIN_LEVEL_RIGHT_, width(), MIN_LEVEL_RIGHT_, standard_pen_);
-    }
-
-    void ControlSignalsPlotScene::clear()
-    {
-        foreach (QGraphicsItem* item, items())
-            removeItem(item);
-
-        time_ = 0;
-        drawScale();
+        addLine(0, MAX_LEVEL_RIGHT_, width(), MAX_LEVEL_RIGHT_, dashed_pen_);
+        addLine(0, ZERO_LEVEL_RIGHT_, width(), ZERO_LEVEL_RIGHT_, dashed_pen_);
+        addLine(0, MIN_LEVEL_RIGHT_, width(), MIN_LEVEL_RIGHT_, dashed_pen_);
     }
 
     /*

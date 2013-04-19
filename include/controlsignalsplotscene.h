@@ -13,6 +13,7 @@
 #define CONTROLSIGNALSPLOTSCENE_H
 
 #include "controlsignals.h"
+#include "plotscene.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsEllipseItem>
@@ -20,12 +21,11 @@
 
 namespace MC
 {
-    class ControlSignalsPlotScene : public QGraphicsScene
+    class ControlSignalsPlotScene : public PlotScene
     {
         Q_OBJECT
     public:
         ControlSignalsPlotScene(QObject* parent = NULL);
-        ~ControlSignalsPlotScene();
 
         void newControlSignals(ControlSignals control_signals);
 
@@ -40,17 +40,13 @@ namespace MC
         const int ZERO_LEVEL_RIGHT_ = 155;
         const int MIN_LEVEL_RIGHT_ = 205;
 
-        int time_ = 0;
-
         QPen lpen_;
         QPen rpen_;
-        QPen standard_pen_;
 
-        void drawScale();
+        void drawGrid() override;
 
     public slots:
-        void clear();
-        void draw();
+        void draw() override;
     };
 } // namespace MC
 

@@ -623,7 +623,7 @@ namespace MC
 
             if (!file.exists())
             {
-                exit(1);
+                exit(3);
             }
 
             if (!file.open(QIODevice::ReadOnly))

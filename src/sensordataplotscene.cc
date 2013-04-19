@@ -11,7 +11,7 @@
 namespace MC
 {
     SensorDataPlotScene::SensorDataPlotScene(QObject *parent)
-        : QGraphicsScene(parent)
+        : PlotScene(parent)
     {
     }
 
@@ -29,12 +29,7 @@ namespace MC
      */
 
     /* Rita ut stödlinjer */
-    void SensorDataPlotScene::drawScale()
-    {
-    }
-
-    /* Nollställ grafen */
-    void SensorDataPlotScene::clear()
+    void SensorDataPlotScene::drawGrid()
     {
     }
 

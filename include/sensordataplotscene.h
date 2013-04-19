@@ -16,11 +16,13 @@
 #include <QObject>
 
 #include "sensordata.h"
+#include "plotscene.h"
 
 namespace MC
 {
-    class SensorDataPlotScene : public QGraphicsScene
+    class SensorDataPlotScene : public PlotScene
     {
+        Q_OBJECT
     public:
         SensorDataPlotScene(QObject* parent = NULL);
 
@@ -31,15 +33,10 @@ namespace MC
 
         // Konstanter
 
-        int time_ = 0;
-
-        QPen standard_pen_;
-
-        void drawScale();
+        void drawGrid() override;
 
     public slots:
-        void clear();
-        void draw();
+        void draw() override;
     };
 } // namespace MC
 
