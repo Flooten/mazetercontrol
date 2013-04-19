@@ -76,6 +76,7 @@ namespace MC
         void openPreferences();
         void toggleConnection();
         void clearPlots();
+        void drawPlots();
     };
 } // namespace MC
 

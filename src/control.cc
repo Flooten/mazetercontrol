@@ -574,7 +574,7 @@ namespace MC
     /* Uppdaterar sensor_data_ */
     void Control::updateSensorData(const QByteArray& sensor_data)
     {
-        if (sensor_data.size() == 12)
+        if (sensor_data.size() == sensor_data.at(1) + 2)
         {
             sensor_data_.distance1 = sensor_data.at(2);
             sensor_data_.distance2 = sensor_data.at(3);

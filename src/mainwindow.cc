@@ -57,13 +57,14 @@ namespace MC
         connect(mc_, SIGNAL(modeChanged(Control::Mode)), this, SLOT(setMode(Control::Mode)));
         connect(mc_, SIGNAL(controlSignalsChanged(ControlSignals)), this, SLOT(setControlGagues(ControlSignals)));
         connect(mc_, SIGNAL(sensorDataChanged(SensorData)), this, SLOT(setSensorValues(SensorData)));
-        connect(plot_timer_, SIGNAL(timeout()), cs_scene_, SLOT(draw()));
+        connect(plot_timer_, SIGNAL(timeout()), this, SLOT(drawPlots()));
 
         connect(ui->actionOpenTerminal, SIGNAL(triggered()), this, SLOT(openTerminal()));
         connect(ui->actionOpenPreferences, SIGNAL(triggered()), this, SLOT(openPreferences()));
         connect(ui->pushButton_toggle_connection, SIGNAL(clicked()), this, SLOT(toggleConnection()));
         connect(ui->actionAboutMazeterControl, SIGNAL(triggered()), this, SLOT(openAboutDialog()));
         connect(ui->pushButton_clear_plots, SIGNAL(clicked()), this, SLOT(clearPlots()));
+        connect(ui->comboBox_sensor_data, SIGNAL(currentIndexChanged(int)), sd_scene_, SLOT(chosenDataChanged(int)));
 
         // Disabla de widgets som är beroende av en aktiv länk
         disableWidgets();
@@ -470,5 +471,12 @@ namespace MC
     {
         cs_scene_->clear();
         sd_scene_->clear();
+    }
+
+    /* Ritar en ny punkt */
+    void MainWindow::drawPlots()
+    {
+        cs_scene_->draw();
+        sd_scene_->draw();
     }
 } // namespace MC
