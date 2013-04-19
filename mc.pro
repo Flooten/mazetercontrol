@@ -24,6 +24,7 @@ HEADERS += \
     include/aboutdialog.h \
     include/controlsignalsplotscene.h \
     include/sensordataplotscene.h \
+    include/plotscene.h
 
 SOURCES += \
     src/utils.cc \
@@ -37,7 +38,8 @@ SOURCES += \
     src/mcgraphicsscene.cc \
     src/aboutdialog.cc \
     src/controlsignalsplotscene.cc \
-    src/sensordataplotscene.cc
+    src/sensordataplotscene.cc \
+    src/plotscene.cc
 
 FORMS += \
     forms/terminal.ui \
