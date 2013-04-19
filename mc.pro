@@ -55,6 +55,11 @@ unix{
 QMAKE_CXXFLAGS += -std=c++11
 }
 
+macx{
+QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++ -mmacosx-version-min=10.7
+LIBS += -stdlib=libc++ -mmacosx-version-min=10.7
+}
+
 RC_FILE += icon.rc
 
 RESOURCES += \

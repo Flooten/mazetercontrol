@@ -617,9 +617,15 @@ namespace MC
     /*  Parsar ini-filen angiven i ini_file */
     void Control::parseIniFile(const QString& ini_file)
     {
+        QString root_path("");
+
+        #ifdef __APPLE__
+            root_path = "/Users/Martin/";
+        #endif
+
         try
         {
-            QFile file(ini_file);
+            QFile file(root_path + ini_file);
 
             if (!file.exists())
             {
