@@ -18,6 +18,7 @@
 #include <QDialog>
 #include <QString>
 #include <QKeyEvent>
+#include <QCoreApplication>
 
 namespace Ui
 {
@@ -35,14 +36,13 @@ namespace MC
         ~Terminal();
 
     private:
-        // Variabler
         Ui::Terminal* ui;
         Control* mc_;
         int current_line_ = 0;
         bool history_reset_ = true;
         QStringList history_;
 
-        // Konstanter
+        const QString HIST_FILE = QCoreApplication::applicationDirPath() + "/data/.mc_history";
 
         bool eventFilter(QObject* obj, QEvent *event);
         void clear();

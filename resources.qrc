@@ -3,12 +3,22 @@
         <file>resources/start.ico</file>
         <file>resources/stop.ico</file>
         <file>resources/usb-bt.ico</file>
+        <file>resources/terminal.ico</file>
     </qresource>
     <qresource prefix="/images">
         <file>resources/logga-small.png</file>
-        <file>resources/skiss.png</file>
+        <file>resources/leftp.png</file>
+        <file>resources/leftr.png</file>
+        <file>resources/rightp.png</file>
+        <file>resources/rightr.png</file>
+        <file>resources/upp.png</file>
+        <file>resources/upr.png</file>
+        <file>resources/downp.png</file>
+        <file>resources/downr.png</file>
+        <file>resources/overview.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>resources/consolas.ttf</file>
+        <file>resources/ubuntu.ttf</file>
     </qresource>
 </RCC>

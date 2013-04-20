@@ -18,7 +18,7 @@
     <normaloff>:/icons/resources/usb-bt.ico</normaloff>:/icons/resources/usb-bt.ico</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">font: 10pt &quot;Ubuntu&quot;;</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

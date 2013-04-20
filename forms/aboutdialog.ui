@@ -21,7 +21,7 @@
     <normaloff>:/icons/resources/usb-bt.ico</normaloff>:/icons/resources/usb-bt.ico</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">font: 8pt &quot;JackInput&quot;;</string>
+   <string notr="true">font: 8pt &quot;Ubuntu&quot;;</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_3">
    <item>

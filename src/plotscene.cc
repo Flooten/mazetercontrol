@@ -21,6 +21,5 @@ namespace MC
             removeItem(item);
 
         time_ = 0;
-        drawGrid();
     }
 } // namespace MC

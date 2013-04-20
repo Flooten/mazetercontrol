@@ -35,7 +35,7 @@ namespace MC
 
         // Historik
         // Läs in historikfilen
-        QFile file(utils::HIST_FILE);
+        QFile file(HIST_FILE);
 
         if(file.open(QFile::ReadOnly | QFile::Text))
         {
@@ -44,6 +44,8 @@ namespace MC
                 history_.prepend(file.readLine().trimmed());
             }
         }
+
+        file.close();
 
         ui->lineEdit_command->installEventFilter(this);
     }
@@ -146,9 +148,9 @@ namespace MC
             history_.prepend(input_string);
 
             // Sparar kommando i historiken
-            QFile file(utils::HIST_FILE);
+            QFile file(HIST_FILE);
 
-            if(file.open(QFile::Append | QFile::Text))
+            if(file.open(QFile::WriteOnly | QFile::Text))
             {
                 QTextStream stream(&file);
                 stream << input_string << endl;

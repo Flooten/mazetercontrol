@@ -29,21 +29,21 @@ namespace MC
 
         void newControlSignals(ControlSignals control_signals);
 
+        void drawGrid() override;
+
     private:
         QVector<ControlSignals> control_signals_;
 
-        const int MAX_LEVEL_LEFT_ = -5;
-        const int ZERO_LEVEL_LEFT_ = 45;
-        const int MIN_LEVEL_LEFT_ = 95;
+        const int MAX_LEVEL_LEFT_ = 20;
+        const int ZERO_LEVEL_LEFT_ = 70;
+        const int MIN_LEVEL_LEFT_ = 120;
 
-        const int MAX_LEVEL_RIGHT_ = 105;
-        const int ZERO_LEVEL_RIGHT_ = 155;
-        const int MIN_LEVEL_RIGHT_ = 205;
+        const int MAX_LEVEL_RIGHT_ = 140;
+        const int ZERO_LEVEL_RIGHT_ = 190;
+        const int MIN_LEVEL_RIGHT_ = 240;
 
         QPen lpen_;
         QPen rpen_;
-
-        void drawGrid() override;
 
     public slots:
         void draw() override;

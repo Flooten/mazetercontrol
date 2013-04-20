@@ -30,7 +30,6 @@ namespace MC
         acknowledge_message_.resize(2);
         acknowledge_message_[0] = BT_CONNECT;
         acknowledge_message_[1] = 0x0;
-
         // Anslutningar
         connect(port_, SIGNAL(readyRead()), this, SLOT(readData()));
         connect(port_, SIGNAL(bytesWritten(qint64)), this, SLOT(reportWrite(qint64)));

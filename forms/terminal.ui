@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../resources.qrc">
-    <normaloff>:/icons/resources/usb-bt.ico</normaloff>:/icons/resources/usb-bt.ico</iconset>
+    <normaloff>:/icons/resources/terminal.ico</normaloff>:/icons/resources/terminal.ico</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">font: 9pt &quot;Consolas&quot;;

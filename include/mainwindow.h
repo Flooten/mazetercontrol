@@ -44,12 +44,13 @@ namespace MC
         Ui::MainWindow *ui;
         Control* mc_;
         Terminal* terminal_;
+        QTimer* plot_timer_;
         MCGraphicsScene* scene_;
         ControlSignalsPlotScene* cs_scene_;
         SensorDataPlotScene* sd_scene_;
-        QTimer* plot_timer_;
 
         const int PLOT_DELTA_T = 50;
+        const QString INI_FILE = QCoreApplication::applicationDirPath() + "/data/mc.ini";
 
         void enableWidgets();
         void disableWidgets();
@@ -58,6 +59,9 @@ namespace MC
         void setLeftEngineGauge(int value, char direction);
 
         void statusMessage(const QString& str);
+
+        void clearPlots();
+        void drawPlotGrid();
 
     public slots:
         void log(const QString& str);
@@ -75,7 +79,7 @@ namespace MC
         void openAboutDialog();
         void openPreferences();
         void toggleConnection();
-        void clearPlots();
+        void resetPlots();
         void drawPlots();
     };
 } // namespace MC

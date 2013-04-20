@@ -16,16 +16,15 @@
 
 #include <QString>
 #include <QByteArray>
+#include <QCoreApplication>
 
 namespace MC
 {
+    /* Konstanter */
+    const QString VERSION = "v0.1";
+
     namespace utils
     {
-        /* Konstanter */
-        const QString VERSION = "v0.1";
-        const QString HIST_FILE = "data/.mc_history";
-        const QString INI_FILE = "data/mc.ini";
-
         // Konverteringsfunktioner portspecifikationer <->
         BaudRateType toBaudRateType(const QString& baud_rate);
         DataBitsType toDataBitsType(const QString& data_bits);

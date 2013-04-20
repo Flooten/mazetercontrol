@@ -33,6 +33,7 @@ namespace MC
     /* Ritar stödlinjer */
     void ControlSignalsPlotScene::drawGrid()
     {
+        int width_temp = width();
         // Skala för vänster motorsignal
         addLine(0, MAX_LEVEL_LEFT_, width(), MAX_LEVEL_LEFT_, dashed_pen_);
         addLine(0, ZERO_LEVEL_LEFT_, width(), ZERO_LEVEL_LEFT_, dashed_pen_);

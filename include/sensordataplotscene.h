@@ -27,7 +27,8 @@ namespace MC
     public:
         SensorDataPlotScene(QObject* parent = NULL);
 
-        void newSensorData(SensorData sensor_data);
+        void newSensorData(SensorData sensor_data);        
+        void drawGrid() override;
 
     private:
         QVector<SensorData> sensor_data_;
@@ -49,14 +50,12 @@ namespace MC
         ChosenData chosen_data_ = FRONT_RIGHT;
 
         // Konstanter
-        int zero_level_ = 170;
-        int max_level_ = 40;
-        int min_level_ = 0;
+        int zero_level_ = 200;
+        int max_level_ = 70;
+        int min_level_ = zero_level_;
 
         QPen pen1_ = QPen(Qt::green);
         QPen pen2_ = QPen(Qt::red);
-
-        void drawGrid() override;
 
     public slots:
         void draw() override;

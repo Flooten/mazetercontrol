@@ -9,7 +9,7 @@ namespace MC
         ui(new Ui::AboutDialog)
     {
         ui->setupUi(this);
-        ui->label_version->setText("Version " + utils::VERSION);
+        ui->label_version->setText("Version " + VERSION);
 
         connect(ui->pushButton_close, SIGNAL(pressed()), this, SLOT(close()));
     }

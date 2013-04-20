@@ -21,33 +21,30 @@ namespace MC
     MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent)
         , ui(new Ui::MainWindow)
-        , mc_(new Control(utils::INI_FILE))
-        , terminal_(new Terminal(mc_, this))
         , plot_timer_(new QTimer(this))
+        , scene_(new MCGraphicsScene(this))
+        , cs_scene_(new ControlSignalsPlotScene(this))
+        , sd_scene_(new SensorDataPlotScene(this))
     {
         ui->setupUi(this);
 
+        mc_ = new Control(INI_FILE);
+        terminal_ = new Terminal(mc_, this);
+
         this->setFocusPolicy(Qt::StrongFocus);
         this->setFocus();
-
-        scene_ = new MCGraphicsScene(this);
-        cs_scene_ = new ControlSignalsPlotScene(this);
-        sd_scene_ = new SensorDataPlotScene(this);
 
         // Subscriptad text
         ui->label_kd->setText("K<sub>D</sub>");
         ui->label_kp->setText("K<sub>P</sub>");
 
         // Uppdatera fönsterrubrik
-        setWindowTitle(windowTitle() + " " + utils::VERSION);
+        setWindowTitle(windowTitle() + " " + VERSION);
 
         // Installera scener i GraphicsView
         ui->graphicsView_overview->setScene(scene_);
         ui->graphicsView_control_signals->setScene(cs_scene_);
         ui->graphicsView_sensor_data->setScene(sd_scene_);
-
-        cs_scene_->setSceneRect(0, 0, ui->graphicsView_control_signals->width(), ui->graphicsView_control_signals->height());
-        sd_scene_->setSceneRect(0, 0, ui->graphicsView_sensor_data->width(), ui->graphicsView_sensor_data->height());
 
         // Anslutningar
         connect(terminal_, SIGNAL(terminalClosing()), this, SLOT(closeTerminal()));
@@ -63,12 +60,11 @@ namespace MC
         connect(ui->actionOpenPreferences, SIGNAL(triggered()), this, SLOT(openPreferences()));
         connect(ui->pushButton_toggle_connection, SIGNAL(clicked()), this, SLOT(toggleConnection()));
         connect(ui->actionAboutMazeterControl, SIGNAL(triggered()), this, SLOT(openAboutDialog()));
-        connect(ui->pushButton_clear_plots, SIGNAL(clicked()), this, SLOT(clearPlots()));
+        connect(ui->pushButton_clear_plots, SIGNAL(clicked()), this, SLOT(resetPlots()));
         connect(ui->comboBox_sensor_data, SIGNAL(currentIndexChanged(int)), sd_scene_, SLOT(chosenDataChanged(int)));
 
         // Disabla de widgets som är beroende av en aktiv länk
         disableWidgets();
-        clearPlots();
 
         // Visa overview
         ui->tabWidget->setCurrentIndex(0);
@@ -83,6 +79,7 @@ namespace MC
         delete terminal_;
         delete scene_;
         delete cs_scene_;
+        delete sd_scene_;
 
         // Alltid sist VIKTIGT!
         delete ui;
@@ -156,6 +153,29 @@ namespace MC
         ui->doubleSpinBox_kp->setEnabled(true);
         ui->pushButton_transfer->setEnabled(true);
         ui->pushButton_calibrate->setEnabled(true);
+        ui->graphicsView_overview->setEnabled(true);
+
+        ui->pushButton_clear_plots->setEnabled(true);
+        ui->graphicsView_control_signals->setEnabled(true);
+        ui->graphicsView_sensor_data->setEnabled(true);
+        ui->comboBox_sensor_data->setEnabled(true);
+
+        // Sätt SceneRect, korrekt tab måste visas för att width() ska ge rätt värde.
+        if (ui->tabWidget->currentIndex() == 0)
+        {
+            ui->tabWidget->setCurrentIndex(1);
+            cs_scene_->setSceneRect(0, 0, ui->graphicsView_control_signals->width(), ui->graphicsView_control_signals->height());
+            sd_scene_->setSceneRect(0, 0, ui->graphicsView_sensor_data->width(), ui->graphicsView_sensor_data->height());
+            ui->tabWidget->setCurrentIndex(0);
+        }
+        else
+        {
+            cs_scene_->setSceneRect(0, 0, ui->graphicsView_control_signals->width(), ui->graphicsView_control_signals->height());
+            sd_scene_->setSceneRect(0, 0, ui->graphicsView_sensor_data->width(), ui->graphicsView_sensor_data->height());
+        }
+
+        scene_->draw();
+        resetPlots();
     }
 
     /* Disablar alla widgets som kräver en aktiv länk */
@@ -179,6 +199,14 @@ namespace MC
         ui->doubleSpinBox_kp->setValue(0);
         ui->pushButton_transfer->setEnabled(false);
         ui->pushButton_calibrate->setEnabled(false);
+        ui->pushButton_clear_plots->setEnabled(false);
+        ui->graphicsView_control_signals->setEnabled(false);
+        ui->graphicsView_overview->setEnabled(false);
+        ui->graphicsView_sensor_data->setEnabled(false);
+        ui->comboBox_sensor_data->setEnabled(false);
+
+        clearPlots();
+        scene_->clear();
     }
 
     /* Tillåter mjuk övergång mellan olika nivåer */
@@ -458,12 +486,19 @@ namespace MC
     /* Togglar blåtandslänkens läge */
     void MainWindow::toggleConnection()
     {
-        if (ui->pushButton_toggle_connection->text() == "Connect")
+        if (!mc_->isConnected())
             // Upprätta anslutning
             mc_->parseCommand(UserInput("open"));
-        else if (ui->pushButton_toggle_connection->text() == "Disconnect")
+        else
             // Bryt anslutning
             mc_->parseCommand(UserInput("close"));
+    }
+
+    /* Nollställer plots */
+    void MainWindow::resetPlots()
+    {
+        clearPlots();
+        drawPlotGrid();
     }
 
     /* Rensar plots */
@@ -478,5 +513,12 @@ namespace MC
     {
         cs_scene_->draw();
         sd_scene_->draw();
+    }
+
+    /* Ritar stödlinjer */
+    void MainWindow::drawPlotGrid()
+    {
+        cs_scene_->drawGrid();
+        sd_scene_->drawGrid();
     }
 } // namespace MC

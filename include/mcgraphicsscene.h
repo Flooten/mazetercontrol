@@ -33,11 +33,21 @@ namespace MC
         void updateSensorData(const SensorData& sensor_data);
         void buttonPressed(QKeyEvent* event);
         void buttonReleased(QKeyEvent* event);
+        void draw();
 
     private:
         enum SensorDataIndex
         {
-
+            FRONT_LEFT,
+            FRONT_RIGHT,
+            LEFT_LONG,
+            RIGHT_LONG,
+            LEFT_SHORT,
+            RIGHT_SHORT,
+            BACK,
+            ANGLE,
+            LINE_DEVIATION,
+            LINE_TYPE
         };
 
         enum ButtonIndex
@@ -50,8 +60,8 @@ namespace MC
         };
 
         QPixmap* background_image_;
-        QMap<QString, QGraphicsTextItem*> sensor_data_;
-        QMap<ButtonIndex, QGraphicsRectItem*> buttons_;
+        QMap<SensorDataIndex, QGraphicsTextItem*> sensor_data_;
+        QMap<ButtonIndex, QGraphicsPixmapItem*> buttons_;
 
         const QString UNIT_CM = " cm";
         const QString UNIT_DEG = " degrees";

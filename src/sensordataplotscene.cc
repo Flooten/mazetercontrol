@@ -38,6 +38,10 @@ namespace MC
     {
         addLine(0, zero_level_, width(), zero_level_, dashed_pen_);
         addLine(0, max_level_, width(), max_level_, dashed_pen_);
+
+        if (min_level_ != zero_level_)
+            // Rita ut ytterligare en stödlinje om sådan sensorsignal är vald.
+            addLine(0, min_level_, width(), min_level_, dashed_pen_);
     }
 
     /*
@@ -75,17 +79,19 @@ namespace MC
     {
         chosen_data_ = static_cast<ChosenData>(index);
 
+        clear();
+
         switch (chosen_data_)
         {
         case FRONT_RIGHT:
-            zero_level_ = 170;
-            max_level_ = 40;
-            min_level_ = 0;
+            zero_level_ = 200;
+            max_level_ = 70;
+            min_level_ = zero_level_;
             break;
 
         case LINE_DEVIATION:
-            zero_level_ = 100;
-            max_level_ = 0;
+            zero_level_ = 130;
+            max_level_ = 60;
             min_level_ = 200;
             break;
 
@@ -93,7 +99,6 @@ namespace MC
             break;
         }
 
-        clear();
         drawGrid();
     }
 

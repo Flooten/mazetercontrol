@@ -6,20 +6,26 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>825</width>
-    <height>650</height>
+    <width>1080</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
   <property name="minimumSize">
    <size>
-    <width>825</width>
-    <height>650</height>
+    <width>1080</width>
+    <height>720</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1080</width>
+    <height>720</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -41,7 +47,10 @@ font: 9pt &quot;Consolas&quot;;
 QMenuBar::item {
 background-color: rgb(31, 31, 31);
 }*/
-font: 10pt &quot;JackInput&quot;;</string>
+font: 10pt &quot;Ubuntu&quot;;</string>
+  </property>
+  <property name="tabShape">
+   <enum>QTabWidget::Rounded</enum>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -107,6 +116,9 @@ font: 10pt &quot;JackInput&quot;;</string>
             </item>
             <item>
              <widget class="QPushButton" name="pushButton_clear_plots">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="text">
                <string>Clear plots</string>
               </property>
@@ -116,6 +128,9 @@ font: 10pt &quot;JackInput&quot;;</string>
           </item>
           <item>
            <widget class="QGraphicsView" name="graphicsView_control_signals">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
             <property name="verticalScrollBarPolicy">
              <enum>Qt::ScrollBarAlwaysOff</enum>
             </property>
@@ -153,12 +168,15 @@ font: 10pt &quot;JackInput&quot;;</string>
             <item>
              <widget class="QLabel" name="label_plot_data">
               <property name="text">
-               <string>Data:</string>
+               <string>Displayed data:</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QComboBox" name="comboBox_sensor_data">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <item>
                <property name="text">
                 <string>Front right</string>
@@ -215,6 +233,9 @@ font: 10pt &quot;JackInput&quot;;</string>
           </item>
           <item>
            <widget class="QGraphicsView" name="graphicsView_sensor_data">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
             <property name="verticalScrollBarPolicy">
              <enum>Qt::ScrollBarAlwaysOff</enum>
             </property>
@@ -350,7 +371,7 @@ font: 10pt &quot;JackInput&quot;;</string>
           <item>
            <widget class="QProgressBar" name="progressBar_left_engine_fwd">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -375,7 +396,7 @@ font: 10pt &quot;JackInput&quot;;</string>
           <item>
            <widget class="QProgressBar" name="progressBar_left_engine_rev">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -419,7 +440,7 @@ font: 10pt &quot;JackInput&quot;;</string>
           <item>
            <widget class="QProgressBar" name="progressBar_right_engine_fwd">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -450,7 +471,7 @@ font: 10pt &quot;JackInput&quot;;</string>
           <item>
            <widget class="QProgressBar" name="progressBar_right_engine_rev">
             <property name="enabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -568,6 +589,9 @@ selection-background-color: rgb(255, 255, 255);
             </item>
             <item>
              <widget class="QDoubleSpinBox" name="doubleSpinBox_kd">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -614,6 +638,9 @@ selection-background-color: rgb(255, 255, 255);
             </item>
             <item>
              <widget class="QDoubleSpinBox" name="doubleSpinBox_kp">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>50</width>
@@ -650,8 +677,8 @@ selection-background-color: rgb(255, 255, 255);
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>825</width>
-     <height>22</height>
+     <width>1080</width>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -697,8 +724,15 @@ selection-background-color: rgb(255, 255, 255);
    <property name="text">
     <string>Preferences...</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
   </action>
   <action name="actionOpenTerminal">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/resources/terminal.ico</normaloff>:/icons/resources/terminal.ico</iconset>
+   </property>
    <property name="text">
     <string>Open terminal...</string>
    </property>
