@@ -8,6 +8,8 @@
 
 #include "mcgraphicsscene.h"
 
+#include <QFont>
+
 namespace MC
 {
     MCGraphicsScene::MCGraphicsScene(QObject *parent)
@@ -104,11 +106,11 @@ namespace MC
         QPixmap button(":/images/resources/upr.png");
 
         QPoint button_dimensions(button.width(), button.height());
-        QPoint up_pos(300, 300);
+        QPoint up_pos(350, 350);
         int spacing = 5;
 
         // Skapa knappar
-        buttons_.insert(KEY_UP, new QGraphicsPixmapItem(QPixmap(":/images/resources/upr.png")));
+        buttons_.insert(KEY_UP, new QGraphicsPixmapItem(button));
         buttons_.insert(KEY_DOWN, new QGraphicsPixmapItem(QPixmap(":/images/resources/downr.png")));
         buttons_.insert(KEY_LEFT, new QGraphicsPixmapItem(QPixmap(":/images/resources/leftr.png")));
         buttons_.insert(KEY_RIGHT, new QGraphicsPixmapItem(QPixmap(":/images/resources/rightr.png")));
@@ -141,24 +143,37 @@ namespace MC
         sensor_data_.insert(LINE_DEVIATION, new QGraphicsTextItem("0 cm"));
         sensor_data_.insert(LINE_TYPE, new QGraphicsTextItem("0 cm"));
 
+        // Sätt rätt font
+        QFont font("Ubuntu");
+        font.setPointSize(10);
+        QMapIterator<SensorDataIndex, QGraphicsTextItem*> itr(sensor_data_);
+
+        while (itr.hasNext())
+        {
+            itr.next();
+            itr.value()->setFont(font);
+        }
+
+        // Sätt rätt positioner
         placeTextItems();
     }
 
     /* Placerar ut textlådorna */
     void MCGraphicsScene::placeTextItems()
     {
-        int ypos = -40;
         int left_edge_x = -40;
-        int right_edge_x = 330;
-        int first_line_y = 75;
-        int second_line_y = 170;
+        int right_edge_x = 305;
+        int first_line_y = 90;
+        int second_line_y = 275;
         int top_edge_y = -30;
-        int bottom_edge_y = 280;
+        int bottom_edge_y = 395;
+        int center_horizontal = background_image_->width() / 2;
+        int center_vertical = background_image_->height() / 2;
 
-        sensor_data_[FRONT_LEFT]->setPos(52, top_edge_y);
+        sensor_data_[FRONT_LEFT]->setPos(60, top_edge_y);
         addItem(sensor_data_[FRONT_LEFT]);
 
-        sensor_data_[FRONT_RIGHT]->setPos(240, top_edge_y);
+        sensor_data_[FRONT_RIGHT]->setPos(205, top_edge_y);
         addItem(sensor_data_[FRONT_RIGHT]);
 
         sensor_data_[LEFT_LONG]->setPos(left_edge_x, first_line_y);
@@ -173,16 +188,16 @@ namespace MC
         sensor_data_[RIGHT_SHORT]->setPos(right_edge_x, second_line_y);
         addItem(sensor_data_[RIGHT_SHORT]);
 
-        sensor_data_[BACK]->setPos(147, bottom_edge_y);
+        sensor_data_[BACK]->setPos(center_horizontal - 18, bottom_edge_y);
         addItem(sensor_data_[BACK]);
 
-        sensor_data_[ANGLE]->setPos(110, ypos);
+        sensor_data_[ANGLE]->setPos(center_horizontal, center_vertical);
         addItem(sensor_data_[ANGLE]);
 
-        sensor_data_[LINE_DEVIATION]->setPos(170, ypos);
+        sensor_data_[LINE_DEVIATION]->setPos(center_horizontal, center_vertical + 20);
         addItem(sensor_data_[LINE_DEVIATION]);
 
-        sensor_data_[LINE_TYPE]->setPos(200, ypos);
+        sensor_data_[LINE_TYPE]->setPos(center_horizontal, center_vertical - 20);
         addItem(sensor_data_[LINE_TYPE]);
     }
 }
