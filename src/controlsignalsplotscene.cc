@@ -30,15 +30,18 @@ namespace MC
         line_vector_.append(new QGraphicsLineItem(0, MIN_LEVEL_RIGHT_, view_width_, MIN_LEVEL_RIGHT_));
     }
 
+    ControlSignalsPlotScene::~ControlSignalsPlotScene()
+    {
+        // Återlämna minne
+        QVectorIterator<QGraphicsLineItem*> itr(line_vector_);
+
+        while (itr.hasNext())
+            delete itr.next();
+    }
+
     /*
      *  Public
      */
-
-    /* Lägger till inkommen data i control_signals_ */
-    void ControlSignalsPlotScene::newControlSignals(ControlSignals control_signals)
-    {
-        control_signals_.append(control_signals);
-    }
 
     /* Ritar stödlinjer */
     void ControlSignalsPlotScene::drawGrid()
@@ -51,10 +54,6 @@ namespace MC
             addItem(itr.next());
         }
     }
-
-    /*
-     *  Private
-     */
 
     /* Ritar om */
     void ControlSignalsPlotScene::draw()
@@ -110,5 +109,15 @@ namespace MC
 
         // Räkna upp
         ++time_;
+    }
+
+    /*
+     *  Public slots
+     */
+
+    /* Lägger till inkommen data i control_signals_ */
+    void ControlSignalsPlotScene::newControlSignals(ControlSignals control_signals)
+    {
+        control_signals_.append(control_signals);
     }
 } // namespace MC

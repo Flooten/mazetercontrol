@@ -23,18 +23,20 @@ namespace MC
         line_map_.insert(ZERO, new QGraphicsLineItem(0, zero_level_, view_width_, zero_level_));
     }
 
-    /*
-     *  Public
-     */
-
-    /* För in ny sensordata */
-    void SensorDataPlotScene::newSensorData(SensorData sensor_data)
+    SensorDataPlotScene::~SensorDataPlotScene()
     {
-        sensor_data_.append(sensor_data);
+        // Återlämna minne
+        QMapIterator<GridLine, QGraphicsLineItem*> itr(line_map_);
+
+        while (itr.hasNext())
+        {
+            itr.next();
+            delete itr.value();
+        }
     }
 
     /*
-     *  Private
+     *  Public
      */
 
     /* Rita ut stödlinjer */
@@ -50,10 +52,6 @@ namespace MC
         }
     }
 
-    /*
-     *  Slots
-     */
-
     /* Rita ut */
     void SensorDataPlotScene::draw()
     {
@@ -65,6 +63,7 @@ namespace MC
         QGraphicsEllipseItem* dot = new QGraphicsEllipseItem(rect);
         int ypos = zero_level_;
 
+        // Position beroende på vald signal
         switch (chosen_data_)
         {
         case FRONT_LEFT:
@@ -134,6 +133,16 @@ namespace MC
         ++time_;
     }
 
+    /*
+     *  Public slots
+     */
+
+    /* För in ny sensordata */
+    void SensorDataPlotScene::newSensorData(SensorData sensor_data)
+    {
+        sensor_data_.append(sensor_data);
+    }
+
     void SensorDataPlotScene::chosenDataChanged(int index)
     {
         chosen_data_ = static_cast<ChosenData>(index);
@@ -190,9 +199,9 @@ namespace MC
 
         case LINE_DEVIATION:
         {
-            zero_level_ = 230;
-            max_level_ = 50;
-            min_level_ = zero_level_;
+            zero_level_ = 130;
+            max_level_ = 60;
+            min_level_ = 200;
 
             while(itr.hasNext())
             {
@@ -229,9 +238,9 @@ namespace MC
         }
 
         case ANGLE:
-            zero_level_ = 130;
-            max_level_ = 60;
-            min_level_ = 200;
+            zero_level_ = 230;
+            max_level_ = 50;
+            min_level_ = zero_level_;
 
             while(itr.hasNext())
             {

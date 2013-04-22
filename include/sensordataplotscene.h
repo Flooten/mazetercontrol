@@ -29,19 +29,26 @@ namespace MC
     public:
         SensorDataPlotScene(int view_width, int view_height, QObject* parent = NULL);
 
+        ~SensorDataPlotScene();
+
         void drawGrid() override;
+        void draw() override;
+
+    public slots:
+        void newSensorData(SensorData sensor_data);
+        void chosenDataChanged(int index);
 
     private:
         QVector<SensorData> sensor_data_;
 
         enum ChosenData
         {
-            FRONT_RIGHT,
             FRONT_LEFT,
-            RIGHT_SHORT,
+            FRONT_RIGHT,
+            LEFT_LONG,
             RIGHT_LONG,
             LEFT_SHORT,
-            LEFT_LONG,
+            RIGHT_SHORT,
             BACK,
             ANGLE,
             LINE_DEVIATION
@@ -54,21 +61,15 @@ namespace MC
             ZERO
         };
 
-        ChosenData chosen_data_ = FRONT_RIGHT;
+        ChosenData chosen_data_ = FRONT_LEFT;
         QMap<GridLine, QGraphicsLineItem*> line_map_;
 
-        // Konstanter
         int zero_level_ = 200;
         int max_level_ = 70;
         int min_level_ = zero_level_;
 
         QPen pen1_ = QPen(Qt::green);
         QPen pen2_ = QPen(Qt::red);
-
-    public slots:
-        void newSensorData(SensorData sensor_data);
-        void draw() override;
-        void chosenDataChanged(int index);
     };
 } // namespace MC
 

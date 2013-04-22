@@ -39,7 +39,7 @@ namespace MC
         ui->label_kp->setText("K<sub>P</sub>");
 
         // Uppdatera fönsterrubrik
-        setWindowTitle(windowTitle() + " " + VERSION);
+        setWindowTitle(windowTitle() + " v" + VERSION);
 
         // Installera scener i GraphicsView
         ui->graphicsView_overview->setScene(scene_);
@@ -47,23 +47,29 @@ namespace MC
         ui->graphicsView_sensor_data->setScene(sd_scene_);
 
 
-        // Anslutningar
+        // Generella anslutningar
         connect(terminal_, SIGNAL(terminalClosing()), this, SLOT(closeTerminal()));
         connect(mc_, SIGNAL(log(QString)), this, SLOT(log(QString)));
         connect(mc_, SIGNAL(btConnected()), this, SLOT(btConnected()));
         connect(mc_, SIGNAL(btDisconnected()), this, SLOT(btDisconnected()));
-        connect(mc_, SIGNAL(modeChanged(Control::Mode)), this, SLOT(setMode(Control::Mode)));
-        connect(mc_, SIGNAL(controlSignalsChanged(ControlSignals)), this, SLOT(setControlGagues(ControlSignals)));
-        connect(mc_, SIGNAL(sensorDataChanged(SensorData)), this, SLOT(setSensorValues(SensorData)));
-        connect(mc_, SIGNAL(sensorDataChanged(SensorData)), sd_scene_, SLOT(newSensorData(SensorData)));
         connect(plot_timer_, SIGNAL(timeout()), this, SLOT(drawPlots()));
 
+        // Relä av nyligen inkommen data
+        connect(mc_, SIGNAL(modeChanged(Control::Mode)), this, SLOT(setMode(Control::Mode)));
+        connect(mc_, SIGNAL(controlSignalsChanged(ControlSignals)), this, SLOT(setControlGagues(ControlSignals)));
+        connect(mc_, SIGNAL(controlSignalsChanged(ControlSignals)), cs_scene_, SLOT(newControlSignals(ControlSignals)));
+        connect(mc_, SIGNAL(sensorDataChanged(SensorData)), this, SLOT(setSensorValues(SensorData)));
+        connect(mc_, SIGNAL(sensorDataChanged(SensorData)), sd_scene_, SLOT(newSensorData(SensorData)));
+
+        // Ui-händelser: knapptryckningar och actions
         connect(ui->actionOpenTerminal, SIGNAL(triggered()), this, SLOT(openTerminal()));
         connect(ui->actionOpenPreferences, SIGNAL(triggered()), this, SLOT(openPreferences()));
         connect(ui->pushButton_toggle_connection, SIGNAL(clicked()), this, SLOT(toggleConnection()));
         connect(ui->actionAboutMazeterControl, SIGNAL(triggered()), this, SLOT(openAboutDialog()));
         connect(ui->pushButton_clear_plots, SIGNAL(clicked()), this, SLOT(resetPlots()));
         connect(ui->comboBox_sensor_data, SIGNAL(currentIndexChanged(int)), this, SLOT(chosenSensorDataChanged(int)));
+
+        // Plotcentreringssignaler
         connect(sd_scene_, SIGNAL(center(int)), this, SLOT(centerSensorDataPlot(int)));
         connect(cs_scene_, SIGNAL(center(int)), this, SLOT(centerControlSignalsPlot(int)));
 
@@ -137,6 +143,106 @@ namespace MC
 
             // Förhindra att eventet kaskadar vidare.
             event->accept();
+        }
+    }
+
+    /*
+     *  Public slots
+     */
+
+    /* Slot för att tillåta skrivning från andra objekt */
+    void MainWindow::log(const QString& str)
+    {
+        ui->textEdit_log->append(str);
+    }
+
+    /* Rensa event log */
+    void MainWindow::clearLog()
+    {
+        ui->textEdit_log->clear();
+    }
+
+    /* Blåtandslänk öppen */
+    void MainWindow::btConnected()
+    {
+        enableWidgets();
+        log("Connection established.");
+        statusMessage("Connection established.");
+
+        // Uppdatera knappen
+        ui->pushButton_toggle_connection->setText("Disconnect");
+        ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/stop.ico"));
+
+        // Starta plot_timer_
+        plot_timer_->start(PLOT_DELTA_T);
+    }
+
+    /* Blåtandslänk stängd */
+    void MainWindow::btDisconnected()
+    {
+        disableWidgets();
+        log("Connection closed.");
+        statusMessage("No active connection.");
+
+        // Uppdatera knappen
+        ui->pushButton_toggle_connection->setText("Connect");
+        ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/start.ico"));
+
+        // Stanna plot_timer_
+        plot_timer_->stop();
+
+        // Rensa plottar
+        sd_scene_->clear();
+        cs_scene_->clear();
+    }
+
+    /* Uppdaterar mätarna för kontrollsignalerna */
+    void MainWindow::setControlGagues(ControlSignals control_signals)
+    {
+        if (mc_->isConnected())
+        {
+            // Höger hjulpar
+            setRightEngineGauge((int)control_signals.right_value, control_signals.right_direction);
+
+            // Vänster hjulpar
+            setLeftEngineGauge((int)control_signals.left_value, control_signals.left_direction);
+
+            // Klo
+            if (control_signals.claw_value == 0)
+                ui->label_claw_status->setText("Closed");
+            else
+                ui->label_claw_status->setText("Open");
+
+            // Sätt värden till KP och KD
+        }
+    }
+
+    /* Uppdaterar sensordatan som visas i scene_ */
+    void MainWindow::setSensorValues(SensorData sensor_data)
+    {
+        scene_->updateSensorData(sensor_data);
+    }
+
+    /* Uppdaterar operationsläget */
+    void MainWindow::setMode(Control::Mode mode)
+    {
+        if (mc_->isConnected())
+        {
+            switch (mode)
+            {
+            case Control::AUTO:
+                ui->label_mode_status->setText("Auto");
+                log("Mode changed to: Auto");
+                break;
+
+            case Control::MANUAL:
+                ui->label_mode_status->setText("Manual");
+                log("Mode changed to: Manual");
+                break;
+
+            default:
+                break;
+            }
         }
     }
 
@@ -337,20 +443,31 @@ namespace MC
         ui->statusbar->showMessage(str);
     }
 
-    /*
-     *  Slots
-     */
-
-    /* Slot för att tillåta skrivning från andra objekt */
-    void MainWindow::log(const QString& str)
+    /* Rensar plots */
+    void MainWindow::clearPlots()
     {
-        ui->textEdit_log->append(str);
+        cs_scene_->clear();
+        ui->graphicsView_control_signals->centerOn(0, ui->graphicsView_control_signals->height() / 2);
+
+        sd_scene_->clear();
+        ui->graphicsView_sensor_data->centerOn(0, ui->graphicsView_sensor_data->height() / 2);
     }
 
-    /* Rensa fönstret */
-    void MainWindow::clear()
+    /* Ritar stödlinjer */
+    void MainWindow::drawPlotGrid()
     {
-        ui->textEdit_log->clear();
+        cs_scene_->drawGrid();
+        sd_scene_->drawGrid();
+    }
+
+    /*
+     *  Private slots
+     */
+
+    /* Öppnar terminalen */
+    void MainWindow::openTerminal()
+    {
+        terminal_->show();
     }
 
     /* Stänger terminalen */
@@ -364,97 +481,6 @@ namespace MC
     {
         AboutDialog dlg;
         dlg.exec();
-    }
-
-    /* Blåtandslänk öppen */
-    void MainWindow::btConnected()
-    {
-        enableWidgets();
-        log("Connection established.");
-        statusMessage("Connection established.");
-
-        // Uppdatera knappen
-        ui->pushButton_toggle_connection->setText("Disconnect");
-        ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/stop.ico"));
-
-        // Starta plot_timer_
-        plot_timer_->start(PLOT_DELTA_T);
-    }
-
-    /* Blåtandslänk stängd */
-    void MainWindow::btDisconnected()
-    {
-        disableWidgets();
-        log("Connection closed.");
-        statusMessage("No active connection.");
-
-        // Uppdatera knappen
-        ui->pushButton_toggle_connection->setText("Connect");
-        ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/start.ico"));
-
-        // Stanna plot_timer_
-        plot_timer_->stop();
-
-        // Rensa plottar
-        sd_scene_->clear();
-        cs_scene_->clear();
-    }
-
-    /* Uppdaterar mätarna för kontrollsignalerna */
-    void MainWindow::setControlGagues(ControlSignals control_signals)
-    {
-        if (mc_->isConnected())
-        {
-            // Höger hjulpar
-            setRightEngineGauge((int)control_signals.right_value, control_signals.right_direction);
-
-            // Vänster hjulpar
-            setLeftEngineGauge((int)control_signals.left_value, control_signals.left_direction);
-
-            // Klo
-            if (control_signals.claw_value == 0)
-                ui->label_claw_status->setText("Closed");
-            else
-                ui->label_claw_status->setText("Open");
-
-            // Sätt värden till KP och KD
-            cs_scene_->newControlSignals(control_signals);
-        }
-    }
-
-    /* Uppdaterar sensordatan som visas i scene_ */
-    void MainWindow::setSensorValues(SensorData sensor_data)
-    {
-        scene_->updateSensorData(sensor_data);
-    }
-
-    /* Uppdaterar operationsläget */
-    void MainWindow::setMode(Control::Mode mode)
-    {
-        if (mc_->isConnected())
-        {
-            switch (mode)
-            {
-            case Control::AUTO:
-                ui->label_mode_status->setText("Auto");
-                log("Mode changed to: Auto");
-                break;
-
-            case Control::MANUAL:
-                ui->label_mode_status->setText("Manual");
-                log("Mode changed to: Manual");
-                break;
-
-            default:
-                break;
-            }
-        }
-    }
-
-    /* Öppnar terminalen */
-    void MainWindow::openTerminal()
-    {
-        terminal_->show();
     }
 
     /* Öppnar preferences */
@@ -495,16 +521,6 @@ namespace MC
         drawPlotGrid();
     }
 
-    /* Rensar plots */
-    void MainWindow::clearPlots()
-    {
-        cs_scene_->clear();
-        ui->graphicsView_control_signals->centerOn(0, ui->graphicsView_control_signals->height() / 2);
-
-        sd_scene_->clear();        
-        ui->graphicsView_sensor_data->centerOn(0, ui->graphicsView_sensor_data->height() / 2);
-    }
-
     /* Ritar en ny punkt */
     void MainWindow::drawPlots()
     {
@@ -532,10 +548,4 @@ namespace MC
         sd_scene_->chosenDataChanged(index);
     }
 
-    /* Ritar stödlinjer */
-    void MainWindow::drawPlotGrid()
-    {
-        cs_scene_->drawGrid();
-        sd_scene_->drawGrid();
-    }
 } // namespace MC

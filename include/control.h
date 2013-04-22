@@ -46,23 +46,25 @@ namespace MC
         void parseCommand(const UserInput& input);
         void handleKeyPressEvent(QKeyEvent *event);
         void handleKeyReleaseEvent(QKeyEvent* event);
-        void printWelcomeMessage();
 
         // Getters
         bool isConnected() const;
         SerialPort* port() const;
 
+    public slots:
+        void readData();
+        void reportWrite(qint64 bytes_written);
+
     private:
         // Variabler
         bool firefly_config_mode_ = false;
+        bool bt_connected_ = false;
 
-        QString welcome_message_;
         QString help_message_;
         QMap<QString, QString> help_texts_;
 
         QByteArray data_;
         QByteArray acknowledge_message_;
-        bool bt_connected_ = false;
 
         SerialPort* port_;
 
@@ -80,8 +82,8 @@ namespace MC
         void parseMessage(const QByteArray &data);
         void updateControlSignals(const QByteArray& control_signals_data);
         void updateSensorData(const QByteArray& sensor_data);
-
         void printData(QByteArray data);
+
         void parseIniFile(const QString& ini_file);
         void readLine(QString& str, QString& command, QString& argument);
         void readAssignArgument(const QString& argument, QString& name, QString& value);
@@ -96,10 +98,6 @@ namespace MC
         void modeChanged(Control::Mode);
         void controlSignalsChanged(ControlSignals);
         void sensorDataChanged(SensorData);
-
-    public slots:
-        void readData();
-        void reportWrite(qint64 bytes_written);
     };
 } // namespace MC
 

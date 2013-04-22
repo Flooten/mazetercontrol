@@ -21,7 +21,9 @@
 namespace MC
 {
     /* Konstanter */
-    const QString VERSION = "v0.1";
+    const QString VERSION = "0.1";
+    const int SENSOR_DATA_SIZE = 11;
+    const int CONTROL_SIGNALS_SIZE = 5;
 
     namespace utils
     {

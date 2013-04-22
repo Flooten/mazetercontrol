@@ -200,4 +200,4 @@ namespace MC
         sensor_data_[LINE_TYPE]->setPos(center_horizontal, center_vertical - 20);
         addItem(sensor_data_[LINE_TYPE]);
     }
-}
+} // namespace MC

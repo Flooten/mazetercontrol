@@ -188,17 +188,17 @@ font: 10pt &quot;Ubuntu&quot;;</string>
               </property>
               <item>
                <property name="text">
-                <string>Front right [20-150 cm]</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
                 <string>Front left [20-150 cm]</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Right short [4-30 cm]</string>
+                <string>Front right [20-150 cm]</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Left long [20-150 cm]</string>
                </property>
               </item>
               <item>
@@ -213,7 +213,7 @@ font: 10pt &quot;Ubuntu&quot;;</string>
               </item>
               <item>
                <property name="text">
-                <string>Left long [20-150 cm]</string>
+                <string>Right short [4-30 cm]</string>
                </property>
               </item>
               <item>
@@ -685,7 +685,7 @@ selection-background-color: rgb(255, 255, 255);
      <x>0</x>
      <y>0</y>
      <width>1080</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

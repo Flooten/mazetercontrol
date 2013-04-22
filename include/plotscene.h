@@ -35,9 +35,8 @@ namespace MC
     protected:
         QPen dashed_pen_ = QPen(Qt::DashLine);
         int time_ = 0;
-        int view_width_ = 0;
-        int view_height_ = 0;
-
+        int view_width_;
+        int view_height_;
     };
 } // namespace MC
 #endif // PLOTSCENE_H

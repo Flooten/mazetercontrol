@@ -14,6 +14,7 @@
 #include <QStringList>
 #include <QFile>
 #include <QMessageBox>
+#include <QDebug>
 
 namespace MC
 {
@@ -33,6 +34,9 @@ namespace MC
         // Anslutningar
         connect(port_, SIGNAL(readyRead()), this, SLOT(readData()));
         connect(port_, SIGNAL(bytesWritten(qint64)), this, SLOT(reportWrite(qint64)));
+
+        qDebug() << sizeof(unsigned short int);
+        qDebug() << sizeof(SensorData);
     }
 
     Control::~Control()
@@ -358,61 +362,83 @@ namespace MC
         switch(event->key())
         {
         case Qt::Key_Up:
+        {
             emit out("Command: Steer straight.");
             transmitCommand(STEER_STRAIGHT);
             break;
+        }
 
         case Qt::Key_Down:
+        {
             emit out("Command: Steer back.");
             transmitCommand(STEER_BACK);
             break;
+        }
 
         case Qt::Key_S:
+        {
             emit out("Command: Steer stop.");
             transmitCommand(STEER_STOP);
             break;
+        }
 
         case Qt::Key_Left:
+        {
             emit out("Command: Steer left.");
             transmitCommand(STEER_STRAIGHT_LEFT);
             break;
+        }
 
         case Qt::Key_Right:
+        {
             emit out("Command: Steer right.");
             transmitCommand(STEER_STRAIGHT_RIGHT);
             break;
+        }
 
         case Qt::Key_A:
+        {
             emit out("Command: Rotate left.");
             transmitCommand(STEER_ROTATE_LEFT);
             break;
+        }
 
         case Qt::Key_D:
+        {
             emit out("Command: Rotate right.");
             transmitCommand(STEER_ROTATE_RIGHT);
             break;
+        }
 
         case Qt::Key_G:
+        {
             emit out("Command: Close Claw.");
             transmitCommand(CLAW_CLOSE);
             break;
+        }
 
         case Qt::Key_B:
+        {
             emit out("Command: Open Claw.");
             transmitCommand(CLAW_OPEN);
             break;
+        }
 
         case Qt::Key_Plus:
+        {
             increaseThrottle();
             emit out("Command: Increasing speed. Current value: " + QString::number(throttle_value_));
             transmitCommand(CONTROL_THROTTLE, 1, &throttle_value_);
             break;
+        }
 
         case Qt::Key_Minus:
+        {
             decreaseThrottle();
             emit out("Command: Increasing speed. Current value: " + QString::number(throttle_value_));
             transmitCommand(CONTROL_THROTTLE, 1, &throttle_value_);
             break;
+        }
 
         default:
             break;
@@ -440,12 +466,6 @@ namespace MC
         }
     }
 
-    /* Skriv ut hjälptexten */
-    void Control::printWelcomeMessage()
-    {
-        emit out(welcome_message_);
-    }
-
     bool Control::isConnected() const
     {
         return bt_connected_;
@@ -456,6 +476,76 @@ namespace MC
     {
         return port_;
     }
+
+    /*
+     *  Public slots
+     */
+
+    /* Läs den inkomna datan och skriv den till terminalen */
+    void Control::readData()
+    {
+        // Läs porten
+        data_.append(port_->readAll());
+
+        // Lyssna efter acc från kommunikationsenheten.
+        if (!bt_connected_ && data_.contains(acknowledge_message_))
+        {
+            int index = data_.indexOf(acknowledge_message_);
+            data_.remove(0, index + 2);
+
+            bt_connected_ = true;
+            emit btConnected();
+        }
+
+        while (data_.length() >= 2)
+        {
+            // Hantera fallet att det sista meddelandet har size 0
+            if (data_.length() == 2 && data_.at(1) == 0)
+            {
+                // Presentera
+                printData(data_);
+
+                // Hantera meddelandet
+                parseMessage(data_);
+
+                // Nollställ
+                data_.clear();
+            }
+            else
+            {
+                // Avsluta om data_ innehåller ett ofullständigt meddelande.
+                if (data_.at(1) > data_.length() - 2)
+                    return;
+
+                // Ett helt eller mer än ett helt meddelande emottaget.
+                if (data_.length() - 2 >= data_.at(1))
+                {
+                    int message_length = data_.at(1) + 2;
+
+                    QByteArray message = data_.left(message_length);
+
+                    // Presentera
+                    printData(message);
+
+                    // Hantera meddelandet
+                    parseMessage(message);
+
+                    // Ta bort ur data_
+                    data_.remove(0, message_length);
+                }
+            }
+        }
+    }
+
+    /* Rapportera om fullbordad sändning */
+    void Control::reportWrite(qint64 bytes_written)
+    {
+        if (bytes_written != -1)
+            emit out("Transmission succeeded.\n");
+        else
+            emit out("Transmission failed.\n");
+    }
+
 
     /*
      *  Private
@@ -497,18 +587,14 @@ namespace MC
     void Control::increaseThrottle()
     {
         if (throttle_value_ <= 100)
-        {
             throttle_value_ += THROTTLE_INCREMENT_;
-        }
     }
 
     /* Minska hastigheten */
     void Control::decreaseThrottle()
     {
         if (throttle_value_ >= THROTTLE_INCREMENT_)
-        {
             throttle_value_ -= THROTTLE_INCREMENT_;
-        }
     }
 
     /* Tolkar det meddelande som är lagrat i data */
@@ -558,7 +644,7 @@ namespace MC
     /* Uppdaterar control_signals_ */
     void Control::updateControlSignals(const QByteArray& control_signals_data)
     {
-        if (control_signals_data.size() == 7)
+        if (control_signals_data.size() - 2 == CONTROL_SIGNALS_SIZE)
         {
             control_signals_.right_value = control_signals_data.at(2);
             control_signals_.left_value = control_signals_data.at(3);
@@ -573,7 +659,7 @@ namespace MC
     /* Uppdaterar sensor_data_ */
     void Control::updateSensorData(const QByteArray& sensor_data)
     {
-        if (sensor_data.size() == sensor_data.at(1) + 2)
+        if (sensor_data.size() - 2 == SENSOR_DATA_SIZE)
         {
             sensor_data_.distance1 = sensor_data.at(2);
             sensor_data_.distance2 = sensor_data.at(3);
@@ -660,10 +746,6 @@ namespace MC
                         if (argument == "help_message")
                         {
                             help_message_ = readUntilEnd(stream);
-                        }
-                        else if (argument == "welcome_message")
-                        {
-                            welcome_message_ = readUntilEnd(stream);
                         }
                         else if (argument == "help_set")
                         {
@@ -808,74 +890,5 @@ namespace MC
         while (!str.isNull());
 
         return str;
-    }
-
-    /*
-     *  Slots
-     */
-
-    /* Läs den inkomna datan och skriv den till terminalen */
-    void Control::readData()
-    {
-        // Läs porten
-        data_.append(port_->readAll());
-
-        // Lyssna efter acc från kommunikationsenheten.
-        if (!bt_connected_ && data_.contains(acknowledge_message_))
-        {
-            int index = data_.indexOf(acknowledge_message_);
-            data_.remove(0, index + 2);
-
-            bt_connected_ = true;
-            emit btConnected();
-        }
-
-        while (data_.length() >= 2)
-        {
-            // Hantera fallet att det sista meddelandet har size 0
-            if (data_.length() == 2 && data_.at(1) == 0)
-            {
-                // Presentera
-                printData(data_);
-
-                // Hantera meddelandet
-                parseMessage(data_);
-
-                // Nollställ
-                data_.clear();
-            }
-            else
-            {
-                // Avsluta om data_ innehåller ett ofullständigt meddelande.
-                if (data_.at(1) > data_.length() - 2)
-                    return;
-
-                // Ett helt eller mer än ett helt meddelande emottaget.
-                if (data_.length() - 2 >= data_.at(1))
-                {
-                    int message_length = data_.at(1) + 2;
-
-                    QByteArray message = data_.left(message_length);
-
-                    // Presentera och ta bort ur data_
-                    printData(message);
-
-                    // Hantera meddelandet
-                    parseMessage(message);
-
-                    // Ta bort ur data_
-                    data_.remove(0, message_length);
-                }
-            }
-        }
-    }
-
-    /* Rapportera om fullbordad sändning */
-    void Control::reportWrite(qint64 bytes_written)
-    {
-        if (bytes_written != -1)
-            emit out("Transmission succeeded.\n");
-        else
-            emit out("Transmission failed.\n");
     }
 } // namespace MC

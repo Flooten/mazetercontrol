@@ -29,12 +29,17 @@ namespace MC
     public:
         ControlSignalsPlotScene(int view_width, int view_height, QObject* parent = NULL);
 
-        void newControlSignals(ControlSignals control_signals);
+        ~ControlSignalsPlotScene();
 
         void drawGrid() override;
+        void draw() override;
+
+    public slots:
+        void newControlSignals(ControlSignals control_signals);
 
     private:
-        QVector<ControlSignals> control_signals_;
+        QVector<ControlSignals> control_signals_;        
+        QVector<QGraphicsLineItem*> line_vector_;
 
         const int MAX_LEVEL_LEFT_ = 20;
         const int ZERO_LEVEL_LEFT_ = 70;
@@ -46,25 +51,6 @@ namespace MC
 
         QPen lpen_;
         QPen rpen_;
-
-        enum Line
-        {
-            MAX_RIGHT,
-            ZERO_RIGHT,
-        };
-
-        QVector<QGraphicsLineItem*> line_vector_;
-
-        QGraphicsLineItem* max_line_l_;
-        QGraphicsLineItem* zero_line_l_;
-        QGraphicsLineItem* min_line_l_;
-
-        QGraphicsLineItem* max_line_r_;
-        QGraphicsLineItem* zero_line_r_;
-        QGraphicsLineItem* min_line_r_;
-
-    public slots:
-        void draw() override;
     };
 } // namespace MC
 

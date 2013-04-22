@@ -40,6 +40,16 @@ namespace MC
         void keyPressEvent(QKeyEvent* event);
         void keyReleaseEvent(QKeyEvent* event);
 
+    public slots:
+        void log(const QString& str);
+        void clearLog();
+        void btConnected();
+        void btDisconnected();
+
+        void setControlGagues(ControlSignals control_signals);
+        void setSensorValues(SensorData sensor_data);
+        void setMode(Control::Mode mode);
+
     private:
         Ui::MainWindow *ui;
         Control* mc_;
@@ -64,16 +74,6 @@ namespace MC
 
         void clearPlots();
         void drawPlotGrid();
-
-    public slots:
-        void log(const QString& str);
-        void clear();
-        void btConnected();
-        void btDisconnected();
-
-        void setControlGagues(ControlSignals control_signals);
-        void setSensorValues(SensorData sensor_data);
-        void setMode(Control::Mode mode);
 
     private slots:
         void openTerminal();
