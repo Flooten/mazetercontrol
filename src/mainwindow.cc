@@ -12,6 +12,7 @@
 #include "controlsignals.h"
 #include "preferencesdialog.h"
 #include "aboutdialog.h"
+#include "commandtable.h"
 
 namespace MC
 {
@@ -65,6 +66,7 @@ namespace MC
         connect(ui->actionOpenTerminal, SIGNAL(triggered()), this, SLOT(openTerminal()));
         connect(ui->actionOpenPreferences, SIGNAL(triggered()), this, SLOT(openPreferences()));
         connect(ui->pushButton_toggle_connection, SIGNAL(clicked()), this, SLOT(toggleConnection()));
+        connect(ui->pushButton_calibrate, SIGNAL(clicked()), this, SLOT(transmitCalibrateSensor()));
         connect(ui->actionAboutMazeterControl, SIGNAL(triggered()), this, SLOT(openAboutDialog()));
         connect(ui->pushButton_clear_plots, SIGNAL(clicked()), this, SLOT(resetPlots()));
         connect(ui->comboBox_sensor_data, SIGNAL(currentIndexChanged(int)), this, SLOT(chosenSensorDataChanged(int)));
@@ -548,4 +550,9 @@ namespace MC
         sd_scene_->chosenDataChanged(index);
     }
 
+    /* Skicka kalibreringsmeddelande */
+    void MainWindow::transmitCalibrateSensor()
+    {
+        mc_->parseCommand(UserInput("transmit " + QString::number(CALIBRATE_LINE_SENSOR, 16) + "00"));
+    }
 } // namespace MC

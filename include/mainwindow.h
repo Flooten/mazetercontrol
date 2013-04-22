@@ -86,6 +86,7 @@ namespace MC
         void centerControlSignalsPlot(int time);
         void centerSensorDataPlot(int time);
         void chosenSensorDataChanged(int index);
+        void transmitCalibrateSensor();
     };
 } // namespace MC
 
