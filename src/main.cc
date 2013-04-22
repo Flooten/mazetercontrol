@@ -4,7 +4,6 @@
 #include <QApplication>
 #include <QFontDatabase>
 #include <QStyleFactory>
-#include <QDebug>
 
 int main(int argc, char *argv[])
 {
