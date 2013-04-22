@@ -624,7 +624,7 @@ namespace MC
 
         try
         {
-            QFile file(root_path + ini_file);
+            QFile file(ini_file);
 
             if (!file.exists())
             {
