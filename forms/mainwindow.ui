@@ -395,6 +395,9 @@ font: 10pt &quot;Ubuntu&quot;;</string>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
             </property>
+            <property name="textVisible">
+             <bool>false</bool>
+            </property>
             <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>
@@ -412,12 +415,13 @@ font: 10pt &quot;Ubuntu&quot;;</string>
              </sizepolicy>
             </property>
             <property name="styleSheet">
-             <string notr="true">QProgressBar {
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255, 0, 0, 255), stop:1 rgba(0, 0, 0, 255));
-}</string>
+             <string notr="true"/>
             </property>
             <property name="value">
              <number>0</number>
+            </property>
+            <property name="textVisible">
+             <bool>false</bool>
             </property>
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -462,7 +466,7 @@ font: 10pt &quot;Ubuntu&quot;;</string>
              <set>Qt::AlignCenter</set>
             </property>
             <property name="textVisible">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -493,7 +497,7 @@ font: 10pt &quot;Ubuntu&quot;;</string>
              <set>Qt::AlignCenter</set>
             </property>
             <property name="textVisible">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="orientation">
              <enum>Qt::Vertical</enum>

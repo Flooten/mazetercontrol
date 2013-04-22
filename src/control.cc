@@ -13,8 +13,6 @@
 
 #include <QStringList>
 #include <QFile>
-#include <QMessageBox>
-#include <QDebug>
 
 namespace MC
 {
@@ -34,9 +32,6 @@ namespace MC
         // Anslutningar
         connect(port_, SIGNAL(readyRead()), this, SLOT(readData()));
         connect(port_, SIGNAL(bytesWritten(qint64)), this, SLOT(reportWrite(qint64)));
-
-        qDebug() << sizeof(unsigned short int);
-        qDebug() << sizeof(SensorData);
     }
 
     Control::~Control()
