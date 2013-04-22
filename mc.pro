@@ -58,6 +58,10 @@ QMAKE_CXXFLAGS += -std=c++11
 macx{
 QMAKE_CXXFLAGS += -std=c++11 -stdlib=libc++ -mmacosx-version-min=10.7
 LIBS += -stdlib=libc++ -mmacosx-version-min=10.7
+
+APP_RSC_FILES.files = data/mc.ini data/.mc_history
+APP_RSC_FILES.path = Contents/MacOS/Data
+QMAKE_BUNDLE_DATA += APP_RSC_FILES
 }
 
 RC_FILE += icon.rc
