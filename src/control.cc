@@ -583,9 +583,10 @@ namespace MC
             sensor_data_.distance6 = sensor_data.at(7);
             sensor_data_.distance7 = sensor_data.at(8);
 
-            sensor_data_.angle = (unsigned char)(sensor_data.at(9));
+            // Angle skickas little-endian, vänd.
+            sensor_data_.angle = (unsigned char)(sensor_data.at(10));
             sensor_data_.angle = (sensor_data_.angle << 8);
-            sensor_data_.angle += (unsigned char)(sensor_data.at(10));
+            sensor_data_.angle += (unsigned char)(sensor_data.at(9));
 
             sensor_data_.line_deviation = sensor_data.at(11);
             sensor_data_.line_type = sensor_data.at(12);
