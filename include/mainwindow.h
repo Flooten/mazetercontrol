@@ -50,6 +50,8 @@ namespace MC
         SensorDataPlotScene* sd_scene_;
 
         const int PLOT_DELTA_T = 50;
+        const int PLOT_VIEW_WIDTH = 770;
+        const int PLOT_VIEW_HEIGHT = 255;
         const QString INI_FILE = QCoreApplication::applicationDirPath() + "/data/mc.ini";
 
         void enableWidgets();
@@ -81,6 +83,9 @@ namespace MC
         void toggleConnection();
         void resetPlots();
         void drawPlots();
+        void centerControlSignalsPlot(int time);
+        void centerSensorDataPlot(int time);
+        void chosenSensorDataChanged(int index);
     };
 } // namespace MC
 

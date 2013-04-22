@@ -8,16 +8,26 @@
 
 #include "controlsignalsplotscene.h"
 
+#include <QLineF>
+
 namespace MC
 {
-    ControlSignalsPlotScene::ControlSignalsPlotScene(QObject* parent)
-        : PlotScene(parent)
+    ControlSignalsPlotScene::ControlSignalsPlotScene(int view_width, int view_height, QObject* parent)
+        : PlotScene(view_width, view_height, parent)
         , lpen_(QPen(Qt::red))
         , rpen_(QPen(Qt::blue))
     {
         // Lägg in ett idle-element
         ControlSignals cs;
         control_signals_.append(cs);
+
+        line_vector_.append(new QGraphicsLineItem(0, MAX_LEVEL_LEFT_, view_width_, MAX_LEVEL_LEFT_));
+        line_vector_.append(new QGraphicsLineItem(0, ZERO_LEVEL_LEFT_, view_width_, ZERO_LEVEL_LEFT_));
+        line_vector_.append(new QGraphicsLineItem(0, MIN_LEVEL_LEFT_, view_width_, MIN_LEVEL_LEFT_));
+
+        line_vector_.append(new QGraphicsLineItem(0, MAX_LEVEL_RIGHT_, view_width_, MAX_LEVEL_RIGHT_));
+        line_vector_.append(new QGraphicsLineItem(0, ZERO_LEVEL_RIGHT_, view_width_, ZERO_LEVEL_RIGHT_));
+        line_vector_.append(new QGraphicsLineItem(0, MIN_LEVEL_RIGHT_, view_width_, MIN_LEVEL_RIGHT_));
     }
 
     /*
@@ -33,15 +43,13 @@ namespace MC
     /* Ritar stödlinjer */
     void ControlSignalsPlotScene::drawGrid()
     {
-        // Skala för vänster motorsignal
-        addLine(0, MAX_LEVEL_LEFT_, width(), MAX_LEVEL_LEFT_, dashed_pen_);
-        addLine(0, ZERO_LEVEL_LEFT_, width(), ZERO_LEVEL_LEFT_, dashed_pen_);
-        addLine(0, MIN_LEVEL_LEFT_, width(), MIN_LEVEL_LEFT_, dashed_pen_);
+        QVectorIterator<QGraphicsLineItem*> itr(line_vector_);
 
-        // Skala för höger motorsignal
-        addLine(0, MAX_LEVEL_RIGHT_, width(), MAX_LEVEL_RIGHT_, dashed_pen_);
-        addLine(0, ZERO_LEVEL_RIGHT_, width(), ZERO_LEVEL_RIGHT_, dashed_pen_);
-        addLine(0, MIN_LEVEL_RIGHT_, width(), MIN_LEVEL_RIGHT_, dashed_pen_);
+        while(itr.hasNext())
+        {
+            itr.peekNext()->setPen(dashed_pen_);
+            addItem(itr.next());
+        }
     }
 
     /*
@@ -82,6 +90,23 @@ namespace MC
         rdot->setPos(time_, ypos_r);
         rdot->setPen(rpen_);
         addItem(rdot);
+
+        if (time_ > view_width_)
+        {
+            QVectorIterator<QGraphicsLineItem*> itr(line_vector_);
+
+            while (itr.hasNext())
+            {
+                // Förläng gridlines
+                QLineF line = itr.peekNext()->line();
+
+                // Lägg till en punkt
+                line.setP2(QPointF(time_, line.y2()));
+                itr.next()->setLine(line);
+            }
+
+            emit center(time_);
+        }
 
         // Räkna upp
         ++time_;

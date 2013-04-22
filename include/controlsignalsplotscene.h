@@ -17,7 +17,9 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsEllipseItem>
+#include <QGraphicsLineItem>
 #include <QObject>
+#include <QVector>
 
 namespace MC
 {
@@ -25,7 +27,7 @@ namespace MC
     {
         Q_OBJECT
     public:
-        ControlSignalsPlotScene(QObject* parent = NULL);
+        ControlSignalsPlotScene(int view_width, int view_height, QObject* parent = NULL);
 
         void newControlSignals(ControlSignals control_signals);
 
@@ -44,6 +46,22 @@ namespace MC
 
         QPen lpen_;
         QPen rpen_;
+
+        enum Line
+        {
+            MAX_RIGHT,
+            ZERO_RIGHT,
+        };
+
+        QVector<QGraphicsLineItem*> line_vector_;
+
+        QGraphicsLineItem* max_line_l_;
+        QGraphicsLineItem* zero_line_l_;
+        QGraphicsLineItem* min_line_l_;
+
+        QGraphicsLineItem* max_line_r_;
+        QGraphicsLineItem* zero_line_r_;
+        QGraphicsLineItem* min_line_r_;
 
     public slots:
         void draw() override;

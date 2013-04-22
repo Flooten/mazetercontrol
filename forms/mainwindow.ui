@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1080</width>
-    <height>720</height>
+    <height>700</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,13 +19,13 @@
   <property name="minimumSize">
    <size>
     <width>1080</width>
-    <height>720</height>
+    <height>700</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>1080</width>
-    <height>720</height>
+    <height>700</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -131,6 +131,9 @@ font: 10pt &quot;Ubuntu&quot;;</string>
             <property name="enabled">
              <bool>true</bool>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="verticalScrollBarPolicy">
              <enum>Qt::ScrollBarAlwaysOff</enum>
             </property>
@@ -159,7 +162,7 @@ font: 10pt &quot;Ubuntu&quot;;</string>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
+                <width>420</width>
                 <height>20</height>
                </size>
               </property>
@@ -177,54 +180,55 @@ font: 10pt &quot;Ubuntu&quot;;</string>
               <property name="enabled">
                <bool>true</bool>
               </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>1</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <item>
                <property name="text">
-                <string>Front right</string>
+                <string>Front right [20-150 cm]</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Front left</string>
+                <string>Front left [20-150 cm]</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Right short</string>
+                <string>Right short [4-30 cm]</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Right long</string>
+                <string>Right long [20-150 cm]</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Left short</string>
+                <string>Left short [4-30 cm]</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Left long</string>
+                <string>Left long [20-150 cm]</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Back</string>
+                <string>Back [20-150 cm]</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Angle</string>
+                <string>Angle [0-360 deg]</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Line deviation</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Line type</string>
+                <string>Line deviation -? - ?</string>
                </property>
               </item>
              </widget>
@@ -235,6 +239,9 @@ font: 10pt &quot;Ubuntu&quot;;</string>
            <widget class="QGraphicsView" name="graphicsView_sensor_data">
             <property name="enabled">
              <bool>true</bool>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
             </property>
             <property name="verticalScrollBarPolicy">
              <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -678,7 +685,7 @@ selection-background-color: rgb(255, 255, 255);
      <x>0</x>
      <y>0</y>
      <width>1080</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

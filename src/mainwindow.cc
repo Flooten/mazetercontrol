@@ -23,13 +23,13 @@ namespace MC
         , ui(new Ui::MainWindow)
         , plot_timer_(new QTimer(this))
         , scene_(new MCGraphicsScene(this))
-        , cs_scene_(new ControlSignalsPlotScene(this))
-        , sd_scene_(new SensorDataPlotScene(this))
     {
         ui->setupUi(this);
 
         mc_ = new Control(INI_FILE);
         terminal_ = new Terminal(mc_, this);
+        cs_scene_ = new ControlSignalsPlotScene(PLOT_VIEW_WIDTH, PLOT_VIEW_HEIGHT, this);
+        sd_scene_ = new SensorDataPlotScene(PLOT_VIEW_WIDTH, PLOT_VIEW_HEIGHT, this);
 
         this->setFocusPolicy(Qt::StrongFocus);
         this->setFocus();
@@ -46,6 +46,7 @@ namespace MC
         ui->graphicsView_control_signals->setScene(cs_scene_);
         ui->graphicsView_sensor_data->setScene(sd_scene_);
 
+
         // Anslutningar
         connect(terminal_, SIGNAL(terminalClosing()), this, SLOT(closeTerminal()));
         connect(mc_, SIGNAL(log(QString)), this, SLOT(log(QString)));
@@ -54,6 +55,7 @@ namespace MC
         connect(mc_, SIGNAL(modeChanged(Control::Mode)), this, SLOT(setMode(Control::Mode)));
         connect(mc_, SIGNAL(controlSignalsChanged(ControlSignals)), this, SLOT(setControlGagues(ControlSignals)));
         connect(mc_, SIGNAL(sensorDataChanged(SensorData)), this, SLOT(setSensorValues(SensorData)));
+        connect(mc_, SIGNAL(sensorDataChanged(SensorData)), sd_scene_, SLOT(newSensorData(SensorData)));
         connect(plot_timer_, SIGNAL(timeout()), this, SLOT(drawPlots()));
 
         connect(ui->actionOpenTerminal, SIGNAL(triggered()), this, SLOT(openTerminal()));
@@ -61,7 +63,9 @@ namespace MC
         connect(ui->pushButton_toggle_connection, SIGNAL(clicked()), this, SLOT(toggleConnection()));
         connect(ui->actionAboutMazeterControl, SIGNAL(triggered()), this, SLOT(openAboutDialog()));
         connect(ui->pushButton_clear_plots, SIGNAL(clicked()), this, SLOT(resetPlots()));
-        connect(ui->comboBox_sensor_data, SIGNAL(currentIndexChanged(int)), sd_scene_, SLOT(chosenDataChanged(int)));
+        connect(ui->comboBox_sensor_data, SIGNAL(currentIndexChanged(int)), this, SLOT(chosenSensorDataChanged(int)));
+        connect(sd_scene_, SIGNAL(center(int)), this, SLOT(centerSensorDataPlot(int)));
+        connect(cs_scene_, SIGNAL(center(int)), this, SLOT(centerControlSignalsPlot(int)));
 
         // Disabla de widgets som är beroende av en aktiv länk
         disableWidgets();
@@ -159,20 +163,6 @@ namespace MC
         ui->graphicsView_control_signals->setEnabled(true);
         ui->graphicsView_sensor_data->setEnabled(true);
         ui->comboBox_sensor_data->setEnabled(true);
-
-        // Sätt SceneRect, korrekt tab måste visas för att width() ska ge rätt värde.
-        if (ui->tabWidget->currentIndex() == 0)
-        {
-            ui->tabWidget->setCurrentIndex(1);
-            cs_scene_->setSceneRect(0, 0, ui->graphicsView_control_signals->width(), ui->graphicsView_control_signals->height());
-            sd_scene_->setSceneRect(0, 0, ui->graphicsView_sensor_data->width(), ui->graphicsView_sensor_data->height());
-            ui->tabWidget->setCurrentIndex(0);
-        }
-        else
-        {
-            cs_scene_->setSceneRect(0, 0, ui->graphicsView_control_signals->width(), ui->graphicsView_control_signals->height());
-            sd_scene_->setSceneRect(0, 0, ui->graphicsView_sensor_data->width(), ui->graphicsView_sensor_data->height());
-        }
 
         scene_->draw();
         resetPlots();
@@ -404,6 +394,10 @@ namespace MC
 
         // Stanna plot_timer_
         plot_timer_->stop();
+
+        // Rensa plottar
+        sd_scene_->clear();
+        cs_scene_->clear();
     }
 
     /* Uppdaterar mätarna för kontrollsignalerna */
@@ -505,7 +499,10 @@ namespace MC
     void MainWindow::clearPlots()
     {
         cs_scene_->clear();
-        sd_scene_->clear();
+        ui->graphicsView_control_signals->centerOn(0, ui->graphicsView_control_signals->height() / 2);
+
+        sd_scene_->clear();        
+        ui->graphicsView_sensor_data->centerOn(0, ui->graphicsView_sensor_data->height() / 2);
     }
 
     /* Ritar en ny punkt */
@@ -513,6 +510,26 @@ namespace MC
     {
         cs_scene_->draw();
         sd_scene_->draw();
+    }
+
+    /* Skiftar innehållet i plotfönstret för kontrollsignalerna till att visa ny data */
+    void MainWindow::centerControlSignalsPlot(int time)
+    {
+        ui->graphicsView_control_signals->centerOn(time - ui->graphicsView_control_signals->width() / 2, ui->graphicsView_control_signals->height() / 2);
+    }
+
+    /* Skiftar innehållet i plotfönstret för sensordatan till att visa ny data */
+    void MainWindow::centerSensorDataPlot(int time)
+    {
+        ui->graphicsView_sensor_data->centerOn(time - ui->graphicsView_sensor_data->width() / 2, ui->graphicsView_sensor_data->height() / 2);
+    }
+
+    /* Centrerar fönstret vid byte av signal */
+    void MainWindow::chosenSensorDataChanged(int index)
+    {
+        ui->graphicsView_sensor_data->centerOn(0, ui->graphicsView_sensor_data->height() / 2);
+
+        sd_scene_->chosenDataChanged(index);
     }
 
     /* Ritar stödlinjer */

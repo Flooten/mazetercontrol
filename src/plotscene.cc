@@ -10,8 +10,10 @@
 
 namespace MC
 {
-    PlotScene::PlotScene(QObject* parent)
+    PlotScene::PlotScene(int view_width, int view_height, QObject* parent)
         : QGraphicsScene(parent)
+        , view_width_(view_width)
+        , view_height_(view_height)
     {}
 
     /* Rensar grafen */

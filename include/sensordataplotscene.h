@@ -15,6 +15,8 @@
 #include <QGraphicsScene>
 #include <QObject>
 #include <QPen>
+#include <QMap>
+#include <QGraphicsLineItem>
 
 #include "sensordata.h"
 #include "plotscene.h"
@@ -25,9 +27,8 @@ namespace MC
     {
         Q_OBJECT
     public:
-        SensorDataPlotScene(QObject* parent = NULL);
+        SensorDataPlotScene(int view_width, int view_height, QObject* parent = NULL);
 
-        void newSensorData(SensorData sensor_data);        
         void drawGrid() override;
 
     private:
@@ -43,11 +44,18 @@ namespace MC
             LEFT_LONG,
             BACK,
             ANGLE,
-            LINE_DEVIATION,
-            LINE_TYPE
+            LINE_DEVIATION
+        };
+
+        enum GridLine
+        {
+            MAX,
+            MIN,
+            ZERO
         };
 
         ChosenData chosen_data_ = FRONT_RIGHT;
+        QMap<GridLine, QGraphicsLineItem*> line_map_;
 
         // Konstanter
         int zero_level_ = 200;
@@ -58,6 +66,7 @@ namespace MC
         QPen pen2_ = QPen(Qt::red);
 
     public slots:
+        void newSensorData(SensorData sensor_data);
         void draw() override;
         void chosenDataChanged(int index);
     };

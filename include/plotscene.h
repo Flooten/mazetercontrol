@@ -21,7 +21,7 @@ namespace MC
     {
         Q_OBJECT
     public:
-        PlotScene(QObject* parent = NULL);
+        PlotScene(int view_width, int view_height, QObject* parent = NULL);
 
         virtual void drawGrid() = 0;
         virtual void draw() = 0;
@@ -29,9 +29,14 @@ namespace MC
     public slots:
         virtual void clear();
 
+    signals:
+        void center(int time);
+
     protected:
         QPen dashed_pen_ = QPen(Qt::DashLine);
         int time_ = 0;
+        int view_width_ = 0;
+        int view_height_ = 0;
 
     };
 } // namespace MC

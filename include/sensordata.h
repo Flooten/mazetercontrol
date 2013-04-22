@@ -21,7 +21,7 @@ struct SensorData
     char distance5 = 0;
     char distance6 = 0;
     char distance7 = 0;
-    int angle = 0;
+    unsigned int angle = 0;
     char line_deviation = 0;
     char line_type = 0;
 };
