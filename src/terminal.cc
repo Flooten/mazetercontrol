@@ -150,7 +150,7 @@ namespace MC
             // Sparar kommando i historiken
             QFile file(HIST_FILE);
 
-            if(file.open(QFile::WriteOnly | QFile::Text))
+            if(file.open(QFile::WriteOnly | QFile::Text | QFile::Append))
             {
                 QTextStream stream(&file);
                 stream << input_string << endl;
