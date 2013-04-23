@@ -118,10 +118,8 @@ namespace MC
 
         while(itr.hasNext())
         {
-            if (!items().isEmpty())
-                removeItem(itr.peekNext());
-
-            itr.next();
+            if (items().contains(itr.next()))
+                removeItem(itr.peekPrevious());
         }
 
         PlotScene::clear();
