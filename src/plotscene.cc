@@ -7,6 +7,7 @@
  */
 
 #include "plotscene.h"
+#include <QGraphicsItem>
 
 namespace MC
 {
