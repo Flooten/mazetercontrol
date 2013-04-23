@@ -20,7 +20,10 @@ namespace MC
     void PlotScene::clear()
     {
         foreach (QGraphicsItem* item, items())
+        {
             removeItem(item);
+            delete item;
+        }
 
         time_ = 0;
     }

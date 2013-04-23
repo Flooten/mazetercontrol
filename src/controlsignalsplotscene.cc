@@ -111,6 +111,17 @@ namespace MC
         ++time_;
     }
 
+    /* Plockar bort linjerna och kallar på PlotScene::clear() */
+    void ControlSignalsPlotScene::clear()
+    {
+        QVectorIterator<QGraphicsLineItem*> itr(line_vector_);
+
+        while(itr.hasNext())
+            removeItem(itr.next());
+
+        PlotScene::clear();
+    }
+
     /*
      *  Public slots
      */

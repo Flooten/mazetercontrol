@@ -133,6 +133,20 @@ namespace MC
         ++time_;
     }
 
+    /* Plockar bort linjerna och kallar på PlotScene::clear() */
+    void SensorDataPlotScene::clear()
+    {
+        QMapIterator<GridLine, QGraphicsLineItem*> itr(line_map_);
+
+        while(itr.hasNext())
+        {
+            itr.next();
+            removeItem(itr.value());
+        }
+
+        PlotScene::clear();
+    }
+
     /*
      *  Public slots
      */

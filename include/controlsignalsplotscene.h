@@ -33,6 +33,7 @@ namespace MC
 
         void drawGrid() override;
         void draw() override;
+        void clear() override;
 
     public slots:
         void newControlSignals(ControlSignals control_signals);
