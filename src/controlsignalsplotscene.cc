@@ -117,7 +117,12 @@ namespace MC
         QVectorIterator<QGraphicsLineItem*> itr(line_vector_);
 
         while(itr.hasNext())
-            removeItem(itr.next());
+        {
+            if (!items().isEmpty())
+                removeItem(itr.peekNext());
+
+            itr.next();
+        }
 
         PlotScene::clear();
     }
