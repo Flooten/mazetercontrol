@@ -18,7 +18,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../resources.qrc">
-    <normaloff>:/icons/resources/usb-bt.ico</normaloff>:/icons/resources/usb-bt.ico</iconset>
+    <normaloff>:/icons/resources/about.ico</normaloff>:/icons/resources/about.ico</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">font: 8pt &quot;Ubuntu&quot;;</string>

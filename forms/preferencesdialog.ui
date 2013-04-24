@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>194</width>
-    <height>206</height>
+    <height>220</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../resources.qrc">
-    <normaloff>:/icons/resources/usb-bt.ico</normaloff>:/icons/resources/usb-bt.ico</iconset>
+    <normaloff>:/icons/resources/preferences.ico</normaloff>:/icons/resources/preferences.ico</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">font: 10pt &quot;Ubuntu&quot;;</string>

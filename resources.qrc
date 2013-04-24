@@ -4,6 +4,8 @@
         <file>resources/stop.ico</file>
         <file>resources/usb-bt.ico</file>
         <file>resources/terminal.ico</file>
+        <file>resources/about.ico</file>
+        <file>resources/preferences.ico</file>
     </qresource>
     <qresource prefix="/images">
         <file>resources/logga-small.png</file>

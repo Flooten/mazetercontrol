@@ -689,7 +689,7 @@ selection-background-color: rgb(255, 255, 255);
      <x>0</x>
      <y>0</y>
      <width>1080</width>
-     <height>28</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -716,11 +716,19 @@ selection-background-color: rgb(255, 255, 255);
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionAboutMazeterControl">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/resources/about.ico</normaloff>:/icons/resources/about.ico</iconset>
+   </property>
    <property name="text">
     <string>About Mazeter Control...</string>
    </property>
   </action>
   <action name="actionOpenPreferences">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/resources/preferences.ico</normaloff>:/icons/resources/preferences.ico</iconset>
+   </property>
    <property name="text">
     <string>Preferences...</string>
    </property>
