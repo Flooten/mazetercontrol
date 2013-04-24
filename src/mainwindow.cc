@@ -70,6 +70,7 @@ namespace MC
         connect(ui->actionAboutMazeterControl, SIGNAL(triggered()), this, SLOT(openAboutDialog()));
         connect(ui->pushButton_clear_plots, SIGNAL(clicked()), this, SLOT(resetPlots()));
         connect(ui->comboBox_sensor_data, SIGNAL(currentIndexChanged(int)), this, SLOT(chosenSensorDataChanged(int)));
+        connect(ui->pushButton_transfer_parameters, SIGNAL(clicked()), this, SLOT(transmitParameters()));
 
         // Plotcentreringssignaler
         connect(sd_scene_, SIGNAL(center(int)), this, SLOT(centerSensorDataPlot(int)));
@@ -261,9 +262,11 @@ namespace MC
         ui->progressBar_left_engine_rev->setEnabled(true);
         ui->progressBar_right_engine_fwd->setEnabled(true);
         ui->progressBar_right_engine_rev->setEnabled(true);
-        ui->doubleSpinBox_kd->setEnabled(true);
-        ui->doubleSpinBox_kp->setEnabled(true);
-        ui->pushButton_transfer->setEnabled(true);
+        ui->spinBox_kd_left->setEnabled(true);
+        ui->spinBox_kp_left->setEnabled(true);
+        ui->spinBox_kd_right->setEnabled(true);
+        ui->spinBox_kp_right->setEnabled(true);
+        ui->pushButton_transfer_parameters->setEnabled(true);
         ui->pushButton_calibrate->setEnabled(true);
         ui->graphicsView_overview->setEnabled(true);
 
@@ -291,11 +294,15 @@ namespace MC
         ui->progressBar_right_engine_fwd->setValue(0);
         ui->progressBar_right_engine_rev->setEnabled(false);
         ui->progressBar_right_engine_rev->setValue(0);
-        ui->doubleSpinBox_kd->setEnabled(false);
-        ui->doubleSpinBox_kd->setValue(0);
-        ui->doubleSpinBox_kp->setEnabled(false);
-        ui->doubleSpinBox_kp->setValue(0);
-        ui->pushButton_transfer->setEnabled(false);
+        ui->spinBox_kd_left->setEnabled(false);
+        ui->spinBox_kd_left->setValue(0);
+        ui->spinBox_kp_left->setEnabled(false);
+        ui->spinBox_kp_left->setValue(0);
+        ui->spinBox_kd_right->setEnabled(false);
+        ui->spinBox_kd_right->setValue(0);
+        ui->spinBox_kp_right->setEnabled(false);
+        ui->spinBox_kp_right->setValue(0);
+        ui->pushButton_transfer_parameters->setEnabled(false);
         ui->pushButton_calibrate->setEnabled(false);
         ui->pushButton_clear_plots->setEnabled(false);
         ui->graphicsView_control_signals->setEnabled(false);
@@ -554,5 +561,43 @@ namespace MC
     void MainWindow::transmitCalibrateSensor()
     {
         mc_->parseCommand(UserInput("transmit " + QString::number(CALIBRATE_LINE_SENSOR, 16) + "00"));
+    }
+
+    /* Skickar de angivna parametervärdena */
+    void MainWindow::transmitParameters()
+    {
+        QString size_str = "02";
+
+        // Hämta värden
+        int kd_left = ui->spinBox_kd_left->value();
+        int kd_right = ui->spinBox_kd_right->value();
+        int kp_left = ui->spinBox_kp_left->value();
+        int kp_right = ui->spinBox_kp_right->value();
+
+        // Skicka datan till kommunikationsenheten (little-endian)
+        mc_->parseCommand(UserInput("transmit " +
+                                    QString::number(PARA_KD_LEFT, 16) +
+                                    size_str +
+                                    QString::number(kd_left & 0xff, 16) +               // LSB
+                                    QString::number((kd_left & 0xff00) >> 8, 16)));     // MSB
+
+        mc_->parseCommand(UserInput("transmit " +
+                                    QString::number(PARA_KD_RIGHT, 16) +
+                                    size_str +
+                                    QString::number(kd_right & 0xff, 16) +               // LSB
+                                    QString::number((kd_right & 0xff00) >> 8, 16)));     // MSB
+
+        mc_->parseCommand(UserInput("transmit " +
+                                    QString::number(PARA_KP_LEFT, 16) +
+                                    size_str +
+                                    QString::number(kp_left & 0xff, 16) +               // LSB
+                                    QString::number((kp_left & 0xff00) >> 8, 16)));     // MSB
+
+        mc_->parseCommand(UserInput("transmit " +
+                                    QString::number(PARA_KP_RIGHT, 16) +
+                                    size_str +
+                                    QString::number(kp_right & 0xff, 16) +               // LSB
+                                    QString::number((kp_right & 0xff00) >> 8, 16)));     // MSB
+
     }
 } // namespace MC
