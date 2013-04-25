@@ -357,6 +357,9 @@ void QextSerialPortPrivate::updatePortSettings()
         case STOP_2:
             commConfig.dcb.StopBits = TWOSTOPBITS;
             break;
+        case STOPINVALID:
+            /* Suppressing warnings */
+            break;
         }
     }
     if (settingsDirtyFlags & DFE_Flow) {

@@ -346,6 +346,9 @@ void QextSerialPortPrivate::updatePortSettings()
         case BAUD4000000:
             setBaudRate2Termios(&currentTermios, B4000000);
             break;
+        case BAUDINVALID:
+            /* Suppressing warnings */
+            break;
 #endif
 #ifdef Q_OS_MAC
         default:
@@ -370,6 +373,9 @@ void QextSerialPortPrivate::updatePortSettings()
         case PAR_ODD:
             currentTermios.c_cflag |= (PARENB|PARODD);
             break;
+        case PARINVALID:
+            /* Suppressing warnings */
+            break;
         }
     }
     /*must after Parity settings*/
@@ -389,6 +395,9 @@ void QextSerialPortPrivate::updatePortSettings()
             case DATA_8:
                 currentTermios.c_cflag |= CS8;
                 break;
+            case DATAINVALID:
+                /* Suppressing warnings */
+                break;
             }
         } else {
             /*space parity not directly supported - add an extra data bit to simulate it*/
@@ -406,6 +415,9 @@ void QextSerialPortPrivate::updatePortSettings()
             case DATA_8:
                 /*this will never happen, put here to Suppress an warning*/
                 break;
+            case DATAINVALID:
+                /* Suppressing warnings */
+                break;
             }
         }
     }
@@ -416,6 +428,9 @@ void QextSerialPortPrivate::updatePortSettings()
             break;
         case STOP_2:
             currentTermios.c_cflag |= CSTOPB;
+            break;
+        case STOPINVALID:
+            /* Suppressing warnings */
             break;
         }
     }
