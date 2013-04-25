@@ -64,7 +64,10 @@ namespace MC
 
         // Ui-händelser: knapptryckningar och actions
         connect(ui->actionOpenTerminal, SIGNAL(triggered()), this, SLOT(openTerminal()));
-        connect(ui->actionOpenPreferences, SIGNAL(triggered()), this, SLOT(openPreferences()));
+        connect(ui->actionPreferences, SIGNAL(triggered()), this, SLOT(openPreferences()));
+        connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(exitApplication()));
+        connect(ui->actionConnect, SIGNAL(triggered()), this, SLOT(toggleConnection()));
+        connect(ui->actionDisconnect, SIGNAL(triggered()), this, SLOT(toggleConnection()));
         connect(ui->pushButton_toggle_connection, SIGNAL(clicked()), this, SLOT(toggleConnection()));
         connect(ui->pushButton_calibrate, SIGNAL(clicked()), this, SLOT(transmitCalibrateSensor()));
         connect(ui->actionAboutMazeterControl, SIGNAL(triggered()), this, SLOT(openAboutDialog()));
@@ -172,9 +175,11 @@ namespace MC
         log("Connection established.");
         statusMessage("Connection established.");
 
-        // Uppdatera knappen
+        // Uppdatera knappen och actions
         ui->pushButton_toggle_connection->setText("Disconnect");
         ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/stop.ico"));
+        ui->actionConnect->setEnabled(false);
+        ui->actionDisconnect->setEnabled(true);
 
         // Starta plot_timer_
         plot_timer_->start(PLOT_DELTA_T);
@@ -190,6 +195,8 @@ namespace MC
         // Uppdatera knappen
         ui->pushButton_toggle_connection->setText("Connect");
         ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/start.ico"));
+        ui->actionConnect->setEnabled(true);
+        ui->actionDisconnect->setEnabled(false);
 
         // Stanna plot_timer_
         plot_timer_->stop();
@@ -224,6 +231,49 @@ namespace MC
     void MainWindow::setSensorValues(SensorData sensor_data)
     {
         scene_->updateSensorData(sensor_data);
+
+        // Fånga ny data och sätt spinbox vid sd-plot till det senaste värdet.
+        ui->spinBox_sensor_data_current_value->setSuffix(" cm");
+        switch (ui->comboBox_sensor_data->currentIndex())
+        {
+        case 0:
+            // Front left
+            ui->spinBox_sensor_data_current_value->setValue(sensor_data.distance1);
+            break;
+
+        case 1:
+            ui->spinBox_sensor_data_current_value->setValue(sensor_data.distance2);
+            break;
+
+        case 2:
+            ui->spinBox_sensor_data_current_value->setValue(sensor_data.distance3);
+            break;
+
+        case 3:
+            ui->spinBox_sensor_data_current_value->setValue(sensor_data.distance4);
+            break;
+
+        case 4:
+            ui->spinBox_sensor_data_current_value->setValue(sensor_data.distance5);
+            break;
+
+        case 5:
+            ui->spinBox_sensor_data_current_value->setValue(sensor_data.distance6);
+            break;
+
+        case 6:
+            ui->spinBox_sensor_data_current_value->setValue(sensor_data.distance7);
+            break;
+
+        case 7:
+            ui->spinBox_sensor_data_current_value->setValue(sensor_data.angle);
+            ui->spinBox_sensor_data_current_value->setSuffix(" degrees");
+            break;
+
+        case 8:
+            ui->spinBox_sensor_data_current_value->setValue(sensor_data.line_deviation);
+            break;
+        }
     }
 
     /* Uppdaterar operationsläget */
@@ -685,5 +735,11 @@ namespace MC
                                         parameters_str_lsb +
                                         parameters_str_msb));
         }
+    }
+
+    /* Avslutar MC */
+    void MainWindow::exitApplication()
+    {
+        exit(0);
     }
 } // namespace MC

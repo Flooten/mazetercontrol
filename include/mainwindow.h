@@ -90,6 +90,7 @@ namespace MC
         void chosenSensorDataChanged(int index);
         void transmitCalibrateSensor();
         void transmitParameters();
+        void exitApplication();
     };
 } // namespace MC
 

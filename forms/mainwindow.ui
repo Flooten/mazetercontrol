@@ -233,6 +233,29 @@ font: 10pt &quot;Ubuntu&quot;;</string>
               </item>
              </widget>
             </item>
+            <item>
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>Current value:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="spinBox_sensor_data_current_value">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::NoButtons</enum>
+              </property>
+              <property name="suffix">
+               <string> cm</string>
+              </property>
+              <property name="maximum">
+               <number>255</number>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
           <item>
@@ -717,20 +740,14 @@ selection-background-color: rgb(255, 255, 255);
      <x>0</x>
      <y>0</y>
      <width>1080</width>
-     <height>28</height>
+     <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
-    </property>
-   </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
      <string>Edit</string>
     </property>
-    <addaction name="actionOpenPreferences"/>
-    <addaction name="actionOpenTerminal"/>
+    <addaction name="actionPreferences"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -738,8 +755,23 @@ selection-background-color: rgb(255, 255, 255);
     </property>
     <addaction name="actionAboutMazeterControl"/>
    </widget>
+   <widget class="QMenu" name="menuPort">
+    <property name="title">
+     <string>Port</string>
+    </property>
+    <addaction name="actionConnect"/>
+    <addaction name="actionDisconnect"/>
+   </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpenTerminal"/>
+    <addaction name="actionExit"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
+   <addaction name="menuPort"/>
    <addaction name="menuAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -752,18 +784,6 @@ selection-background-color: rgb(255, 255, 255);
     <string>About Mazeter Control...</string>
    </property>
   </action>
-  <action name="actionOpenPreferences">
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/icons/resources/preferences.ico</normaloff>:/icons/resources/preferences.ico</iconset>
-   </property>
-   <property name="text">
-    <string>Preferences...</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+P</string>
-   </property>
-  </action>
   <action name="actionOpenTerminal">
    <property name="icon">
     <iconset resource="../resources.qrc">
@@ -774,6 +794,51 @@ selection-background-color: rgb(255, 255, 255);
    </property>
    <property name="shortcut">
     <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="actionConnect">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/resources/start.ico</normaloff>:/icons/resources/start.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Connect</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/resources/preferences.ico</normaloff>:/icons/resources/preferences.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Preferences...</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/resources/exit.ico</normaloff>:/icons/resources/exit.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionDisconnect">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/resources/stop.ico</normaloff>:/icons/resources/stop.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Disconnect</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
    </property>
   </action>
  </widget>

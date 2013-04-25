@@ -8,6 +8,7 @@
 
 #include "sensordataplotscene.h"
 #include <QGraphicsEllipseItem>
+#include <QGraphicsLineItem>
 
 namespace MC
 {
@@ -67,11 +68,11 @@ namespace MC
         switch (chosen_data_)
         {
         case FRONT_LEFT:
-            ypos -= sensor_data_.last().distance1 - long_offset; // - 20 när vi väl får data
+            ypos -= sensor_data_.last().distance1 - long_offset;
             break;
 
         case FRONT_RIGHT:
-            ypos -= sensor_data_.last().distance2 - long_offset; // - 20 när vi väl får data
+            ypos -= sensor_data_.last().distance2 - long_offset;
             break;
 
         case LEFT_LONG:
@@ -110,6 +111,7 @@ namespace MC
         dot->setPos(time_, ypos);
         dot->setPen(pen1_);
         addItem(dot);
+
 
         // Om scrollning behövs
         if (time_ > view_width_)
