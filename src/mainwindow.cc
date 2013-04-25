@@ -580,7 +580,8 @@ namespace MC
 
         if (kd_left_lsb <= 0xf)
             kd_left_str_lsb.prepend("0");
-        else if (kd_left_msb <= 0xf)
+
+        if (kd_left_msb <= 0xf)
             kd_left_str_msb.prepend("0");
 
         // Kd_right
@@ -592,7 +593,8 @@ namespace MC
 
         if (kd_right_lsb <= 0xf)
             kd_right_str_lsb.prepend("0");
-        else if (kd_right_msb <= 0xf)
+
+        if (kd_right_msb <= 0xf)
             kd_right_str_msb.prepend("0");
 
         // Kp_left
@@ -604,7 +606,8 @@ namespace MC
 
         if (kp_left_lsb <= 0xf)
             kp_left_str_lsb.prepend("0");
-        else if (kp_left_msb <= 0xf)
+
+        if (kp_left_msb <= 0xf)
             kp_left_str_msb.prepend("0");
 
         // Kp_right
@@ -616,7 +619,8 @@ namespace MC
 
         if (kp_right_lsb <= 0xf)
             kp_right_str_lsb.prepend("0");
-        else if (kp_right_msb <= 0xf)
+
+        if (kp_right_msb <= 0xf)
             kp_right_str_msb.prepend("0");
 
 
