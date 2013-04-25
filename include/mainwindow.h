@@ -67,13 +67,15 @@ namespace MC
         void enableWidgets();
         void disableWidgets();
 
-        void setRightEngineGauge(int value, char direction);
-        void setLeftEngineGauge(int value, char direction);
+        void setRightEngineGauge(unsigned char value, char direction);
+        void setLeftEngineGauge(unsigned char value, char direction);
 
         void statusMessage(const QString& str);
 
         void clearPlots();
         void drawPlotGrid();
+
+        void writePreferences();
 
     private slots:
         void openTerminal();

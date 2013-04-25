@@ -27,16 +27,16 @@ namespace MC
     void MCGraphicsScene::updateSensorData(const SensorData &sensor_data)
     {
         // Giltig sensordata finns i sensor_data, uppdatera texten hos alla graphics items.
-        sensor_data_[FRONT_LEFT]->setPlainText(QString::number(sensor_data.distance1) + UNIT_CM);
-        sensor_data_[FRONT_RIGHT]->setPlainText(QString::number(sensor_data.distance2) + UNIT_CM);
-        sensor_data_[LEFT_LONG]->setPlainText(QString::number(sensor_data.distance3) + UNIT_CM);
-        sensor_data_[RIGHT_LONG]->setPlainText(QString::number(sensor_data.distance4) + UNIT_CM);
-        sensor_data_[LEFT_SHORT]->setPlainText(QString::number(sensor_data.distance5) + UNIT_CM);
-        sensor_data_[RIGHT_SHORT]->setPlainText(QString::number(sensor_data.distance6) + UNIT_CM);
-        sensor_data_[BACK]->setPlainText(QString::number(sensor_data.distance7) + UNIT_CM);
-        sensor_data_[ANGLE]->setPlainText(QString::number(sensor_data.angle / 100) + UNIT_DEG);
-        sensor_data_[LINE_DEVIATION]->setPlainText(QString::number(sensor_data.line_deviation) + UNIT_CM);
-        sensor_data_[LINE_TYPE]->setPlainText(QString::number(sensor_data.line_type) + UNIT_CM);
+        sensor_data_[FRONT_LEFT]->setPlainText(QString::number((unsigned char)sensor_data.distance1) + UNIT_CM);
+        sensor_data_[FRONT_RIGHT]->setPlainText(QString::number((unsigned char)sensor_data.distance2) + UNIT_CM);
+        sensor_data_[LEFT_LONG]->setPlainText(QString::number((unsigned char)sensor_data.distance3) + UNIT_CM);
+        sensor_data_[RIGHT_LONG]->setPlainText(QString::number((unsigned char)sensor_data.distance4) + UNIT_CM);
+        sensor_data_[LEFT_SHORT]->setPlainText(QString::number((unsigned char)sensor_data.distance5) + UNIT_CM);
+        sensor_data_[RIGHT_SHORT]->setPlainText(QString::number((unsigned char)sensor_data.distance6) + UNIT_CM);
+        sensor_data_[BACK]->setPlainText(QString::number((unsigned char)sensor_data.distance7) + UNIT_CM);
+        sensor_data_[ANGLE]->setPlainText(QString::number((unsigned short int)sensor_data.angle / 100) + UNIT_DEG);
+        sensor_data_[LINE_DEVIATION]->setPlainText(QString::number((char)sensor_data.line_deviation) + UNIT_CM);
+        sensor_data_[LINE_TYPE]->setPlainText(QString::number((unsigned char)sensor_data.line_type) + UNIT_CM);
 
         this->update();
     }

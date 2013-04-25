@@ -205,10 +205,10 @@ namespace MC
         if (mc_->isConnected())
         {
             // Höger hjulpar
-            setRightEngineGauge((int)control_signals.right_value, control_signals.right_direction);
+            setRightEngineGauge((unsigned char)control_signals.right_value, (char)control_signals.right_direction);
 
             // Vänster hjulpar
-            setLeftEngineGauge((int)control_signals.left_value, control_signals.left_direction);
+            setLeftEngineGauge((unsigned char)control_signals.left_value, (char)control_signals.left_direction);
 
             // Klo
             if (control_signals.claw_value == 0)
@@ -315,7 +315,7 @@ namespace MC
     }
 
     /* Tillåter mjuk övergång mellan olika nivåer */
-    void MainWindow::setRightEngineGauge(int value, char direction)
+    void MainWindow::setRightEngineGauge(unsigned char value, char direction)
     {
         int right_fwd_value = ui->progressBar_right_engine_fwd->value();
         int right_rev_value = ui->progressBar_right_engine_rev->value();
@@ -381,7 +381,7 @@ namespace MC
     }
 
     /* Tillåter mjuk övergång mellan olika nivåer */
-    void MainWindow::setLeftEngineGauge(int value, char direction)
+    void MainWindow::setLeftEngineGauge(unsigned char value, char direction)
     {
         int left_fwd_value = ui->progressBar_left_engine_fwd->value();
         int left_rev_value = ui->progressBar_left_engine_rev->value();
@@ -469,6 +469,71 @@ namespace MC
         sd_scene_->drawGrid();
     }
 
+    /* Skriver portinställningar till ini-filen */
+    void MainWindow::writePreferences()
+    {
+        QFile ini_file(INI_FILE);
+
+        if (!ini_file.open(QFile::ReadOnly))
+        {
+            log("Error: unable to open ini-file to read port preferences.");
+            return;
+        }
+
+        QTextStream stream(&ini_file);
+
+        QString complete_file = stream.readAll();
+
+        ini_file.close();
+
+        QStringList lines(complete_file.split("\n"));
+
+        QMutableStringListIterator itr(lines);
+
+        while (itr.hasNext())
+        {
+            QString line = itr.next();
+
+            if (line.startsWith("port_name"))
+            {
+                itr.remove();
+                itr.insert("port_name=" + mc_->port()->portName());
+            }
+            else if (line.startsWith("baud_rate"))
+            {
+                itr.remove();
+                itr.insert("baud_rate=" + utils::toString(mc_->port()->baudRate()));
+            }
+            else if (line.startsWith("data_bits"))
+            {
+                itr.remove();
+                itr.insert("data_bits=" + utils::toString(mc_->port()->dataBits()));
+            }
+            else if (line.startsWith("parity"))
+            {
+                itr.remove();
+                itr.insert("parity=" + utils::toString(mc_->port()->parity()));
+            }
+            else if (line.startsWith("stop_bits"))
+            {
+                itr.remove();
+                itr.insert("stop_bits=" + utils::toString(mc_->port()->stopBits()));
+            }
+        }
+
+        if (!ini_file.open(QFile::WriteOnly | QFile::Truncate))
+        {
+            log("Error: unable to open ini-file to save port preferences.");
+            return;
+        }
+
+        stream.setDevice(&ini_file);
+
+        stream << lines.join("\n");
+
+        ini_file.close();
+    }
+
     /*
      *  Private slots
      */
@@ -509,6 +574,8 @@ namespace MC
             mc_->port()->setDataBits(dlg.dataBits());
             mc_->port()->setParity(dlg.parity());
             mc_->port()->setStopBits(dlg.stopBits());
+
+            writePreferences();
         }
     }
 

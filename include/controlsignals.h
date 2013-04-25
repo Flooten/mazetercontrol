@@ -13,15 +13,17 @@
 #ifndef CONTROLSIGNALS_H
 #define CONTROLSIGNALS_H
 
+#include <cstdint>
+
 namespace MC
 {
     struct ControlSignals
     {
-        char right_value = 0;
-        char left_value = 0;
-        char right_direction = 1;
-        char left_direction = 1;
-        char claw_value = 0;
+        uint8_t right_value = 0;
+        uint8_t left_value = 0;
+        uint8_t right_direction = 1;
+        uint8_t left_direction = 1;
+        uint8_t claw_value = 0;
     };
 } // namespace MC
 

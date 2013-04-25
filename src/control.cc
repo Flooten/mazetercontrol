@@ -804,8 +804,6 @@ namespace MC
                         readAssignArgument(argument, name, value);
 
                         // LISTA HÄR
-                        if (name == "foo")
-                        {}
                     }
                 }
             }

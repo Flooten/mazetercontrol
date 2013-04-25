@@ -12,18 +12,20 @@
 #ifndef SENSOR_DATA_H
 #define SENSOR_DATA_H
 
+#include <cstdint>
+
 struct SensorData
 {
-    char distance1 = 0;
-    char distance2 = 0;
-    char distance3 = 0;
-    char distance4 = 0;
-    char distance5 = 0;
-    char distance6 = 0;
-    char distance7 = 0;
-    unsigned int angle = 0;
-    char line_deviation = 0;
-    char line_type = 0;
+    uint8_t distance1 = 0;
+    uint8_t distance2 = 0;
+    uint8_t distance3 = 0;
+    uint8_t distance4 = 0;
+    uint8_t distance5 = 0;
+    uint8_t distance6 = 0;
+    uint8_t distance7 = 0;
+    uint16_t angle = 0;
+    int8_t line_deviation = 0;
+    uint8_t line_type = 0;
 };
 
 #endif /* SENSOR_DATA_H */
