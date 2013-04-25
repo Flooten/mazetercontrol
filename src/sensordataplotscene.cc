@@ -95,7 +95,8 @@ namespace MC
             break;
 
         case ANGLE:
-            ypos -= sensor_data_.last().angle / 200;
+            ypos -= sensor_data_.last().angle / 200
+                    ;
             break;
 
         case LINE_DEVIATION:
