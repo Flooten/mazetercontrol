@@ -565,88 +565,58 @@ namespace MC
 
     /* Skickar de angivna parametervärdena */
     void MainWindow::transmitParameters()
-    {
-        QString size_str = "02";
-
+    {        
         // Hämta värden och skapa representativa strängar
         // uppdelade i LSB och MSB, data skickas little-endian.
 
-        // Kd_left
-        int kd_left = ui->spinBox_kd_left->value();
-        int kd_left_lsb = kd_left & 0xff;
-        int kd_left_msb = (kd_left & 0xff00) >> 8;
-        QString kd_left_str_lsb = QString::number(kd_left_lsb, 16);
-        QString kd_left_str_msb = QString::number(kd_left_msb, 16);
+        QString size_str = "02";
 
-        if (kd_left_lsb <= 0xf)
-            kd_left_str_lsb.prepend("0");
+        int parameters[4];
 
-        if (kd_left_msb <= 0xf)
-            kd_left_str_msb.prepend("0");
+        parameters[0] = ui->spinBox_kd_left->value();
+        parameters[1] = ui->spinBox_kd_right->value();
+        parameters[2] = ui->spinBox_kp_left->value();
+        parameters[3] = ui->spinBox_kp_right->value();
 
-        // Kd_right
-        int kd_right = ui->spinBox_kd_right->value();
-        int kd_right_lsb = kd_right & 0xff;
-        int kd_right_msb = (kd_right & 0xff00) >> 8;
-        QString kd_right_str_lsb = QString::number(kd_right_lsb, 16);
-        QString kd_right_str_msb = QString::number(kd_right_msb, 16);
+        for (int i = 0; i < 4; ++i)
+        {
+            int parameters_lsb = parameters[i] & 0xff;
+            int parameters_msb = (parameters[i] & 0xff00) >> 8;
 
-        if (kd_right_lsb <= 0xf)
-            kd_right_str_lsb.prepend("0");
+            QString parameters_str_lsb = QString::number(parameters_lsb, 16);
+            QString parameters_str_msb = QString::number(parameters_msb, 16);
 
-        if (kd_right_msb <= 0xf)
-            kd_right_str_msb.prepend("0");
+            if (parameters_lsb <= 0xf)
+                parameters_str_lsb.prepend("0");
 
-        // Kp_left
-        int kp_left = ui->spinBox_kp_left->value();
-        int kp_left_lsb = kp_left & 0xff;
-        int kp_left_msb = (kp_left & 0xff00) >> 8;
-        QString kp_left_str_lsb = QString::number(kp_left_lsb, 16);
-        QString kp_left_str_msb = QString::number(kp_left_msb, 16);
+            if (parameters_msb <= 0xf)
+                parameters_str_msb.prepend("0");
 
-        if (kp_left_lsb <= 0xf)
-            kp_left_str_lsb.prepend("0");
+            int command_code;
 
-        if (kp_left_msb <= 0xf)
-            kp_left_str_msb.prepend("0");
+            // Avgör kommandokod
+            switch (i)
+            {
+            case 0:
+                command_code = PARA_KD_LEFT;
+                break;
+            case 1:
+                command_code = PARA_KD_RIGHT;
+                break;
+            case 2:
+                command_code = PARA_KP_LEFT;
+                break;
+            case 3:
+                command_code = PARA_KP_RIGHT;
+                break;
+            }
 
-        // Kp_right
-        int kp_right = ui->spinBox_kp_right->value();
-        int kp_right_lsb = kp_right & 0xff;
-        int kp_right_msb = (kp_right & 0xff00) >> 8;
-        QString kp_right_str_lsb = QString::number(kp_right_lsb, 16);
-        QString kp_right_str_msb = QString::number(kp_right_msb, 16);
-
-        if (kp_right_lsb <= 0xf)
-            kp_right_str_lsb.prepend("0");
-
-        if (kp_right_msb <= 0xf)
-            kp_right_str_msb.prepend("0");
-
-
-        // Skicka datan till kommunikationsenheten (little-endian)
-        mc_->parseCommand(UserInput("transmit " +
-                                    QString::number(PARA_KD_LEFT, 16) +
-                                    size_str +
-                                    kd_left_str_lsb +
-                                    kd_left_str_msb));
-
-        mc_->parseCommand(UserInput("transmit " +
-                                    QString::number(PARA_KD_RIGHT, 16) +
-                                    size_str +
-                                    kd_right_str_lsb +
-                                    kd_right_str_msb));
-
-        mc_->parseCommand(UserInput("transmit " +
-                                    QString::number(PARA_KP_LEFT, 16) +
-                                    size_str +
-                                    kp_left_str_lsb +
-                                    kp_left_str_msb));
-
-        mc_->parseCommand(UserInput("transmit " +
-                                    QString::number(PARA_KP_RIGHT, 16) +
-                                    size_str +
-                                    kp_right_str_lsb +
-                                    kp_right_str_msb));
+            // Sätt samman och skicka kommando
+            mc_->parseCommand(UserInput("transmit " +
+                                        QString::number(command_code, 16) +
+                                        size_str +
+                                        parameters_str_lsb +
+                                        parameters_str_msb));
+        }
     }
 } // namespace MC
