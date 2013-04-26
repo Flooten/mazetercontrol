@@ -450,6 +450,8 @@ namespace MC
         {
         case Qt::Key_Up:
         case Qt::Key_Down:
+        case Qt::Key_Left:
+        case Qt::Key_Right:
         case Qt::Key_A:
         case Qt::Key_D:
             emit out("Command: Stop.");
