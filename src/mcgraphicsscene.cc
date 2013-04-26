@@ -35,8 +35,8 @@ namespace MC
         sensor_data_[RIGHT_SHORT]->setPlainText(QString::number((unsigned char)sensor_data.distance6) + UNIT_CM);
         sensor_data_[BACK]->setPlainText(QString::number((unsigned char)sensor_data.distance7) + UNIT_CM);
         sensor_data_[ANGLE]->setPlainText(QString::number((unsigned short int)sensor_data.angle / 100) + UNIT_DEG);
-        sensor_data_[LINE_DEVIATION]->setPlainText(QString::number((char)sensor_data.line_deviation) + UNIT_CM);
-        sensor_data_[LINE_TYPE]->setPlainText(QString::number((unsigned char)sensor_data.line_type) + UNIT_CM);
+        sensor_data_[LINE_DEVIATION]->setPlainText("Line deviation: " + QString::number((char)sensor_data.line_deviation) + UNIT_CM);
+        sensor_data_[LINE_TYPE]->setPlainText("Line type: " + QString::number((unsigned char)sensor_data.line_type));
 
         this->update();
     }
