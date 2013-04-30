@@ -362,7 +362,7 @@ namespace MC
         ui->spinBox_kp_right->setValue(0);
         ui->spinBox_throttle->setEnabled(false);
         ui->spinBox_throttle->setValue(0);
-        ui->spinBox_sensor_data_current_value->setEnabled(true);
+        ui->spinBox_sensor_data_current_value->setEnabled(false);
         ui->spinBox_sensor_data_current_value->setValue(0);
         ui->verticalSlider_throttle->setEnabled(false);
         ui->verticalSlider_throttle->setValue(0);
