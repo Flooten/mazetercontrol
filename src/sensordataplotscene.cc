@@ -110,8 +110,18 @@ namespace MC
 
         dot->setPos(time_, ypos);
         dot->setPen(pen1_);
-        addItem(dot);
 
+        // Rita förbindelser mellan punkterna
+        if ((last_dot_ != NULL) && abs(ypos - last_dot_->y()) >= 2)
+        {
+            QGraphicsLineItem* connector = new QGraphicsLineItem(time_, last_dot_->y(), time_, ypos);
+            connector->setPen(pen1_);
+            addItem(connector);
+        }
+
+        last_dot_ = dot;
+
+        addItem(dot);
 
         // Om scrollning behövs
         if (time_ > view_width_)

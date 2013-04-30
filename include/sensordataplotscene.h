@@ -64,6 +64,7 @@ namespace MC
 
         ChosenData chosen_data_ = FRONT_LEFT;
         QMap<GridLine, QGraphicsLineItem*> line_map_;
+        QGraphicsEllipseItem* last_dot_ = NULL;
 
         int zero_level_ = 200;
         int max_level_ = 70;

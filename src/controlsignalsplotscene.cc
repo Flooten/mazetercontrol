@@ -62,7 +62,10 @@ namespace MC
 
         // Vänster
         QGraphicsEllipseItem* ldot = new QGraphicsEllipseItem(rect);
+        QGraphicsEllipseItem* rdot = new QGraphicsEllipseItem(rect);
+
         int ypos_l = ZERO_LEVEL_LEFT_;
+        int ypos_r = ZERO_LEVEL_RIGHT_;
 
         if (control_signals_.last().left_direction == 1)
             // Åker framåt
@@ -71,14 +74,6 @@ namespace MC
             // Åker bakåt
             ypos_l += control_signals_.last().left_value / 2;
 
-        ldot->setPos(time_, ypos_l);
-        ldot->setPen(lpen_);
-        addItem(ldot);
-
-        // Höger
-        QGraphicsEllipseItem* rdot = new QGraphicsEllipseItem(rect);
-        int ypos_r = ZERO_LEVEL_RIGHT_;
-
         if (control_signals_.last().right_direction == 1)
             // Åker framåt
             ypos_r -= control_signals_.last().right_value / 2;
@@ -86,8 +81,31 @@ namespace MC
             // Åker bakåt
             ypos_r += control_signals_.last().right_value / 2;
 
+        ldot->setPos(time_, ypos_l);
+        ldot->setPen(lpen_);
+
         rdot->setPos(time_, ypos_r);
         rdot->setPen(rpen_);
+
+        // Rita förbindelser mellan punkterna
+        if ((last_ldot_ != NULL) && abs(ypos_l - last_ldot_->y()) >= 2)
+        {
+            QGraphicsLineItem* connector = new QGraphicsLineItem(time_, last_ldot_->y(), time_, ypos_l);
+            connector->setPen(lpen_);
+            addItem(connector);
+        }
+
+        if ((last_rdot_ != NULL) && abs(ypos_r - last_rdot_->y()) >= 2)
+        {
+            QGraphicsLineItem* connector = new QGraphicsLineItem(time_, last_rdot_->y(), time_, ypos_r);
+            connector->setPen(rpen_);
+            addItem(connector);
+        }
+
+        last_ldot_ = ldot;
+        last_rdot_ = rdot;
+
+        addItem(ldot);
         addItem(rdot);
 
         if (time_ > view_width_)
