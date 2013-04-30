@@ -107,6 +107,9 @@ namespace MC
                     return true;
                 }
 
+                case Qt::Key_section:
+                    emit terminalClosing();
+
                 default:
                     // Hantera inte eventet.
                     return false;

@@ -49,6 +49,8 @@ namespace MC
     {
         // Underrätta kommunikationsenheten.
         transmitCommand(BT_DISCONNECT);
+        delete port_settings_;
+        delete ini_file_;
         delete port_;
     }
 

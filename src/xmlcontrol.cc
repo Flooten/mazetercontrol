@@ -1,3 +1,12 @@
+/*
+ * FILNAMN:       xmlcontrol.h
+ * PROJEKT:       MazeterControl
+ * PROGRAMMERARE: Marcus Eriksson
+ * DATUM:         2013-04-30
+ *
+ */
+
+
 #include "xmlcontrol.h"
 
 #include <QTextStream>

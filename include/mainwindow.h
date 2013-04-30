@@ -21,6 +21,7 @@
 #include <QMainWindow>
 #include <QtCore>
 #include <QTimer>
+#include <QTime>
 
 namespace Ui
 {
@@ -52,14 +53,17 @@ namespace MC
 
     private:
         int calibrate_countdown_ = 5;
+        bool terminal_open_ = false;
         Ui::MainWindow *ui;
         Control* mc_;
         Terminal* terminal_;
         QTimer* plot_timer_;
+        QTimer* running_time_update_timer_;
         QTimer* calibrate_countdown_timer_;
         MCGraphicsScene* scene_;
         ControlSignalsPlotScene* cs_scene_;
         SensorDataPlotScene* sd_scene_;
+        QTime time_;
 
         XmlControl* parameter_values_;
 
@@ -90,6 +94,9 @@ namespace MC
         void toggleConnection();
         void resetPlots();
         void drawPlots();
+        void startAutonomousRun();
+        void finishAutonomousRun();
+        void updateRunningTime();
         void centerControlSignalsPlot(int time);
         void centerSensorDataPlot(int time);
         void chosenSensorDataChanged(int index);

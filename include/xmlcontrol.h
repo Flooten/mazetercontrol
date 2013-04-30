@@ -1,3 +1,14 @@
+/*
+ * FILNAMN:       xmlcontrol.h
+ * PROJEKT:       MazeterControl
+ * PROGRAMMERARE: Marcus Eriksson
+ * DATUM:         2013-04-30
+ *
+ * BESKRIVNING:   XmlControl är en stödklass som förenklar
+ *                in och utmatning i ett XML-formaterat dokument.
+ *
+ */
+
 #ifndef XMLCONTROL_H
 #define XMLCONTROL_H
 

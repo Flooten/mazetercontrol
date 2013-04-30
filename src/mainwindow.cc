@@ -23,6 +23,7 @@ namespace MC
         : QMainWindow(parent)
         , ui(new Ui::MainWindow)
         , plot_timer_(new QTimer(this))
+        , running_time_update_timer_(new QTimer(this))
         , calibrate_countdown_timer_(new QTimer(this))
         , scene_(new MCGraphicsScene(this))
     {
@@ -56,6 +57,7 @@ namespace MC
         connect(mc_, SIGNAL(btConnected()), this, SLOT(btConnected()));
         connect(mc_, SIGNAL(btDisconnected()), this, SLOT(btDisconnected()));
         connect(plot_timer_, SIGNAL(timeout()), this, SLOT(drawPlots()));
+        connect(running_time_update_timer_, SIGNAL(timeout()), this, SLOT(updateRunningTime()));
         connect(calibrate_countdown_timer_, SIGNAL(timeout()), this, SLOT(calibrateCountdown()));
 
         // Relä av nyligen inkommen data
@@ -107,6 +109,10 @@ namespace MC
         delete scene_;
         delete cs_scene_;
         delete sd_scene_;
+        delete plot_timer_;
+        delete running_time_update_timer_;
+        delete calibrate_countdown_timer_;
+        delete parameter_values_;
 
         // Alltid sist VIKTIGT!
         delete ui;
@@ -125,13 +131,20 @@ namespace MC
             switch (event->key())
             {
             case Qt::Key_section:
-                openTerminal();
+            {
+                if (terminal_open_)
+                    closeTerminal();
+                else
+                    openTerminal();
+
                 break;
+            }
 
             default:
+            {
                 mc_->handleKeyPressEvent(event);
-
                 break;
+            }
             }
 
             // Tänd knappen
@@ -169,8 +182,9 @@ namespace MC
 
     /* Slot för att tillåta skrivning från andra objekt */
     void MainWindow::log(const QString& str)
-    {
-        ui->textEdit_log->append(str);
+    {        
+        ui->textEdit_log->append(time_.currentTime().toString("HH:mm:ss") + ": " + str);
+        //ui->textEdit_log->append(str);
     }
 
     /* Rensa event log */
@@ -330,16 +344,17 @@ namespace MC
         ui->spinBox_kd_right->setEnabled(true);
         ui->spinBox_kp_right->setEnabled(true);
         ui->spinBox_sensor_data_current_value->setEnabled(true);
+        ui->spinBox_throttle->setEnabled(true);
         ui->pushButton_transfer_parameters->setEnabled(true);
         ui->pushButton_calibrate->setEnabled(true);
-        ui->graphicsView_overview->setEnabled(true);
-        ui->verticalSlider_throttle->setEnabled(true);
-        ui->spinBox_throttle->setEnabled(true);
         ui->pushButton_clear_plots->setEnabled(true);
+        ui->pushButton_abort->setEnabled(true);
+        ui->verticalSlider_throttle->setEnabled(true);
+        ui->graphicsView_overview->setEnabled(true);
         ui->graphicsView_control_signals->setEnabled(true);
         ui->graphicsView_sensor_data->setEnabled(true);
         ui->comboBox_sensor_data->setEnabled(true);
-        ui->pushButton_abort->setEnabled(true);
+        ui->timeEdit_running_time->setEnabled(true);
 
         ui->spinBox_kd_left->setValue(parameter_values_->attributeValue("kd-left", "value").toInt());
         ui->spinBox_kd_right->setValue(parameter_values_->attributeValue("kd-right", "value").toInt());
@@ -366,13 +381,13 @@ namespace MC
         ui->progressBar_right_engine_rev->setEnabled(false);
         ui->progressBar_right_engine_rev->setValue(0);
         ui->spinBox_kd_left->setEnabled(false);
-        //ui->spinBox_kd_left->setValue(0);
+        ui->spinBox_kd_left->clear();
         ui->spinBox_kp_left->setEnabled(false);
-        //ui->spinBox_kp_left->setValue(0);
+        ui->spinBox_kp_left->clear();
         ui->spinBox_kd_right->setEnabled(false);
-        //ui->spinBox_kd_right->setValue(0);
+        ui->spinBox_kd_right->clear();
         ui->spinBox_kp_right->setEnabled(false);
-        //ui->spinBox_kp_right->setValue(0);
+        ui->spinBox_kp_right->clear();
         ui->spinBox_throttle->setEnabled(false);
         ui->spinBox_throttle->setValue(0);
         ui->spinBox_sensor_data_current_value->setEnabled(false);
@@ -387,6 +402,7 @@ namespace MC
         ui->graphicsView_sensor_data->setEnabled(false);
         ui->comboBox_sensor_data->setEnabled(false);
         ui->pushButton_abort->setEnabled(false);
+        ui->timeEdit_running_time->setEnabled(false);
 
         clearPlots();
         scene_->clear();
@@ -620,12 +636,14 @@ namespace MC
     void MainWindow::openTerminal()
     {
         terminal_->show();
+        terminal_open_ = true;
     }
 
     /* Stänger terminalen */
     void MainWindow::closeTerminal()
     {
         terminal_->hide();
+        terminal_open_ = false;
     }
 
     /* Öppnar AboutDialog */
@@ -680,6 +698,29 @@ namespace MC
     {
         cs_scene_->draw();
         sd_scene_->draw();
+    }
+
+    /* Registrerar att roboten har aktiverat autonom labyrintkörning. */
+    void MainWindow::startAutonomousRun()
+    {
+        time_.start();
+        running_time_update_timer_->start(100);
+        log("Autonomous run initiated.");
+    }
+
+    /* Registrerar att roboten har avslutat en follbordad körning */
+    void MainWindow::finishAutonomousRun()
+    {
+        running_time_update_timer_->stop();
+        updateRunningTime();
+        log("Autonomous run completed. Elapsed time: " + ui->timeEdit_running_time->time().toString("mm:ss:zzz"));
+    }
+
+    /* Uppdaterar körtiden */
+    void MainWindow::updateRunningTime()
+    {
+        int elapsed_time = time_.elapsed();
+        ui->timeEdit_running_time->setTime(QTime(0, elapsed_time / 60000, elapsed_time / 1000, elapsed_time % 1000));
     }
 
     /* Skiftar innehållet i plotfönstret för kontrollsignalerna till att visa ny data */

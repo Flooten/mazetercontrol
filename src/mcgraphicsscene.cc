@@ -140,8 +140,8 @@ namespace MC
         sensor_data_.insert(RIGHT_SHORT, new QGraphicsTextItem("0 cm"));
         sensor_data_.insert(BACK, new QGraphicsTextItem("0 cm"));
         sensor_data_.insert(ANGLE, new QGraphicsTextItem("0 degrees"));
-        sensor_data_.insert(LINE_DEVIATION, new QGraphicsTextItem("0 cm"));
-        sensor_data_.insert(LINE_TYPE, new QGraphicsTextItem("0 cm"));
+        sensor_data_.insert(LINE_DEVIATION, new QGraphicsTextItem("Line deviation: 0 cm"));
+        sensor_data_.insert(LINE_TYPE, new QGraphicsTextItem("Line type: 0 cm"));
 
         // Sätt rätt font
         QFont font("Ubuntu");
