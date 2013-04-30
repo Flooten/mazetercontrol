@@ -321,6 +321,7 @@ namespace MC
         ui->spinBox_kp_left->setEnabled(true);
         ui->spinBox_kd_right->setEnabled(true);
         ui->spinBox_kp_right->setEnabled(true);
+        ui->spinBox_sensor_data_current_value->setEnabled(true);
         ui->pushButton_transfer_parameters->setEnabled(true);
         ui->pushButton_calibrate->setEnabled(true);
         ui->graphicsView_overview->setEnabled(true);
@@ -361,6 +362,8 @@ namespace MC
         ui->spinBox_kp_right->setValue(0);
         ui->spinBox_throttle->setEnabled(false);
         ui->spinBox_throttle->setValue(0);
+        ui->spinBox_sensor_data_current_value->setEnabled(true);
+        ui->spinBox_sensor_data_current_value->setValue(0);
         ui->verticalSlider_throttle->setEnabled(false);
         ui->verticalSlider_throttle->setValue(0);
         ui->pushButton_transfer_parameters->setEnabled(false);

@@ -614,6 +614,7 @@ namespace MC
         if (command == BT_DISCONNECT)
         {
             bt_connected_ = false;
+            mode_ = NO_MODE;
             emit btDisconnected();
         }
 
