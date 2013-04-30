@@ -19,19 +19,30 @@ namespace MC
     /*
      *  Public
      */
-    Control::Control(const QString &ini_file, QObject *parent)
+    Control::Control(const QString& ini_file, QObject* parent)
         : QObject(parent)
-    {
-        // Parsa ini-filen
-        parseIniFile(ini_file);
+        , port_settings_(new XmlControl(PORT_SETTINGS_))
+        , ini_file_(new XmlControl(ini_file))
+    {        
+        port_ = new SerialPort(port_settings_->attributeValue("port-name", "value"),
+                               port_settings_->attributeValue("baud-rate", "value"),
+                               port_settings_->attributeValue("data-bits", "value"),
+                               port_settings_->attributeValue("parity", "value"),
+                               port_settings_->attributeValue("stop-bits", "value"));
 
         // Skapa ett acknowledge-meddelade att lyssna efter.
         acknowledge_message_.resize(2);
         acknowledge_message_[0] = BT_CONNECT;
         acknowledge_message_[1] = 0x0;
+
         // Anslutningar
         connect(port_, SIGNAL(readyRead()), this, SLOT(readData()));
         connect(port_, SIGNAL(bytesWritten(qint64)), this, SLOT(reportWrite(qint64)));
+        connect(port_, SIGNAL(portNameChanged(QString)), this, SLOT(portNameChanged(QString)));
+        connect(port_, SIGNAL(baudRateChanged(QString)), this, SLOT(baudRateChanged(QString)));
+        connect(port_, SIGNAL(dataBitsChanged(QString)), this, SLOT(dataBitsChanged(QString)));
+        connect(port_, SIGNAL(parityChanged(QString)), this, SLOT(parityChanged(QString)));
+        connect(port_, SIGNAL(stopBitsChanged(QString)), this, SLOT(stopBitsChanged(QString)));
     }
 
     Control::~Control()
@@ -71,12 +82,12 @@ namespace MC
         case UserInput::HELP:
         {
             if (input.argumentCount() == 0)
-                emit out(help_message_);
+                emit out(ini_file_->text("help_general"));
             else
             {
                 // Hjälptext för specifikt kommando
                 QString argument = input.argument(0);
-                QString help_text = help_texts_.value(argument);
+                QString help_text = ini_file_->text("help_" + argument); //help_texts_.value(argument);
 
                 if (help_text != "")
                     emit out(help_text);
@@ -750,189 +761,28 @@ namespace MC
         }
     }
 
-    /*  Parsar ini-filen angiven i ini_file */
-    void Control::parseIniFile(const QString& ini_file)
+    void Control::portNameChanged(QString port_name)
     {
-        try
-        {
-            QFile file(ini_file);
-
-            if (!file.exists())
-            {
-                exit(3);
-            }
-
-            if (!file.open(QIODevice::ReadOnly))
-            {
-                emit out("Error: Unable to open file " + file.fileName() + " for reading.");
-                return;
-            }
-
-            QTextStream stream(&file);
-
-            // Parsa raden
-            while (!stream.atEnd())
-            {
-                QString str = stream.readLine();
-
-                // Ignorera kommentarer, tomma rader
-                if (str.startsWith('#') || str.startsWith('\n') || str.startsWith(' '))
-                    continue;
-                else if (str.startsWith('\\'))
-                {
-                    // Kommando
-                    QString command;
-                    QString argument;
-
-                    readLine(str, command, argument);
-
-                    if (command == "begin")
-                    {
-                        // Parsa sammanhängande data
-                        if (argument == "help_message")
-                        {
-                            help_message_ = readUntilEnd(stream);
-                        }
-                        else if (argument == "help_set")
-                        {
-                            help_texts_.insert("set", readUntilEnd(stream));
-                        }
-                        else if (argument == "help_exit")
-                        {
-                            help_texts_.insert("exit", readUntilEnd(stream));
-                        }
-                        else if (argument == "help_transmit")
-                        {
-                            help_texts_.insert("transmit", readUntilEnd(stream));
-                        }
-                        else if (argument == "help_ffconfig")
-                        {
-                            help_texts_.insert("ffconfig", readUntilEnd(stream));
-                        }
-                        else if (argument == "port")
-                        {
-                            QString port_name;
-                            QString baud_rate;
-                            QString data_bits;
-                            QString parity;
-                            QString stop_bits;
-
-                            do
-                            {
-                                str = stream.readLine();
-
-                                QString name;
-                                QString value;
-
-                                readAssignArgument(str, name, value);
-
-                                if (name == "port_name")
-                                    port_name = value;
-                                else if (name == "baud_rate")
-                                    baud_rate = value;
-                                else if (name == "data_bits")
-                                    data_bits = value;
-                                else if (name == "parity")
-                                    parity = value;
-                                else if (name == "stop_bits")
-                                    stop_bits = value;
-                            }
-                            while (!str.isNull());
-
-                            // Skapa en port
-                            if (!port_name.isEmpty() && !baud_rate.isEmpty() && !data_bits.isEmpty() && !parity.isEmpty() && !stop_bits.isEmpty())
-                                port_ = new SerialPort(port_name, baud_rate, data_bits, parity, stop_bits);
-                            else
-                                port_ = new SerialPort();
-                        }
-                    }
-                    else if (command == "assign")
-                    {
-                        // Sätt en variabel
-                        QString name;
-                        QString value;
-
-                        readAssignArgument(argument, name, value);
-
-                        // LISTA HÄR
-                    }
-                }
-            }
-        }
-        catch (...)
-        {
-            emit out("Error while parsing ini-file.");
-        }
+        port_settings_->setAttributeValue("port-name", "value", port_name);
     }
 
-    /*
-     *  Läser en rad ur en ini-fil. Kommandot som följer efter '\'
-     *  läggs i command och argumentet i argument. Otillåten data
-     *  resulterar i tomma strängar.
-     */
-    void Control::readLine(QString& str, QString& command, QString& argument)
+    void Control::baudRateChanged(QString baud_rate)
     {
-        if (!str.startsWith('\\'))
-            return;
-        else
-            str.remove(0, 1);
-
-        QStringList list = str.split(" ");
-
-        command = list[0];
-
-        if (list.length() == 2)
-            argument = list[1];
-        else
-            argument = "";
+        port_settings_->setAttributeValue("baud-rate", "value", baud_rate);
     }
 
-    /*
-     *  Läser en tilldelningsuttryck och lagrar variabeln i name
-     *  och dess värde i value. Otillåten data resilterar i tomma
-     *  strängar.
-     */
-    void Control::readAssignArgument(const QString& argument, QString& name, QString& value)
+    void Control::dataBitsChanged(QString data_bits)
     {
-        QStringList list = argument.split("=");
-
-        name = list[0];
-
-        if (list.length() == 2)
-            value = list[1];
-        else
-            value = "";
+        port_settings_->setAttributeValue("data-bits", "value", data_bits);
     }
 
-    /*
-     *  Läser data tills kommandot \end påträffas och tolkar
-     *  denna som ren text.
-     */
-    QString Control::readUntilEnd(QTextStream& is)
+    void Control::parityChanged(QString parity)
     {
-        QString str;
-        QString line;
+        port_settings_->setAttributeValue("parity", "value", parity);
+    }
 
-        do
-        {
-            // Läs rader
-            line = is.readLine();
-
-            QString command;
-            QString argument;
-
-            readLine(line, command, argument);
-
-            if (command == "end")
-                break;
-            else
-            {
-                str.append(line);
-                str.append("\n");
-            }
-        }
-        while (!str.isNull());
-
-        return str;
+    void Control::stopBitsChanged(QString stop_bits)
+    {
+        port_settings_->setAttributeValue("stop-bits", "value", stop_bits);
     }
 } // namespace MC

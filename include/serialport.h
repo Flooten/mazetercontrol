@@ -73,6 +73,11 @@ namespace MC
         void readyRead();
         void bytesWritten(qint64 bytes_written);
         void out(const QString& str);
+        void portNameChanged(QString);
+        void baudRateChanged(QString);
+        void dataBitsChanged(QString);
+        void parityChanged(QString);
+        void stopBitsChanged(QString);
 
     private slots:
         void readyReadRelay();

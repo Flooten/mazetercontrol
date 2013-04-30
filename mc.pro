@@ -1,6 +1,6 @@
 include(libs/qextserialport-1.2rc/src/qextserialport.pri)
 
-QT += core gui
+QT += core gui xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -24,7 +24,8 @@ HEADERS += \
     include/aboutdialog.h \
     include/controlsignalsplotscene.h \
     include/sensordataplotscene.h \
-    include/plotscene.h
+    include/plotscene.h \
+    include/xmlcontrol.h
 
 SOURCES += \
     src/utils.cc \
@@ -39,7 +40,8 @@ SOURCES += \
     src/aboutdialog.cc \
     src/controlsignalsplotscene.cc \
     src/sensordataplotscene.cc \
-    src/plotscene.cc
+    src/plotscene.cc \
+    src/xmlcontrol.cc
 
 FORMS += \
     forms/terminal.ui \

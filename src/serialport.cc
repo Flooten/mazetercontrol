@@ -106,26 +106,31 @@ namespace MC
     void SerialPort::setPortName(const QString& port_name)
     {
         port_->setPortName(port_name);
+        emit portNameChanged(port_name);
     }
 
     void SerialPort::setBaudRate(BaudRateType baud_rate)
     {
         port_->setBaudRate(baud_rate);
+        emit baudRateChanged(utils::toString(baud_rate));
     }
 
     void SerialPort::setDataBits(DataBitsType data_bits)
     {
         port_->setDataBits(data_bits);
+        emit dataBitsChanged(utils::toString(data_bits));
     }
 
     void SerialPort::setParity(ParityType parity)
     {
         port_->setParity(parity);
+        emit parityChanged(utils::toString(parity));
     }
 
     void SerialPort::setStopBits(StopBitsType stop_bits)
     {
         port_->setStopBits(stop_bits);
+        emit stopBitsChanged(utils::toString(stop_bits));
     }
 
     /* Skicka */
@@ -167,8 +172,6 @@ namespace MC
 
     void SerialPort::parsePortSettings(const QString& baud_rate, const QString& data_bits, const QString& parity, const QString& stop_bits)
     {
-        // LÄGG TILL ERRORHANTERING
-
         // Sätt baudrate
         port_settings_.BaudRate = utils::toBaudRateType(baud_rate);
 

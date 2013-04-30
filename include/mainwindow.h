@@ -16,6 +16,7 @@
 #include "mcgraphicsscene.h"
 #include "controlsignalsplotscene.h"
 #include "sensordataplotscene.h"
+#include "xmlcontrol.h"
 
 #include <QMainWindow>
 #include <QtCore>
@@ -60,10 +61,13 @@ namespace MC
         ControlSignalsPlotScene* cs_scene_;
         SensorDataPlotScene* sd_scene_;
 
+        XmlControl* parameter_values_;
+
         const int PLOT_DELTA_T = 50;
         const int PLOT_VIEW_WIDTH = 770;
         const int PLOT_VIEW_HEIGHT = 255;
-        const QString INI_FILE = QCoreApplication::applicationDirPath() + "/data/mc.ini";
+        const QString INI_FILE = ":/data/data/mc_settings.xml";
+        const QString PARAMETER_VALUES_ = QCoreApplication::applicationDirPath() + "/data/parameter_values.xml";
 
         void enableWidgets();
         void disableWidgets();
@@ -96,6 +100,10 @@ namespace MC
         void calibrateCountdown();
         void throttleRelay();
         void throttleValueChanged(char throttle_value);
+        void parameterKdLeftChanged(int kd_left);
+        void parameterKdRightChanged(int kd_right);
+        void parameterKpLeftChanged(int kp_left);
+        void parameterKpRightChanged(int kp_right);
     };
 } // namespace MC
 

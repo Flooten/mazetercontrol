@@ -17,6 +17,7 @@
 #include "userinput.h"
 #include "controlsignals.h"
 #include "sensordata.h"
+#include "xmlcontrol.h"
 
 #include <QObject>
 #include <QString>
@@ -25,6 +26,7 @@
 #include <QKeyEvent>
 #include <QByteArray>
 #include <QTimer>
+#include <QCoreApplication>
 
 namespace MC
 {
@@ -63,6 +65,10 @@ namespace MC
 
         QString help_message_;
         QMap<QString, QString> help_texts_;
+        const QString PORT_SETTINGS_ = QCoreApplication::applicationDirPath() + "/data/port_settings.xml";
+
+        XmlControl* port_settings_;
+        XmlControl* ini_file_;
 
         QByteArray data_;
         QByteArray acknowledge_message_;
@@ -83,10 +89,12 @@ namespace MC
         void updateSensorData(const QByteArray& sensor_data);
         void printData(QByteArray data);
 
-        void parseIniFile(const QString& ini_file);
-        void readLine(QString& str, QString& command, QString& argument);
-        void readAssignArgument(const QString& argument, QString& name, QString& value);
-        QString readUntilEnd(QTextStream& is);
+    private slots:
+        void portNameChanged(QString port_name);
+        void baudRateChanged(QString baud_rate);
+        void dataBitsChanged(QString data_bits);
+        void parityChanged(QString parity);
+        void stopBitsChanged(QString stop_bits);
 
     signals:
         void out(const QString&);

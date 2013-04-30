@@ -24,4 +24,7 @@
         <file>resources/consolas.ttf</file>
         <file>resources/ubuntu.ttf</file>
     </qresource>
+    <qresource prefix="/data">
+        <file>data/mc_settings.xml</file>
+    </qresource>
 </RCC>

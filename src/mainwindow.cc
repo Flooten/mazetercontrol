@@ -32,6 +32,7 @@ namespace MC
         terminal_ = new Terminal(mc_, this);
         cs_scene_ = new ControlSignalsPlotScene(PLOT_VIEW_WIDTH, PLOT_VIEW_HEIGHT, this);
         sd_scene_ = new SensorDataPlotScene(PLOT_VIEW_WIDTH, PLOT_VIEW_HEIGHT, this);
+        parameter_values_ = new XmlControl(PARAMETER_VALUES_);
 
         this->setFocusPolicy(Qt::StrongFocus);
         this->setFocus();
@@ -79,6 +80,10 @@ namespace MC
         connect(ui->pushButton_transfer_parameters, SIGNAL(clicked()), this, SLOT(transmitParameters()));
         connect(ui->verticalSlider_throttle, SIGNAL(sliderReleased()), this, SLOT(throttleRelay()));
         connect(ui->pushButton_abort, SIGNAL(clicked()), this, SLOT(transmitAbort()));
+        connect(ui->spinBox_kd_left, SIGNAL(valueChanged(int)), this, SLOT(parameterKdLeftChanged(int)));
+        connect(ui->spinBox_kd_right, SIGNAL(valueChanged(int)), this, SLOT(parameterKdRightChanged(int)));
+        connect(ui->spinBox_kp_left, SIGNAL(valueChanged(int)), this, SLOT(parameterKpLeftChanged(int)));
+        connect(ui->spinBox_kp_right, SIGNAL(valueChanged(int)), this, SLOT(parameterKpRightChanged(int)));
 
         // Plotcentreringssignaler
         connect(sd_scene_, SIGNAL(center(int)), this, SLOT(centerSensorDataPlot(int)));
@@ -333,6 +338,11 @@ namespace MC
         ui->comboBox_sensor_data->setEnabled(true);
         ui->pushButton_abort->setEnabled(true);
 
+        ui->spinBox_kd_left->setValue(parameter_values_->attributeValue("kd-left", "value").toInt());
+        ui->spinBox_kd_right->setValue(parameter_values_->attributeValue("kd-right", "value").toInt());
+        ui->spinBox_kp_left->setValue(parameter_values_->attributeValue("kp-left", "value").toInt());
+        ui->spinBox_kp_right->setValue(parameter_values_->attributeValue("kp-right", "value").toInt());
+
         scene_->draw();
         resetPlots();
     }
@@ -353,13 +363,13 @@ namespace MC
         ui->progressBar_right_engine_rev->setEnabled(false);
         ui->progressBar_right_engine_rev->setValue(0);
         ui->spinBox_kd_left->setEnabled(false);
-        ui->spinBox_kd_left->setValue(0);
+        //ui->spinBox_kd_left->setValue(0);
         ui->spinBox_kp_left->setEnabled(false);
-        ui->spinBox_kp_left->setValue(0);
+        //ui->spinBox_kp_left->setValue(0);
         ui->spinBox_kd_right->setEnabled(false);
-        ui->spinBox_kd_right->setValue(0);
+        //ui->spinBox_kd_right->setValue(0);
         ui->spinBox_kp_right->setEnabled(false);
-        ui->spinBox_kp_right->setValue(0);
+        //ui->spinBox_kp_right->setValue(0);
         ui->spinBox_throttle->setEnabled(false);
         ui->spinBox_throttle->setValue(0);
         ui->spinBox_sensor_data_current_value->setEnabled(false);
@@ -537,66 +547,66 @@ namespace MC
     /* Skriver portinställningar till ini-filen */
     void MainWindow::writePreferences()
     {
-        QFile ini_file(INI_FILE);
+//        QFile ini_file(INI_FILE);
 
-        if (!ini_file.open(QFile::ReadOnly))
-        {
-            log("Error: unable to open ini-file to read port preferences.");
-            return;
-        }
+//        if (!ini_file.open(QFile::ReadOnly))
+//        {
+//            log("Error: unable to open ini-file to read port preferences.");
+//            return;
+//        }
 
-        QTextStream stream(&ini_file);
+//        QTextStream stream(&ini_file);
 
-        QString complete_file = stream.readAll();
+//        QString complete_file = stream.readAll();
 
-        ini_file.close();
+//        ini_file.close();
 
-        QStringList lines(complete_file.split("\n"));
+//        QStringList lines(complete_file.split("\n"));
 
-        QMutableStringListIterator itr(lines);
+//        QMutableStringListIterator itr(lines);
 
-        while (itr.hasNext())
-        {
-            QString line = itr.next();
+//        while (itr.hasNext())
+//        {
+//            QString line = itr.next();
 
-            if (line.startsWith("port_name"))
-            {
-                itr.remove();
-                itr.insert("port_name=" + mc_->port()->portName());
-            }
-            else if (line.startsWith("baud_rate"))
-            {
-                itr.remove();
-                itr.insert("baud_rate=" + utils::toString(mc_->port()->baudRate()));
-            }
-            else if (line.startsWith("data_bits"))
-            {
-                itr.remove();
-                itr.insert("data_bits=" + utils::toString(mc_->port()->dataBits()));
-            }
-            else if (line.startsWith("parity"))
-            {
-                itr.remove();
-                itr.insert("parity=" + utils::toString(mc_->port()->parity()));
-            }
-            else if (line.startsWith("stop_bits"))
-            {
-                itr.remove();
-                itr.insert("stop_bits=" + utils::toString(mc_->port()->stopBits()));
-            }
-        }
+//            if (line.startsWith("port_name"))
+//            {
+//                itr.remove();
+//                itr.insert("port_name=" + mc_->port()->portName());
+//            }
+//            else if (line.startsWith("baud_rate"))
+//            {
+//                itr.remove();
+//                itr.insert("baud_rate=" + utils::toString(mc_->port()->baudRate()));
+//            }
+//            else if (line.startsWith("data_bits"))
+//            {
+//                itr.remove();
+//                itr.insert("data_bits=" + utils::toString(mc_->port()->dataBits()));
+//            }
+//            else if (line.startsWith("parity"))
+//            {
+//                itr.remove();
+//                itr.insert("parity=" + utils::toString(mc_->port()->parity()));
+//            }
+//            else if (line.startsWith("stop_bits"))
+//            {
+//                itr.remove();
+//                itr.insert("stop_bits=" + utils::toString(mc_->port()->stopBits()));
+//            }
+//        }
 
-        if (!ini_file.open(QFile::WriteOnly | QFile::Truncate))
-        {
-            log("Error: unable to open ini-file to save port preferences.");
-            return;
-        }
+//        if (!ini_file.open(QFile::WriteOnly | QFile::Truncate))
+//        {
+//            log("Error: unable to open ini-file to save port preferences.");
+//            return;
+//        }
 
-        stream.setDevice(&ini_file);
+//        stream.setDevice(&ini_file);
 
-        stream << lines.join("\n");
+//        stream << lines.join("\n");
 
-        ini_file.close();
+//        ini_file.close();
     }
 
     /*
@@ -798,8 +808,30 @@ namespace MC
         mc_->setThrottleValue(ui->verticalSlider_throttle->value());
     }
 
+    /* Tillåter ändring av vertical slider */
     void MainWindow::throttleValueChanged(char throttle_value)
     {
         ui->verticalSlider_throttle->setValue((int)throttle_value);
+    }
+
+    /* Sparar parametrarna till fil vid ändring */
+    void MainWindow::parameterKdLeftChanged(int kd_left)
+    {
+        parameter_values_->setAttributeValue("kd-left", "value", QString::number(kd_left));
+    }
+
+    void MainWindow::parameterKdRightChanged(int kd_right)
+    {
+        parameter_values_->setAttributeValue("kd-right", "value", QString::number(kd_right));
+    }
+
+    void MainWindow::parameterKpLeftChanged(int kp_left)
+    {
+        parameter_values_->setAttributeValue("kp-left", "value", QString::number(kp_left));
+    }
+
+    void MainWindow::parameterKpRightChanged(int kp_right)
+    {
+        parameter_values_->setAttributeValue("kp-right", "value", QString::number(kp_right));
     }
 } // namespace MC
