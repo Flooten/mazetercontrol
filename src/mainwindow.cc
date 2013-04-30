@@ -362,6 +362,7 @@ namespace MC
         ui->spinBox_throttle->setEnabled(false);
         ui->spinBox_throttle->setValue(0);
         ui->verticalSlider_throttle->setEnabled(false);
+        ui->verticalSlider_throttle->setValue(0);
         ui->pushButton_transfer_parameters->setEnabled(false);
         ui->pushButton_calibrate->setEnabled(false);
         ui->pushButton_clear_plots->setEnabled(false);
