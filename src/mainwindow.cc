@@ -72,6 +72,7 @@ namespace MC
         connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(exitApplication()));
         connect(ui->actionConnect, SIGNAL(triggered()), this, SLOT(toggleConnection()));
         connect(ui->actionDisconnect, SIGNAL(triggered()), this, SLOT(toggleConnection()));
+        connect(ui->actionAbort, SIGNAL(triggered()), this, SLOT(transmitAbort()));
         connect(ui->pushButton_toggle_connection, SIGNAL(clicked()), this, SLOT(toggleConnection()));
         connect(ui->pushButton_calibrate, SIGNAL(clicked()), this, SLOT(transmitCalibrateSensor()));
         connect(ui->actionAboutMazeterControl, SIGNAL(triggered()), this, SLOT(openAboutDialog()));

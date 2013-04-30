@@ -327,6 +327,9 @@ font: 10pt &quot;Ubuntu&quot;;</string>
             <iconset resource="../resources.qrc">
              <normaloff>:/icons/resources/exit.ico</normaloff>:/icons/resources/exit.ico</iconset>
            </property>
+           <property name="checkable">
+            <bool>false</bool>
+           </property>
           </widget>
          </item>
          <item>
@@ -942,9 +945,16 @@ selection-background-color: rgb(255, 255, 255);
     <addaction name="actionOpenTerminal"/>
     <addaction name="actionExit"/>
    </widget>
+   <widget class="QMenu" name="menuMazeter">
+    <property name="title">
+     <string>Mazeter</string>
+    </property>
+    <addaction name="actionAbort"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuPort"/>
+   <addaction name="menuMazeter"/>
    <addaction name="menuAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -998,6 +1008,9 @@ selection-background-color: rgb(255, 255, 255);
    <property name="text">
     <string>Exit</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
   </action>
   <action name="actionDisconnect">
    <property name="enabled">
@@ -1012,6 +1025,18 @@ selection-background-color: rgb(255, 255, 255);
    </property>
    <property name="shortcut">
     <string>Ctrl+D</string>
+   </property>
+  </action>
+  <action name="actionAbort">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/resources/exit.ico</normaloff>:/icons/resources/exit.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Abort</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
    </property>
   </action>
  </widget>
