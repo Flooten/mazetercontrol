@@ -43,11 +43,11 @@ namespace MC
 
         ~Control();
 
+        void setThrottleValue(int throttle_value);
         void parseCommand(const UserInput& input);
         void handleKeyPressEvent(QKeyEvent *event);
         void handleKeyReleaseEvent(QKeyEvent* event);
 
-        // Getters
         bool isConnected() const;
         SerialPort* port() const;
 
@@ -56,9 +56,10 @@ namespace MC
         void reportWrite(qint64 bytes_written);
 
     private:
-        // Variabler
         bool firefly_config_mode_ = false;
         bool bt_connected_ = false;
+        bool key_up_pressed_ = false;
+        bool key_down_pressed_ = false;
 
         QString help_message_;
         QMap<QString, QString> help_texts_;
@@ -68,14 +69,12 @@ namespace MC
 
         SerialPort* port_;
 
-        // Robotvariabler
         char throttle_value_ = 50;
         const char THROTTLE_INCREMENT_ = 5;
         ControlSignals control_signals_;
         SensorData sensor_data_;
         Mode mode_ = NO_MODE;
 
-        // Funktioner
         void transmitCommand(char command, char size = 0, char* data = 0);
         void increaseThrottle();
         void decreaseThrottle();
@@ -98,6 +97,7 @@ namespace MC
         void modeChanged(Control::Mode);
         void controlSignalsChanged(ControlSignals);
         void sensorDataChanged(SensorData);
+        void throttleValueChanged(char);
     };
 } // namespace MC
 

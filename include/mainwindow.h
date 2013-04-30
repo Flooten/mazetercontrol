@@ -36,7 +36,6 @@ namespace MC
         explicit MainWindow(QWidget *parent = 0);
         ~MainWindow();
 
-        // Funktioner
         void keyPressEvent(QKeyEvent* event);
         void keyReleaseEvent(QKeyEvent* event);
 
@@ -51,10 +50,12 @@ namespace MC
         void setMode(Control::Mode mode);
 
     private:
+        int calibrate_countdown_ = 5;
         Ui::MainWindow *ui;
         Control* mc_;
         Terminal* terminal_;
         QTimer* plot_timer_;
+        QTimer* calibrate_countdown_timer_;
         MCGraphicsScene* scene_;
         ControlSignalsPlotScene* cs_scene_;
         SensorDataPlotScene* sd_scene_;
@@ -91,6 +92,9 @@ namespace MC
         void transmitCalibrateSensor();
         void transmitParameters();
         void exitApplication();
+        void calibrateCountdown();
+        void throttleRelay();
+        void throttleValueChanged(char throttle_value);
     };
 } // namespace MC
 

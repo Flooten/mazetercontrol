@@ -41,6 +41,13 @@ namespace MC
         delete port_;
     }
 
+    void Control::setThrottleValue(int throttle_value)
+    {
+        throttle_value_ = (char)throttle_value;
+        emit out("Changing speed. Current value: " + QString::number(throttle_value_));
+        transmitCommand(CONTROL_THROTTLE, 1, &throttle_value_);
+    }
+
     /*
      *  Parsa ett kommando. Alla kommandon som ej är UserInput::INVALID
      *  är giltiga.
@@ -214,6 +221,10 @@ namespace MC
 
                 // Underrätta kommunikationsenheten.
                 transmitCommand(BT_CONNECT);
+
+                // Sätt throttle
+                transmitCommand(CONTROL_THROTTLE, 1, &throttle_value_);
+                emit throttleValueChanged(throttle_value_);
             }
             else
             {
@@ -360,6 +371,7 @@ namespace MC
         {
             emit out("Command: Steer straight.");
             transmitCommand(STEER_STRAIGHT);
+            key_up_pressed_ = true;
             break;
         }
 
@@ -367,6 +379,7 @@ namespace MC
         {
             emit out("Command: Steer back.");
             transmitCommand(STEER_BACK);
+            key_down_pressed_ = true;
             break;
         }
 
@@ -423,6 +436,7 @@ namespace MC
         {
             increaseThrottle();
             emit out("Command: Increasing speed. Current value: " + QString::number(throttle_value_));
+            emit throttleValueChanged(throttle_value_);
             transmitCommand(CONTROL_THROTTLE, 1, &throttle_value_);
             break;
         }
@@ -431,6 +445,7 @@ namespace MC
         {
             decreaseThrottle();
             emit out("Command: Increasing speed. Current value: " + QString::number(throttle_value_));
+            emit throttleValueChanged(throttle_value_);
             transmitCommand(CONTROL_THROTTLE, 1, &throttle_value_);
             break;
         }
@@ -449,14 +464,47 @@ namespace MC
         switch(event->key())
         {
         case Qt::Key_Up:
+        {
+            emit out("Command: Stop.");
+            transmitCommand(STEER_STOP);
+            key_up_pressed_ = false;
+            break;
+        }
         case Qt::Key_Down:
-        case Qt::Key_Left:
-        case Qt::Key_Right:
+        {
+            emit out("Command: Stop.");
+            transmitCommand(STEER_STOP);
+            key_down_pressed_ = false;
+            break;
+        }
         case Qt::Key_A:
         case Qt::Key_D:
+        {
             emit out("Command: Stop.");
             transmitCommand(STEER_STOP);
             break;
+        }
+
+        case Qt::Key_Left:
+        case Qt::Key_Right:
+        {
+            if (key_up_pressed_)
+            {
+                Qt::KeyboardModifier modifier = Qt::NoModifier;
+                handleKeyPressEvent(new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_Up, modifier));
+            }
+            else if (key_down_pressed_)
+            {
+                Qt::KeyboardModifier modifier = Qt::NoModifier;
+                handleKeyPressEvent(new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_Down, modifier));
+            }
+            else
+            {
+                emit out("Command: Stop.");
+                transmitCommand(STEER_STOP);
+                break;
+            }
+        }
 
         default:
             break;
@@ -583,7 +631,7 @@ namespace MC
     /* Öka hastigheten */
     void Control::increaseThrottle()
     {
-        if (throttle_value_ <= 100)
+        if (throttle_value_ < 100)
             throttle_value_ += THROTTLE_INCREMENT_;
     }
 

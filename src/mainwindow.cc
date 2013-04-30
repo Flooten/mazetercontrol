@@ -23,6 +23,7 @@ namespace MC
         : QMainWindow(parent)
         , ui(new Ui::MainWindow)
         , plot_timer_(new QTimer(this))
+        , calibrate_countdown_timer_(new QTimer(this))
         , scene_(new MCGraphicsScene(this))
     {
         ui->setupUi(this);
@@ -54,6 +55,7 @@ namespace MC
         connect(mc_, SIGNAL(btConnected()), this, SLOT(btConnected()));
         connect(mc_, SIGNAL(btDisconnected()), this, SLOT(btDisconnected()));
         connect(plot_timer_, SIGNAL(timeout()), this, SLOT(drawPlots()));
+        connect(calibrate_countdown_timer_, SIGNAL(timeout()), this, SLOT(calibrateCountdown()));
 
         // Relä av nyligen inkommen data
         connect(mc_, SIGNAL(modeChanged(Control::Mode)), this, SLOT(setMode(Control::Mode)));
@@ -61,6 +63,7 @@ namespace MC
         connect(mc_, SIGNAL(controlSignalsChanged(ControlSignals)), cs_scene_, SLOT(newControlSignals(ControlSignals)));
         connect(mc_, SIGNAL(sensorDataChanged(SensorData)), this, SLOT(setSensorValues(SensorData)));
         connect(mc_, SIGNAL(sensorDataChanged(SensorData)), sd_scene_, SLOT(newSensorData(SensorData)));
+        connect(mc_, SIGNAL(throttleValueChanged(char)), this, SLOT(throttleValueChanged(char)));
 
         // Ui-händelser: knapptryckningar och actions
         connect(ui->actionOpenTerminal, SIGNAL(triggered()), this, SLOT(openTerminal()));
@@ -74,6 +77,7 @@ namespace MC
         connect(ui->pushButton_clear_plots, SIGNAL(clicked()), this, SLOT(resetPlots()));
         connect(ui->comboBox_sensor_data, SIGNAL(currentIndexChanged(int)), this, SLOT(chosenSensorDataChanged(int)));
         connect(ui->pushButton_transfer_parameters, SIGNAL(clicked()), this, SLOT(transmitParameters()));
+        connect(ui->verticalSlider_throttle, SIGNAL(sliderReleased()), this, SLOT(throttleRelay()));
 
         // Plotcentreringssignaler
         connect(sd_scene_, SIGNAL(center(int)), this, SLOT(centerSensorDataPlot(int)));
@@ -319,7 +323,8 @@ namespace MC
         ui->pushButton_transfer_parameters->setEnabled(true);
         ui->pushButton_calibrate->setEnabled(true);
         ui->graphicsView_overview->setEnabled(true);
-
+        ui->verticalSlider_throttle->setEnabled(true);
+        ui->spinBox_throttle->setEnabled(true);
         ui->pushButton_clear_plots->setEnabled(true);
         ui->graphicsView_control_signals->setEnabled(true);
         ui->graphicsView_sensor_data->setEnabled(true);
@@ -352,6 +357,9 @@ namespace MC
         ui->spinBox_kd_right->setValue(0);
         ui->spinBox_kp_right->setEnabled(false);
         ui->spinBox_kp_right->setValue(0);
+        ui->spinBox_throttle->setEnabled(false);
+        ui->spinBox_throttle->setValue(0);
+        ui->verticalSlider_throttle->setEnabled(true);
         ui->pushButton_transfer_parameters->setEnabled(false);
         ui->pushButton_calibrate->setEnabled(false);
         ui->pushButton_clear_plots->setEnabled(false);
@@ -678,6 +686,7 @@ namespace MC
     void MainWindow::transmitCalibrateSensor()
     {
         mc_->parseCommand(UserInput("transmit " + QString::number(CALIBRATE_LINE_SENSOR, 16) + "00"));
+        calibrateCountdown();
     }
 
     /* Skickar de angivna parametervärdena */
@@ -710,23 +719,30 @@ namespace MC
                 parameters_str_msb.prepend("0");
 
             int command_code;
+            QString log_message = "Transmitting parameter: ";
 
             // Avgör kommandokod
             switch (i)
             {
             case 0:
                 command_code = PARA_KD_LEFT;
+                log_message.append("Kd left.");
                 break;
             case 1:
                 command_code = PARA_KD_RIGHT;
+                log_message.append("Kd right.");
                 break;
             case 2:
                 command_code = PARA_KP_LEFT;
+                log_message.append("Kp left.");
                 break;
             case 3:
                 command_code = PARA_KP_RIGHT;
+                log_message.append("Kp right.");
                 break;
             }
+
+            log(log_message);
 
             // Sätt samman och skicka kommando
             mc_->parseCommand(UserInput("transmit " +
@@ -741,5 +757,35 @@ namespace MC
     void MainWindow::exitApplication()
     {
         exit(0);
+    }
+
+    /* Räknar ner från 5 */
+    void MainWindow::calibrateCountdown()
+    {
+        if (calibrate_countdown_ == 0)
+        {
+            calibrate_countdown_timer_->stop();
+            ui->pushButton_calibrate->setEnabled(true);
+            ui->pushButton_calibrate->setText("Calibrate line sensor");
+            calibrate_countdown_ = 5;
+        }
+        else
+        {
+            calibrate_countdown_timer_->start(1000);
+            ui->pushButton_calibrate->setEnabled(false);
+            ui->pushButton_calibrate->setText(QString::number(calibrate_countdown_));
+            --calibrate_countdown_;
+        }
+    }
+
+    /* Tillåter throttleändring via vertical slider */
+    void MainWindow::throttleRelay()
+    {
+        mc_->setThrottleValue(ui->verticalSlider_throttle->value());
+    }
+
+    void MainWindow::throttleValueChanged(char throttle_value)
+    {
+        ui->verticalSlider_throttle->setValue((int)throttle_value);
     }
 } // namespace MC
