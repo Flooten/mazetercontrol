@@ -321,7 +321,7 @@ font: 10pt &quot;Ubuntu&quot;;</string>
          <item>
           <widget class="QPushButton" name="pushButton_abort">
            <property name="text">
-            <string/>
+            <string>Abort</string>
            </property>
            <property name="icon">
             <iconset resource="../resources.qrc">
@@ -931,13 +931,6 @@ selection-background-color: rgb(255, 255, 255);
     </property>
     <addaction name="actionAboutMazeterControl"/>
    </widget>
-   <widget class="QMenu" name="menuPort">
-    <property name="title">
-     <string>Port</string>
-    </property>
-    <addaction name="actionConnect"/>
-    <addaction name="actionDisconnect"/>
-   </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>File</string>
@@ -949,11 +942,12 @@ selection-background-color: rgb(255, 255, 255);
     <property name="title">
      <string>Mazeter</string>
     </property>
+    <addaction name="actionConnect"/>
+    <addaction name="actionDisconnect"/>
     <addaction name="actionAbort"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
-   <addaction name="menuPort"/>
    <addaction name="menuMazeter"/>
    <addaction name="menuAbout"/>
   </widget>
@@ -1028,6 +1022,9 @@ selection-background-color: rgb(255, 255, 255);
    </property>
   </action>
   <action name="actionAbort">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="../resources.qrc">
      <normaloff>:/icons/resources/exit.ico</normaloff>:/icons/resources/exit.ico</iconset>

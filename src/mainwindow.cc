@@ -191,6 +191,7 @@ namespace MC
         ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/stop.ico"));
         ui->actionConnect->setEnabled(false);
         ui->actionDisconnect->setEnabled(true);
+        ui->actionAbort->setEnabled(true);
 
         // Starta plot_timer_
         plot_timer_->start(PLOT_DELTA_T);
@@ -208,6 +209,7 @@ namespace MC
         ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/start.ico"));
         ui->actionConnect->setEnabled(true);
         ui->actionDisconnect->setEnabled(false);
+        ui->actionAbort->setEnabled(false);
 
         // Stanna plot_timer_
         plot_timer_->stop();
