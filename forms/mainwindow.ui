@@ -352,6 +352,17 @@ font: 10pt &quot;Ubuntu&quot;;</string>
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_abort">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources.qrc">
+            <normaloff>:/icons/resources/exit.ico</normaloff>:/icons/resources/exit.ico</iconset>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item>

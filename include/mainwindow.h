@@ -91,6 +91,7 @@ namespace MC
         void chosenSensorDataChanged(int index);
         void transmitCalibrateSensor();
         void transmitParameters();
+        void transmitAbort();
         void exitApplication();
         void calibrateCountdown();
         void throttleRelay();

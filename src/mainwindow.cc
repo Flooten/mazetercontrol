@@ -78,6 +78,7 @@ namespace MC
         connect(ui->comboBox_sensor_data, SIGNAL(currentIndexChanged(int)), this, SLOT(chosenSensorDataChanged(int)));
         connect(ui->pushButton_transfer_parameters, SIGNAL(clicked()), this, SLOT(transmitParameters()));
         connect(ui->verticalSlider_throttle, SIGNAL(sliderReleased()), this, SLOT(throttleRelay()));
+        connect(ui->pushButton_abort, SIGNAL(clicked()), this, SLOT(transmitAbort()));
 
         // Plotcentreringssignaler
         connect(sd_scene_, SIGNAL(center(int)), this, SLOT(centerSensorDataPlot(int)));
@@ -329,6 +330,7 @@ namespace MC
         ui->graphicsView_control_signals->setEnabled(true);
         ui->graphicsView_sensor_data->setEnabled(true);
         ui->comboBox_sensor_data->setEnabled(true);
+        ui->pushButton_abort->setEnabled(true);
 
         scene_->draw();
         resetPlots();
@@ -367,6 +369,7 @@ namespace MC
         ui->graphicsView_overview->setEnabled(false);
         ui->graphicsView_sensor_data->setEnabled(false);
         ui->comboBox_sensor_data->setEnabled(false);
+        ui->pushButton_abort->setEnabled(false);
 
         clearPlots();
         scene_->clear();
@@ -751,6 +754,12 @@ namespace MC
                                         parameters_str_lsb +
                                         parameters_str_msb));
         }
+    }
+
+    /* Skickar abort */
+    void MainWindow::transmitAbort()
+    {
+        mc_->parseCommand(UserInput("transmit " + QString::number(ABORT, 16) + "00"));
     }
 
     /* Avslutar MC */
