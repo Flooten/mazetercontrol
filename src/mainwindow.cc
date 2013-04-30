@@ -359,7 +359,7 @@ namespace MC
         ui->spinBox_kp_right->setValue(0);
         ui->spinBox_throttle->setEnabled(false);
         ui->spinBox_throttle->setValue(0);
-        ui->verticalSlider_throttle->setEnabled(true);
+        ui->verticalSlider_throttle->setEnabled(false);
         ui->pushButton_transfer_parameters->setEnabled(false);
         ui->pushButton_calibrate->setEnabled(false);
         ui->pushButton_clear_plots->setEnabled(false);
@@ -774,6 +774,7 @@ namespace MC
             calibrate_countdown_timer_->start(1000);
             ui->pushButton_calibrate->setEnabled(false);
             ui->pushButton_calibrate->setText(QString::number(calibrate_countdown_));
+            setFocus();
             --calibrate_countdown_;
         }
     }
