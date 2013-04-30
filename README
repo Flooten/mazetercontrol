@@ -1,6 +1,8 @@
 An application for the purpose of controlling the robot 'The Mazeter'.
 Relies on the QextSerialPort library (v1.2rc) and Qt5.
 
+The program assumes a data/ directory exists, containing the files port_settings.xml and parameter_values.xml
+
 Developed at LiTH spring 2013 as a part of the course TSEA27 by
 
 Martin Andersson, Joel Davidsson, Herman Ekwall, Marcus Eriksson, Mattias Fransson and Fredrik Stenmark.
