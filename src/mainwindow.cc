@@ -233,6 +233,9 @@ namespace MC
         // Rensa plottar
         sd_scene_->clear();
         cs_scene_->clear();
+
+        // Rensa event log
+        ui->textEdit_log->clear();
     }
 
     /* Uppdaterar mätarna för kontrollsignalerna */
