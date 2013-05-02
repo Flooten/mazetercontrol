@@ -107,10 +107,10 @@ namespace MC
         void calibrateCountdown();
         void throttleRelay();
         void throttleValueChanged(char throttle_value);
-        void parameterKdLeftChanged(int kd_left);
-        void parameterKdRightChanged(int kd_right);
-        void parameterKpLeftChanged(int kp_left);
-        void parameterKpRightChanged(int kp_right);
+        void parameterKdDistanceChanged(int kd_left);
+        void parameterKdLineChanged(int kd_right);
+        void parameterKpDistanceChanged(int kp_left);
+        void parameterKpLineChanged(int kp_right);
     };
 } // namespace MC
 

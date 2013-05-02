@@ -678,7 +678,7 @@ namespace MC
             break;
         }
 
-        case FLAG_MAN:
+        case FLAG_MANUAL:
         {
             if (mode_ != MANUAL)
             {

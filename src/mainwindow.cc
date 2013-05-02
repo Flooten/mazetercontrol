@@ -83,10 +83,10 @@ namespace MC
         connect(ui->pushButton_transfer_parameters, SIGNAL(clicked()), this, SLOT(transmitParameters()));
         connect(ui->verticalSlider_throttle, SIGNAL(sliderReleased()), this, SLOT(throttleRelay()));
         connect(ui->pushButton_abort, SIGNAL(clicked()), this, SLOT(transmitAbort()));
-        connect(ui->spinBox_kd_left, SIGNAL(valueChanged(int)), this, SLOT(parameterKdLeftChanged(int)));
-        connect(ui->spinBox_kd_right, SIGNAL(valueChanged(int)), this, SLOT(parameterKdRightChanged(int)));
-        connect(ui->spinBox_kp_left, SIGNAL(valueChanged(int)), this, SLOT(parameterKpLeftChanged(int)));
-        connect(ui->spinBox_kp_right, SIGNAL(valueChanged(int)), this, SLOT(parameterKpRightChanged(int)));
+        connect(ui->spinBox_kd_distance, SIGNAL(valueChanged(int)), this, SLOT(parameterKdDistanceChanged(int)));
+        connect(ui->spinBox_kd_line, SIGNAL(valueChanged(int)), this, SLOT(parameterKdLineChanged(int)));
+        connect(ui->spinBox_kp_distance, SIGNAL(valueChanged(int)), this, SLOT(parameterKpDistanceChanged(int)));
+        connect(ui->spinBox_kp_line, SIGNAL(valueChanged(int)), this, SLOT(parameterKpLineChanged(int)));
 
         // Plotcentreringssignaler
         connect(sd_scene_, SIGNAL(center(int)), this, SLOT(centerSensorDataPlot(int)));
@@ -339,10 +339,10 @@ namespace MC
         ui->progressBar_left_engine_rev->setEnabled(true);
         ui->progressBar_right_engine_fwd->setEnabled(true);
         ui->progressBar_right_engine_rev->setEnabled(true);
-        ui->spinBox_kd_left->setEnabled(true);
-        ui->spinBox_kp_left->setEnabled(true);
-        ui->spinBox_kd_right->setEnabled(true);
-        ui->spinBox_kp_right->setEnabled(true);
+        ui->spinBox_kd_distance->setEnabled(true);
+        ui->spinBox_kp_distance->setEnabled(true);
+        ui->spinBox_kd_line->setEnabled(true);
+        ui->spinBox_kp_line->setEnabled(true);
         ui->spinBox_sensor_data_current_value->setEnabled(true);
         ui->spinBox_throttle->setEnabled(true);
         ui->pushButton_transfer_parameters->setEnabled(true);
@@ -356,10 +356,10 @@ namespace MC
         ui->comboBox_sensor_data->setEnabled(true);
         ui->timeEdit_running_time->setEnabled(true);
 
-        ui->spinBox_kd_left->setValue(parameter_values_->attributeValue("kd-left", "value").toInt());
-        ui->spinBox_kd_right->setValue(parameter_values_->attributeValue("kd-right", "value").toInt());
-        ui->spinBox_kp_left->setValue(parameter_values_->attributeValue("kp-left", "value").toInt());
-        ui->spinBox_kp_right->setValue(parameter_values_->attributeValue("kp-right", "value").toInt());
+        ui->spinBox_kd_distance->setValue(parameter_values_->attributeValue("kd-left", "value").toInt());
+        ui->spinBox_kd_line->setValue(parameter_values_->attributeValue("kd-right", "value").toInt());
+        ui->spinBox_kp_distance->setValue(parameter_values_->attributeValue("kp-left", "value").toInt());
+        ui->spinBox_kp_line->setValue(parameter_values_->attributeValue("kp-right", "value").toInt());
 
         scene_->draw();
         resetPlots();
@@ -380,14 +380,14 @@ namespace MC
         ui->progressBar_right_engine_fwd->setValue(0);
         ui->progressBar_right_engine_rev->setEnabled(false);
         ui->progressBar_right_engine_rev->setValue(0);
-        ui->spinBox_kd_left->setEnabled(false);
-        ui->spinBox_kd_left->clear();
-        ui->spinBox_kp_left->setEnabled(false);
-        ui->spinBox_kp_left->clear();
-        ui->spinBox_kd_right->setEnabled(false);
-        ui->spinBox_kd_right->clear();
-        ui->spinBox_kp_right->setEnabled(false);
-        ui->spinBox_kp_right->clear();
+        ui->spinBox_kd_distance->setEnabled(false);
+        ui->spinBox_kd_distance->clear();
+        ui->spinBox_kp_distance->setEnabled(false);
+        ui->spinBox_kp_distance->clear();
+        ui->spinBox_kd_line->setEnabled(false);
+        ui->spinBox_kd_line->clear();
+        ui->spinBox_kp_line->setEnabled(false);
+        ui->spinBox_kp_line->clear();
         ui->spinBox_throttle->setEnabled(false);
         ui->spinBox_throttle->setValue(0);
         ui->spinBox_sensor_data_current_value->setEnabled(false);
@@ -760,10 +760,10 @@ namespace MC
 
         int parameters[4];
 
-        parameters[0] = ui->spinBox_kd_left->value();
-        parameters[1] = ui->spinBox_kd_right->value();
-        parameters[2] = ui->spinBox_kp_left->value();
-        parameters[3] = ui->spinBox_kp_right->value();
+        parameters[0] = ui->spinBox_kd_distance->value();
+        parameters[1] = ui->spinBox_kd_line->value();
+        parameters[2] = ui->spinBox_kp_distance->value();
+        parameters[3] = ui->spinBox_kp_line->value();
 
         for (int i = 0; i < 4; ++i)
         {
@@ -786,20 +786,20 @@ namespace MC
             switch (i)
             {
             case 0:
-                command_code = PARA_KD_LEFT;
-                log_message.append("Kd left.");
+                command_code = PARA_DIST_KD;
+                log_message.append("Kd distance.");
                 break;
             case 1:
-                command_code = PARA_KD_RIGHT;
-                log_message.append("Kd right.");
+                command_code = PARA_LINE_KD;
+                log_message.append("Kd line.");
                 break;
             case 2:
-                command_code = PARA_KP_LEFT;
-                log_message.append("Kp left.");
+                command_code = PARA_DIST_KP;
+                log_message.append("Kp distance.");
                 break;
             case 3:
-                command_code = PARA_KP_RIGHT;
-                log_message.append("Kp right.");
+                command_code = PARA_LINE_KP;
+                log_message.append("Kp line.");
                 break;
             }
 
@@ -859,22 +859,22 @@ namespace MC
     }
 
     /* Sparar parametrarna till fil vid ändring */
-    void MainWindow::parameterKdLeftChanged(int kd_left)
+    void MainWindow::parameterKdDistanceChanged(int kd_left)
     {
         parameter_values_->setAttributeValue("kd-left", "value", QString::number(kd_left));
     }
 
-    void MainWindow::parameterKdRightChanged(int kd_right)
+    void MainWindow::parameterKdLineChanged(int kd_right)
     {
         parameter_values_->setAttributeValue("kd-right", "value", QString::number(kd_right));
     }
 
-    void MainWindow::parameterKpLeftChanged(int kp_left)
+    void MainWindow::parameterKpDistanceChanged(int kp_left)
     {
         parameter_values_->setAttributeValue("kp-left", "value", QString::number(kp_left));
     }
 
-    void MainWindow::parameterKpRightChanged(int kp_right)
+    void MainWindow::parameterKpLineChanged(int kp_right)
     {
         parameter_values_->setAttributeValue("kp-right", "value", QString::number(kp_right));
     }
