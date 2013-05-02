@@ -147,8 +147,9 @@ namespace MC
             }
             }
 
-            // Tänd knappen
-            scene_->buttonPressed(event);
+            if (mc_->isConnected())
+                // Tänd knappen
+                scene_->buttonPressed(event);
 
             // Förhindra att eventet kaskadar vidare.
             event->accept();
@@ -168,8 +169,9 @@ namespace MC
             // Vidarebefordra till MC
             mc_->handleKeyReleaseEvent(event);
 
-            // Släck knappen
-            scene_->buttonReleased(event);
+            if (mc_->isConnected())
+                // Släck knappen
+                scene_->buttonReleased(event);
 
             // Förhindra att eventet kaskadar vidare.
             event->accept();

@@ -140,6 +140,9 @@ namespace MC
                 removeItem(itr.peekPrevious());
         }
 
+        last_ldot_ = NULL;
+        last_rdot_ = NULL;
+
         PlotScene::clear();
     }
 

@@ -159,6 +159,8 @@ namespace MC
                 removeItem(itr.value());
         }
 
+        last_dot_ = NULL;
+
         PlotScene::clear();
     }
 
