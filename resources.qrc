@@ -7,6 +7,7 @@
         <file>resources/about.ico</file>
         <file>resources/preferences.ico</file>
         <file>resources/exit.ico</file>
+        <file>resources/antenna.ico</file>
     </qresource>
     <qresource prefix="/images">
         <file>resources/logga-small.png</file>

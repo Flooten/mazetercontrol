@@ -33,7 +33,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../resources.qrc">
-    <normaloff>:/icons/resources/usb-bt.ico</normaloff>:/icons/resources/usb-bt.ico</iconset>
+    <normaloff>:/icons/resources/antenna.ico</normaloff>:/icons/resources/antenna.ico</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">/*QLabel {
@@ -970,7 +970,7 @@ selection-background-color: rgb(255, 255, 255);
      <x>0</x>
      <y>0</y>
      <width>1080</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEdit">
