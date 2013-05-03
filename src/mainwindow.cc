@@ -319,13 +319,9 @@ namespace MC
             {
                 ui->label_mode_status->setText("Auto");
                 ui->spinBox_kd_distance->setEnabled(false);
-                ui->spinBox_kd_distance->clear();
                 ui->spinBox_kp_distance->setEnabled(false);
-                ui->spinBox_kp_distance->clear();
                 ui->spinBox_kd_line->setEnabled(false);
-                ui->spinBox_kd_line->clear();
                 ui->spinBox_kp_line->setEnabled(false);
-                ui->spinBox_kp_line->clear();
                 ui->pushButton_transfer_parameters->setEnabled(false);
                 ui->pushButton_calibrate->setEnabled(false);
                 log("Mode changed to: Auto");
