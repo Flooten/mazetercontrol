@@ -316,14 +316,34 @@ namespace MC
             switch (mode)
             {
             case Control::AUTO:
+            {
                 ui->label_mode_status->setText("Auto");
+                ui->spinBox_kd_distance->setEnabled(false);
+                ui->spinBox_kd_distance->clear();
+                ui->spinBox_kp_distance->setEnabled(false);
+                ui->spinBox_kp_distance->clear();
+                ui->spinBox_kd_line->setEnabled(false);
+                ui->spinBox_kd_line->clear();
+                ui->spinBox_kp_line->setEnabled(false);
+                ui->spinBox_kp_line->clear();
+                ui->pushButton_transfer_parameters->setEnabled(false);
+                ui->pushButton_calibrate->setEnabled(false);
                 log("Mode changed to: Auto");
                 break;
+            }
 
             case Control::MANUAL:
+            {
                 ui->label_mode_status->setText("Manual");
+                ui->spinBox_kd_distance->setEnabled(true);
+                ui->spinBox_kp_distance->setEnabled(true);
+                ui->spinBox_kd_line->setEnabled(true);
+                ui->spinBox_kp_line->setEnabled(true);
+                ui->pushButton_transfer_parameters->setEnabled(true);
+                ui->pushButton_calibrate->setEnabled(true);
                 log("Mode changed to: Manual");
                 break;
+            }
 
             default:
                 break;
