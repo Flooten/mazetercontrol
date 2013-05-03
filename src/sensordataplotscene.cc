@@ -108,8 +108,17 @@ namespace MC
             break;
         }
 
+        if (ypos < 70)
+        {
+            ypos = 70;
+            dot->setPen(pen2_);
+        }
+        else
+        {
+            dot->setPen(pen1_);
+        }
+
         dot->setPos(time_, ypos);
-        dot->setPen(pen1_);
 
         // Rita förbindelser mellan punkterna
         if ((last_dot_ != NULL) && abs(ypos - last_dot_->y()) >= 2)
