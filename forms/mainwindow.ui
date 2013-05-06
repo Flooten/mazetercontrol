@@ -53,7 +53,7 @@ font: 10pt &quot;Ubuntu&quot;;</string>
    <enum>QTabWidget::Rounded</enum>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_10">
+   <layout class="QHBoxLayout" name="horizontalLayout_5">
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="sizePolicy">
@@ -130,6 +130,12 @@ font: 10pt &quot;Ubuntu&quot;;</string>
            <widget class="QGraphicsView" name="graphicsView_control_signals">
             <property name="enabled">
              <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
             <property name="focusPolicy">
              <enum>Qt::NoFocus</enum>
@@ -281,7 +287,10 @@ font: 10pt &quot;Ubuntu&quot;;</string>
      </widget>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_10">
+     <layout class="QVBoxLayout" name="verticalLayout_9">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
       <item>
        <widget class="QGroupBox" name="groupBox_4">
         <property name="title">
@@ -353,137 +362,82 @@ font: 10pt &quot;Ubuntu&quot;;</string>
         <property name="title">
          <string>Mazeter status:</string>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_9">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetDefaultConstraint</enum>
+         </property>
          <item>
-          <layout class="QFormLayout" name="formLayout">
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="0" column="2">
+            <widget class="QLabel" name="label_mode">
+             <property name="text">
+              <string>Mode:</string>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="0">
-            <layout class="QHBoxLayout" name="horizontalLayout_9">
-             <item>
-              <widget class="QLabel" name="label_claw">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Claw:</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="label_claw_status">
-               <property name="text">
-                <string>N/A</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_7">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Fixed</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>81</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
+            <widget class="QLabel" name="label_claw">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Claw:</string>
+             </property>
+            </widget>
            </item>
            <item row="0" column="1">
-            <layout class="QHBoxLayout" name="horizontalLayout_4">
-             <item>
-              <widget class="QLabel" name="label_mode">
-               <property name="text">
-                <string>Mode:</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="label_mode_status">
-               <property name="text">
-                <string>N/A</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_6">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
+            <widget class="QLabel" name="label_claw_status">
+             <property name="text">
+              <string>N/A</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="3">
+            <widget class="QLabel" name="label_mode_status">
+             <property name="text">
+              <string>N/A</string>
+             </property>
+            </widget>
            </item>
            <item row="1" column="0">
-            <layout class="QHBoxLayout" name="horizontalLayout_5">
-             <item>
-              <widget class="QLabel" name="label_6">
-               <property name="text">
-                <string>Algorithm:</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="label_algorithm">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>N/A</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_11">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>50</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>Algorithm:</string>
+             </property>
+            </widget>
            </item>
            <item row="1" column="1">
-            <layout class="QHBoxLayout" name="horizontalLayout_12">
-             <item>
-              <widget class="QLabel" name="label_5">
-               <property name="text">
-                <string>Running time:</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QTimeEdit" name="timeEdit_running_time">
-               <property name="readOnly">
-                <bool>true</bool>
-               </property>
-               <property name="buttonSymbols">
-                <enum>QAbstractSpinBox::NoButtons</enum>
-               </property>
-               <property name="displayFormat">
-                <string>mm:ss:zzz</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <widget class="QLabel" name="label_algorithm">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string>N/A</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>Running time:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <widget class="QTimeEdit" name="timeEdit_running_time">
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="displayFormat">
+              <string>mm:ss:zzz</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -1007,7 +961,7 @@ selection-background-color: rgb(255, 255, 255);
      <x>0</x>
      <y>0</y>
      <width>1080</width>
-     <height>28</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEdit">

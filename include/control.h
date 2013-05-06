@@ -99,6 +99,7 @@ namespace MC
         SensorData sensor_data_;
         Mode mode_ = NO_MODE;
         Algorithm algorithm_ = NO_ALGORITHM;
+        TurnType last_turn_ = INVALID;
 
         void transmitCommand(char command, char size = 0, char* data = 0);
         void increaseThrottle();

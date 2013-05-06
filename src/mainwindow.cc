@@ -236,7 +236,7 @@ namespace MC
         // Rensa fält
         sd_scene_->clear();
         cs_scene_->clear();
-        ui->timeEdit_running_time->clear();
+        ui->timeEdit_running_time->setTime(QTime(0,0,0,0));
         ui->textEdit_log->clear();
     }
 
@@ -341,7 +341,7 @@ namespace MC
                 ui->pushButton_calibrate->setEnabled(true);
 
                 running_time_update_timer_->stop();
-                ui->timeEdit_running_time->clear();
+                ui->timeEdit_running_time->setTime(QTime(0,0,0,0));
 
                 log("Mode changed to: Manual");
                 break;
@@ -380,7 +380,7 @@ namespace MC
 
             case Control::ALGO_GOAL_REVERSE:
             {
-                ui->label_algorithm->setText("Goal reverse");
+                ui->label_algorithm->setText("Goal rev.");
                 break;
             }
 

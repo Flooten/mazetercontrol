@@ -697,55 +697,41 @@ namespace MC
 
         case TURN_STACK_TOP:
         {
-            switch ((TurnType)data.at(2))
+            TurnType turn_stack_top = (TurnType)data.at(2);
+
+            if (last_turn_ != turn_stack_top)
             {
-            case LEFT_TURN:
-                emit out("Top is left turn.");
-                break;
+                switch (turn_stack_top)
+                {
+                case LEFT_TURN:
+                    emit log("Registered left turn.");
+                    emit out("Registered left turn.");
+                    break;
 
-            case RIGHT_TURN:
-                emit out("Top is right turn.");
-                break;
+                case RIGHT_TURN:
+                    emit log("Registered right turn.");
+                    emit out("Registered right turn.");
+                    break;
 
-            case STRAIGHT:
-                emit out("Top is straight ahead.");
-                break;
+                case STRAIGHT:
+                    emit log("Registered straight ahead.");
+                    emit out("Registered straight ahead.");
+                    break;
 
-            default:
-                emit out("Error: Invalid turn stack type.");
-                break;
+                default:
+                    emit out("Error: Invalid turn stack type.");
+                    break;
+                }
+
+                last_turn_ = turn_stack_top;
             }
 
             break;
         }
 
         case ALGO_STATE:
-        {
-            switch (data.at(2))
-            {
-            case ALGO_IN:
-                algorithm_ = ALGO_IN;
-                break;
-
-            case ALGO_OUT:
-                algorithm_ = ALGO_OUT;
-                break;
-
-            case ALGO_GOAL:
-                algorithm_ = ALGO_GOAL;
-                break;
-
-            case ALGO_GOAL_REVERSE:
-                algorithm_ = ALGO_GOAL_REVERSE;
-                break;
-
-            case ALGO_DONE:
-                algorithm_ = ALGO_DONE;
-                break;
-
-            default:
-                break;
-            }
+        {            
+            algorithm_ = (Algorithm)data.at(2);
 
             emit algorithmChanged(algorithm_);
 
