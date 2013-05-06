@@ -11,11 +11,6 @@
 #define SENSOR_LINE_DEVIATION 0x08
 #define SENSOR_ANGLE 0x09
 #define SENSOR_LINE_TYPE 0x0A
-//#define SENSOR_LINE_LEFT 0x0A
-//#define SENSOR_LINE_RIGHT 0x0B
-//#define SENSOR_LINE_STRAIGHT 0x0C
-//#define SENSOR_LINE_GOAL 0x0D
-//#define SENSOR_LINE_STOP 0x0E
 #define SENSOR_DATA_ALL 0x0F
 
 #define CONTROL_SIGNALS 0x20
@@ -38,8 +33,6 @@
 #define FLAG_AUTO 0x41
 #define FLAG_MANUAL 0x42
 
-// Bara v�rden, inte kommandon.
-// L�gg dessa i sin egna header?
 #define LINE_TURN_LEFT 0x51
 #define LINE_TURN_RIGHT 0x52
 #define LINE_STRAIGHT 0x53
@@ -54,6 +47,10 @@
 #define PARA_DIST_KD 0x62
 #define PARA_LINE_KP 0x63
 #define PARA_LINE_KD 0x64
+
+#define TURN_STACK_TOP 0x71
+#define ALGO_STATE 0x72
+#define RUN_START 0x73
 
 #define ABORT 0x99
 

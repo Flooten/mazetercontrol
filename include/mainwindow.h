@@ -50,6 +50,7 @@ namespace MC
         void setControlGagues(ControlSignals control_signals);
         void setSensorValues(SensorData sensor_data);
         void setMode(Control::Mode mode);
+        void setAlgoritm(Control::Algorithm algorithm);
 
     private:
         int calibrate_countdown_ = 5;

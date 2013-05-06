@@ -1,5 +1,5 @@
 /*
- * FILNAMN:       control.h
+ * FILNAMN:       control.cc
  * PROJEKT:       MazeterControl
  * PROGRAMMERARE: Marcus Eriksson
  *                Herman Ekwall
@@ -628,6 +628,7 @@ namespace MC
         {
             bt_connected_ = false;
             mode_ = NO_MODE;
+            algorithm_ = NO_ALGORITHM;
             emit btDisconnected();
         }
 
@@ -683,7 +684,9 @@ namespace MC
             if (mode_ != MANUAL)
             {
                 mode_ = MANUAL;
+                algorithm_ = NO_ALGORITHM;
                 emit modeChanged(mode_);
+                emit algorithmChanged(algorithm_);
             }
             break;
         }
@@ -692,6 +695,69 @@ namespace MC
         {
             updateSensorData(data);
             emit sensorDataChanged(sensor_data_);
+            break;
+        }
+
+        case TURN_STACK_TOP:
+        {
+            switch (data.at(2))
+            {
+            case LEFT_TURN:
+                emit out("Registering left turn.");
+                break;
+
+            case RIGHT_TURN:
+                emit out("Registering right turn.");
+                break;
+
+            case STRAIGHT:
+                emit out("Registering straight ahead.");
+                break;
+
+            default:
+                emit out("Error: Invalid turn stack type.");
+                break;
+            }
+
+            break;
+        }
+
+        case ALGO_STATE:
+        {
+            switch (data.at(2))
+            {
+            case ALGO_IN:
+                algorithm_ = ALGO_IN;
+                break;
+
+            case ALGO_OUT:
+                algorithm_ = ALGO_OUT;
+                break;
+
+            case ALGO_GOAL:
+                algorithm_ = ALGO_GOAL;
+                break;
+
+            case ALGO_GOAL_REVERSE:
+                algorithm_ = ALGO_GOAL_REVERSE;
+                break;
+
+            case ALGO_DONE:
+                algorithm_ = ALGO_DONE;
+                break;
+
+            default:
+                break;
+            }
+
+            emit algorithmChanged(algorithm_);
+
+            break;
+        }
+
+        case RUN_START:
+        {
+            emit startAutonomousRun();
             break;
         }
 

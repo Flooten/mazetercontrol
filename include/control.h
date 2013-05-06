@@ -39,6 +39,16 @@ namespace MC
             AUTO,
             MANUAL,
             NO_MODE
+        };        
+
+        enum Algorithm
+        {
+            ALGO_IN,
+            ALGO_OUT,
+            ALGO_GOAL,
+            ALGO_GOAL_REVERSE,
+            ALGO_DONE,
+            NO_ALGORITHM
         };
 
         explicit Control(const QString& ini_file, QObject *parent = 0);
@@ -58,6 +68,14 @@ namespace MC
         void reportWrite(qint64 bytes_written);
 
     private:
+        enum TurnType
+        {
+            INVALID,
+            LEFT_TURN,
+            RIGHT_TURN,
+            STRAIGHT
+        };
+
         bool firefly_config_mode_ = false;
         bool bt_connected_ = false;
         bool key_up_pressed_ = false;
@@ -80,6 +98,7 @@ namespace MC
         ControlSignals control_signals_;
         SensorData sensor_data_;
         Mode mode_ = NO_MODE;
+        Algorithm algorithm_ = NO_ALGORITHM;
 
         void transmitCommand(char command, char size = 0, char* data = 0);
         void increaseThrottle();
@@ -103,6 +122,8 @@ namespace MC
         void btConnected();
         void btDisconnected();
         void modeChanged(Control::Mode);
+        void algorithmChanged(Control::Algorithm);
+        void startAutonomousRun();
         void controlSignalsChanged(ControlSignals);
         void sensorDataChanged(SensorData);
         void throttleValueChanged(char);

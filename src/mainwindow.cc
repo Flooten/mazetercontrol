@@ -67,6 +67,8 @@ namespace MC
         connect(mc_, SIGNAL(sensorDataChanged(SensorData)), this, SLOT(setSensorValues(SensorData)));
         connect(mc_, SIGNAL(sensorDataChanged(SensorData)), sd_scene_, SLOT(newSensorData(SensorData)));
         connect(mc_, SIGNAL(throttleValueChanged(char)), this, SLOT(throttleValueChanged(char)));
+        connect(mc_, SIGNAL(algorithmChanged(Control::Algorithm)), this, SLOT(setAlgoritm(Control::Algorithm)));
+        connect(mc_, SIGNAL(startAutonomousRun()), this, SLOT(startAutonomousRun()));
 
         // Ui-händelser: knapptryckningar och actions
         connect(ui->actionOpenTerminal, SIGNAL(triggered()), this, SLOT(openTerminal()));
@@ -347,6 +349,26 @@ namespace MC
         }
     }
 
+    /* Uppdaterar label för den algoritm som körs */
+    void MainWindow::setAlgoritm(Control::Algorithm algorithm)
+    {
+        if (mc_->isConnected())
+        {
+            switch (algorithm)
+            {
+            case Control::ALGO_IN:
+            {
+                ui->label_algorithm->setText("In");
+                break;
+            }
+
+            default:
+                ui->label_algorithm->setText("N/A");
+                break;
+            }
+        }
+    }
+
     /*
      *  Private
      */
@@ -356,6 +378,7 @@ namespace MC
     {
         ui->label_mode_status->setEnabled(true);
         ui->label_claw_status->setEnabled(true);
+        ui->label_algorithm->setEnabled(true);
         ui->progressBar_left_engine_fwd->setEnabled(true);
         ui->progressBar_left_engine_rev->setEnabled(true);
         ui->progressBar_right_engine_fwd->setEnabled(true);
@@ -393,6 +416,8 @@ namespace MC
         ui->label_mode_status->setText("N/A");
         ui->label_claw_status->setEnabled(false);
         ui->label_claw_status->setText("N/A");
+        ui->label_algorithm->setEnabled(false);
+        ui->label_algorithm->setText("N/A");
         ui->progressBar_left_engine_fwd->setEnabled(false);
         ui->progressBar_left_engine_fwd->setValue(0);
         ui->progressBar_left_engine_rev->setEnabled(false);
