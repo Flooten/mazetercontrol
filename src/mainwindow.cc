@@ -229,14 +229,14 @@ namespace MC
         ui->actionDisconnect->setEnabled(false);
         ui->actionAbort->setEnabled(false);
 
-        // Stanna plot_timer_
+        // Stanna timers
         plot_timer_->stop();
+        running_time_update_timer_->stop();
 
-        // Rensa plottar
+        // Rensa fält
         sd_scene_->clear();
         cs_scene_->clear();
-
-        // Rensa event log
+        ui->timeEdit_running_time->clear();
         ui->textEdit_log->clear();
     }
 
@@ -339,6 +339,10 @@ namespace MC
                 ui->spinBox_kp_line->setEnabled(true);
                 ui->pushButton_transfer_parameters->setEnabled(true);
                 ui->pushButton_calibrate->setEnabled(true);
+
+                running_time_update_timer_->stop();
+                ui->timeEdit_running_time->clear();
+
                 log("Mode changed to: Manual");
                 break;
             }
@@ -359,6 +363,31 @@ namespace MC
             case Control::ALGO_IN:
             {
                 ui->label_algorithm->setText("In");
+                break;
+            }
+
+            case Control::ALGO_OUT:
+            {
+                ui->label_algorithm->setText("Out");
+                break;
+            }
+
+            case Control::ALGO_GOAL:
+            {
+                ui->label_algorithm->setText("Goal");
+                break;
+            }
+
+            case Control::ALGO_GOAL_REVERSE:
+            {
+                ui->label_algorithm->setText("Goal reverse");
+                break;
+            }
+
+            case Control::ALGO_DONE:
+            {
+                ui->label_algorithm->setText("Done");
+                finishAutonomousRun();
                 break;
             }
 
@@ -399,6 +428,7 @@ namespace MC
         ui->graphicsView_sensor_data->setEnabled(true);
         ui->comboBox_sensor_data->setEnabled(true);
         ui->timeEdit_running_time->setEnabled(true);
+        ui->timeEdit_running_time->setTime(QTime(0,0,0,0));
 
         ui->spinBox_kd_distance->setValue(parameter_values_->attributeValue("kd-left", "value").toInt());
         ui->spinBox_kd_line->setValue(parameter_values_->attributeValue("kd-right", "value").toInt());
@@ -449,6 +479,7 @@ namespace MC
         ui->comboBox_sensor_data->setEnabled(false);
         ui->pushButton_abort->setEnabled(false);
         ui->timeEdit_running_time->setEnabled(false);
+        ui->timeEdit_running_time->setTime(QTime(0,0,0,0));
 
         clearPlots();
         scene_->clear();
@@ -864,6 +895,7 @@ namespace MC
     void MainWindow::transmitAbort()
     {
         mc_->parseCommand(UserInput("transmit " + QString::number(ABORT, 16) + "00"));
+        running_time_update_timer_->stop();
     }
 
     /* Avslutar MC */

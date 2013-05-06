@@ -381,6 +381,7 @@ namespace MC
         switch(event->key())
         {
         case Qt::Key_Up:
+        case Qt::Key_W:
         {
             emit out("Command: Steer straight.");
             transmitCommand(STEER_STRAIGHT);
@@ -389,17 +390,11 @@ namespace MC
         }
 
         case Qt::Key_Down:
+        case Qt::Key_S:
         {
             emit out("Command: Steer back.");
             transmitCommand(STEER_BACK);
             key_down_pressed_ = true;
-            break;
-        }
-
-        case Qt::Key_S:
-        {
-            emit out("Command: Steer stop.");
-            transmitCommand(STEER_STOP);
             break;
         }
 
@@ -477,6 +472,7 @@ namespace MC
         switch(event->key())
         {
         case Qt::Key_Up:
+        case Qt::Key_W:
         {
             emit out("Command: Stop.");
             transmitCommand(STEER_STOP);
@@ -484,6 +480,7 @@ namespace MC
             break;
         }
         case Qt::Key_Down:
+        case Qt::Key_S:
         {
             emit out("Command: Stop.");
             transmitCommand(STEER_STOP);
@@ -700,18 +697,18 @@ namespace MC
 
         case TURN_STACK_TOP:
         {
-            switch (data.at(2))
+            switch ((TurnType)data.at(2))
             {
             case LEFT_TURN:
-                emit out("Registering left turn.");
+                emit out("Top is left turn.");
                 break;
 
             case RIGHT_TURN:
-                emit out("Registering right turn.");
+                emit out("Top is right turn.");
                 break;
 
             case STRAIGHT:
-                emit out("Registering straight ahead.");
+                emit out("Top is straight ahead.");
                 break;
 
             default:
