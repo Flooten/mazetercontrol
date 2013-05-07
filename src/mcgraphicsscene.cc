@@ -15,7 +15,12 @@ namespace MC
     MCGraphicsScene::MCGraphicsScene(QObject *parent)
         : QGraphicsScene(parent)
         , background_image_(new QPixmap(":/images/resources/overview.png"))
-    {}
+    {
+        createTextItems();
+
+        // Sätt rätt positioner
+        placeTextItems();
+    }
 
     MCGraphicsScene::~MCGraphicsScene()
     {
@@ -93,7 +98,6 @@ namespace MC
         addPixmap(*background_image_);
 
         // Rita ut textlådorna
-        createTextItems();
         createButtons();
     }
 
@@ -153,9 +157,6 @@ namespace MC
             itr.next();
             itr.value()->setFont(font);
         }
-
-        // Sätt rätt positioner
-        placeTextItems();
     }
 
     /* Placerar ut textlådorna */

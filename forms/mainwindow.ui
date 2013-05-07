@@ -961,7 +961,7 @@ selection-background-color: rgb(255, 255, 255);
      <x>0</x>
      <y>0</y>
      <width>1080</width>
-     <height>23</height>
+     <height>28</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEdit">
@@ -1064,9 +1064,6 @@ selection-background-color: rgb(255, 255, 255);
    </property>
    <property name="text">
     <string>Disconnect</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+D</string>
    </property>
   </action>
   <action name="actionAbort">

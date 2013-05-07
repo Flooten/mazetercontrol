@@ -63,7 +63,7 @@ namespace MC
         // Variabler
         QextSerialPort* port_;
         PortSettings port_settings_;
-        const int TIMEOUT_ = 100;
+        const int TIMEOUT_ = 500;
 
         // Funktioner
         void setupConnections();
