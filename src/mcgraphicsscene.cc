@@ -14,18 +14,19 @@ namespace MC
 {
     MCGraphicsScene::MCGraphicsScene(QObject *parent)
         : QGraphicsScene(parent)
-        , background_image_(new QPixmap(":/images/resources/overview.png"))
+        , background_image_(new QGraphicsPixmapItem(QPixmap(":/images/resources/overview.png")))
     {
         createTextItems();
+        createButtons();
+        addItem(background_image_);
 
-        // Sätt rätt positioner
-        placeTextItems();
+        hide();
     }
 
     MCGraphicsScene::~MCGraphicsScene()
     {
         delete background_image_;
-        // DELETE THE MAP
+        clear();
     }
 
     /* Uppdaterar */
@@ -75,10 +76,12 @@ namespace MC
         switch (event->key())
         {
         case Qt::Key_Up:
+        case Qt::Key_W:
             buttons_[KEY_UP]->setPixmap(QPixmap(":/images/resources/upr.png"));
             break;
 
         case Qt::Key_Down:
+        case Qt::Key_S:
             buttons_[KEY_DOWN]->setPixmap(QPixmap(":/images/resources/downr.png"));
             break;
 
@@ -92,13 +95,42 @@ namespace MC
         }
     }
 
-    void MCGraphicsScene::draw()
+    /* Visar items */
+    void MCGraphicsScene::show()
     {
-        // Rita ut roboten
-        addPixmap(*background_image_);
+        background_image_->show();
 
-        // Rita ut textlådorna
-        createButtons();
+        buttons_[KEY_UP]->show();
+        buttons_[KEY_DOWN]->show();
+        buttons_[KEY_LEFT]->show();
+        buttons_[KEY_RIGHT]->show();
+
+        QMapIterator<SensorDataIndex, QGraphicsTextItem*> itr(sensor_data_);
+
+        while (itr.hasNext())
+        {
+            itr.next();
+            itr.value()->show();
+        }
+    }
+
+    /* Gömmer alla items på scenen */
+    void MCGraphicsScene::hide()
+    {
+        background_image_->hide();
+
+        buttons_[KEY_UP]->hide();
+        buttons_[KEY_DOWN]->hide();
+        buttons_[KEY_LEFT]->hide();
+        buttons_[KEY_RIGHT]->hide();
+
+        QMapIterator<SensorDataIndex, QGraphicsTextItem*> itr(sensor_data_);
+
+        while (itr.hasNext())
+        {
+            itr.next();
+            itr.value()->hide();
+        }
     }
 
     /*
@@ -122,12 +154,15 @@ namespace MC
         // Placera ut knapparna
         buttons_[KEY_UP]->setPos(up_pos);
         addItem(buttons_[KEY_UP]);
+
         buttons_[KEY_DOWN]->setPos(up_pos.x(),
                                    up_pos.y() + button_dimensions.y() + spacing);
         addItem(buttons_[KEY_DOWN]);
+
         buttons_[KEY_LEFT]->setPos(up_pos.x() - button_dimensions.x() - spacing,
                                    up_pos.y() + button_dimensions.y() + spacing);
         addItem(buttons_[KEY_LEFT]);
+
         buttons_[KEY_RIGHT]->setPos(up_pos.x() + button_dimensions.x() + spacing,
                                     up_pos.y() + button_dimensions.y() + spacing);
         addItem(buttons_[KEY_RIGHT]);
@@ -145,7 +180,7 @@ namespace MC
         sensor_data_.insert(BACK, new QGraphicsTextItem("0 cm"));
         sensor_data_.insert(ANGLE, new QGraphicsTextItem("0 degrees"));
         sensor_data_.insert(LINE_DEVIATION, new QGraphicsTextItem("Line deviation: 0 cm"));
-        sensor_data_.insert(LINE_TYPE, new QGraphicsTextItem("Line type: 0 cm"));
+        sensor_data_.insert(LINE_TYPE, new QGraphicsTextItem("Line type: 0"));
 
         // Sätt rätt font
         QFont font("Ubuntu");
@@ -157,6 +192,8 @@ namespace MC
             itr.next();
             itr.value()->setFont(font);
         }
+
+        placeTextItems();
     }
 
     /* Placerar ut textlådorna */
@@ -168,8 +205,9 @@ namespace MC
         int second_line_y = 275;
         int top_edge_y = -30;
         int bottom_edge_y = 395;
-        int center_horizontal = background_image_->width() / 2;
-        int center_vertical = background_image_->height() / 2;
+        int center_horizontal = background_image_->boundingRect().width() / 2;
+        int center_vertical = background_image_->boundingRect().height() / 2;
+        int center_offset = 40;
 
         sensor_data_[FRONT_LEFT]->setPos(60, top_edge_y);
         addItem(sensor_data_[FRONT_LEFT]);
@@ -192,13 +230,14 @@ namespace MC
         sensor_data_[BACK]->setPos(center_horizontal - 18, bottom_edge_y);
         addItem(sensor_data_[BACK]);
 
-        sensor_data_[ANGLE]->setPos(center_horizontal, center_vertical);
+        sensor_data_[ANGLE]->setPos(center_horizontal - center_offset, center_vertical);
         addItem(sensor_data_[ANGLE]);
 
-        sensor_data_[LINE_DEVIATION]->setPos(center_horizontal, center_vertical + 20);
+        sensor_data_[LINE_DEVIATION]->setPos(center_horizontal - center_offset, center_vertical + 20);
         addItem(sensor_data_[LINE_DEVIATION]);
 
-        sensor_data_[LINE_TYPE]->setPos(center_horizontal, center_vertical - 20);
+        sensor_data_[LINE_TYPE]->setPos(center_horizontal - center_offset, center_vertical - 20);
         addItem(sensor_data_[LINE_TYPE]);
     }
+
 } // namespace MC

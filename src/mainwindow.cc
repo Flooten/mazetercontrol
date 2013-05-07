@@ -264,7 +264,14 @@ namespace MC
     /* Uppdaterar sensordatan som visas i scene_ */
     void MainWindow::setSensorValues(SensorData sensor_data)
     {
-        scene_->updateSensorData(sensor_data);
+        try
+        {
+            scene_->updateSensorData(sensor_data);
+        }
+        catch (...)
+        {
+            log("Error in overview.");
+        }
 
         // Fånga ny data och sätt spinbox vid sd-plot till det senaste värdet.
         ui->spinBox_sensor_data_current_value->setSuffix(" cm");
@@ -435,7 +442,7 @@ namespace MC
         ui->spinBox_kp_distance->setValue(parameter_values_->attributeValue("kp-left", "value").toInt());
         ui->spinBox_kp_line->setValue(parameter_values_->attributeValue("kp-right", "value").toInt());
 
-        scene_->draw();
+        scene_->show();
         resetPlots();
     }
 
@@ -482,7 +489,7 @@ namespace MC
         ui->timeEdit_running_time->setTime(QTime(0,0,0,0));
 
         clearPlots();
-        scene_->clear();
+        scene_->hide();
     }
 
     /* Tillåter mjuk övergång mellan olika nivåer */

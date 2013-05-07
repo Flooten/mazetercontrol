@@ -19,6 +19,7 @@
 #include <QMap>
 #include <QGraphicsTextItem>
 #include <QGraphicsRectItem>
+#include <QGraphicsPixmapItem>
 #include <QKeyEvent>
 
 namespace MC
@@ -33,7 +34,8 @@ namespace MC
         void updateSensorData(const SensorData& sensor_data);
         void buttonPressed(QKeyEvent* event);
         void buttonReleased(QKeyEvent* event);
-        void draw();
+        void show();
+        void hide();
 
     private:
         enum SensorDataIndex
@@ -59,7 +61,7 @@ namespace MC
             KEY_INVALID
         };
 
-        QPixmap* background_image_;
+        QGraphicsPixmapItem* background_image_;
         QMap<SensorDataIndex, QGraphicsTextItem*> sensor_data_;
         QMap<ButtonIndex, QGraphicsPixmapItem*> buttons_;
 
