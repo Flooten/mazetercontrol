@@ -40,7 +40,7 @@ namespace MC
         sensor_data_[LEFT_SHORT]->setPlainText(QString::number((unsigned char)sensor_data.distance5) + UNIT_CM);
         sensor_data_[RIGHT_SHORT]->setPlainText(QString::number((unsigned char)sensor_data.distance6) + UNIT_CM);
         sensor_data_[BACK]->setPlainText(QString::number((unsigned char)sensor_data.distance7) + UNIT_CM);
-        sensor_data_[ANGLE]->setPlainText(QString::number((unsigned short int)sensor_data.angle / 100) + UNIT_DEG);
+        sensor_data_[ANGLE]->setPlainText("Angle: " + QString::number((unsigned short int)sensor_data.angle / 100) + UNIT_DEG);
         sensor_data_[LINE_DEVIATION]->setPlainText("Line deviation: " + QString::number((char)sensor_data.line_deviation) + UNIT_CM);
         sensor_data_[LINE_TYPE]->setPlainText("Line type: " + QString::number((unsigned char)sensor_data.line_type));
 
@@ -53,10 +53,12 @@ namespace MC
         switch (event->key())
         {
         case Qt::Key_Up:
+        case Qt::Key_W:
             buttons_[KEY_UP]->setPixmap(QPixmap(":/images/resources/upp.png"));
             break;
 
         case Qt::Key_Down:
+        case Qt::Key_S:
             buttons_[KEY_DOWN]->setPixmap(QPixmap(":/images/resources/downp.png"));
             break;
 
@@ -64,8 +66,16 @@ namespace MC
             buttons_[KEY_LEFT]->setPixmap(QPixmap(":/images/resources/leftp.png"));
             break;
 
+        case Qt::Key_A:
+            buttons_[KEY_ROTATE_LEFT]->setPixmap(QPixmap(":/images/resources/rotleftp.png"));
+            break;
+
         case Qt::Key_Right:
             buttons_[KEY_RIGHT]->setPixmap(QPixmap(":/images/resources/rightp.png"));
+            break;
+
+        case Qt::Key_D:
+            buttons_[KEY_ROTATE_RIGHT]->setPixmap(QPixmap(":/images/resources/rotrightp.png"));
             break;
         }
     }
@@ -87,10 +97,18 @@ namespace MC
 
         case Qt::Key_Left:
             buttons_[KEY_LEFT]->setPixmap(QPixmap(":/images/resources/leftr.png"));
+            break;            
+
+        case Qt::Key_A:
+            buttons_[KEY_ROTATE_LEFT]->setPixmap(QPixmap(":/images/resources/rotleftr.png"));
             break;
 
         case Qt::Key_Right:
             buttons_[KEY_RIGHT]->setPixmap(QPixmap(":/images/resources/rightr.png"));
+            break;
+
+        case Qt::Key_D:
+            buttons_[KEY_ROTATE_RIGHT]->setPixmap(QPixmap(":/images/resources/rotrightr.png"));
             break;
         }
     }
@@ -104,6 +122,8 @@ namespace MC
         buttons_[KEY_DOWN]->show();
         buttons_[KEY_LEFT]->show();
         buttons_[KEY_RIGHT]->show();
+        buttons_[KEY_ROTATE_LEFT]->show();
+        buttons_[KEY_ROTATE_RIGHT]->show();
 
         QMapIterator<SensorDataIndex, QGraphicsTextItem*> itr(sensor_data_);
 
@@ -123,6 +143,8 @@ namespace MC
         buttons_[KEY_DOWN]->hide();
         buttons_[KEY_LEFT]->hide();
         buttons_[KEY_RIGHT]->hide();
+        buttons_[KEY_ROTATE_LEFT]->hide();
+        buttons_[KEY_ROTATE_RIGHT]->hide();
 
         QMapIterator<SensorDataIndex, QGraphicsTextItem*> itr(sensor_data_);
 
@@ -142,7 +164,7 @@ namespace MC
         QPixmap button(":/images/resources/upr.png");
 
         QPoint button_dimensions(button.width(), button.height());
-        QPoint up_pos(350, 350);
+        QPoint up_pos(430, 260);
         int spacing = 5;
 
         // Skapa knappar
@@ -150,6 +172,8 @@ namespace MC
         buttons_.insert(KEY_DOWN, new QGraphicsPixmapItem(QPixmap(":/images/resources/downr.png")));
         buttons_.insert(KEY_LEFT, new QGraphicsPixmapItem(QPixmap(":/images/resources/leftr.png")));
         buttons_.insert(KEY_RIGHT, new QGraphicsPixmapItem(QPixmap(":/images/resources/rightr.png")));
+        buttons_.insert(KEY_ROTATE_LEFT, new QGraphicsPixmapItem(QPixmap(":/images/resources/rotleftr.png")));
+        buttons_.insert(KEY_ROTATE_RIGHT, new QGraphicsPixmapItem(QPixmap(":/images/resources/rotrightr.png")));
 
         // Placera ut knapparna
         buttons_[KEY_UP]->setPos(up_pos);
@@ -166,6 +190,14 @@ namespace MC
         buttons_[KEY_RIGHT]->setPos(up_pos.x() + button_dimensions.x() + spacing,
                                     up_pos.y() + button_dimensions.y() + spacing);
         addItem(buttons_[KEY_RIGHT]);
+
+        buttons_[KEY_ROTATE_LEFT]->setPos(up_pos.x() - button_dimensions.x() - spacing,
+                                          up_pos.y());
+        addItem(buttons_[KEY_ROTATE_LEFT]);
+
+        buttons_[KEY_ROTATE_RIGHT]->setPos(up_pos.x() + button_dimensions.x() + spacing,
+                                           up_pos.y());
+        addItem(buttons_[KEY_ROTATE_RIGHT]);
     }
 
     /* Skapar alla textlådor och placerar ut dessa. */
@@ -178,7 +210,7 @@ namespace MC
         sensor_data_.insert(LEFT_SHORT, new QGraphicsTextItem("0 cm"));
         sensor_data_.insert(RIGHT_SHORT, new QGraphicsTextItem("0 cm"));
         sensor_data_.insert(BACK, new QGraphicsTextItem("0 cm"));
-        sensor_data_.insert(ANGLE, new QGraphicsTextItem("0 degrees"));
+        sensor_data_.insert(ANGLE, new QGraphicsTextItem("Angle: 0 degrees"));
         sensor_data_.insert(LINE_DEVIATION, new QGraphicsTextItem("Line deviation: 0 cm"));
         sensor_data_.insert(LINE_TYPE, new QGraphicsTextItem("Line type: 0"));
 

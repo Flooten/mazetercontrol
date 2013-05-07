@@ -58,6 +58,8 @@ namespace MC
             KEY_DOWN,
             KEY_LEFT,
             KEY_RIGHT,
+            KEY_ROTATE_LEFT,
+            KEY_ROTATE_RIGHT,
             KEY_INVALID
         };
 

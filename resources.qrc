@@ -20,6 +20,10 @@
         <file>resources/downp.png</file>
         <file>resources/downr.png</file>
         <file>resources/overview.png</file>
+        <file>resources/rotleftp.png</file>
+        <file>resources/rotleftr.png</file>
+        <file>resources/rotrightp.png</file>
+        <file>resources/rotrightr.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>resources/consolas.ttf</file>

@@ -25,7 +25,7 @@ namespace MC
         , plot_timer_(new QTimer(this))
         , running_time_update_timer_(new QTimer(this))
         , calibrate_countdown_timer_(new QTimer(this))
-        , scene_(new OverviewScene(this))
+        , overview_scene_(new OverviewScene(this))
     {
         ui->setupUi(this);
 
@@ -46,7 +46,7 @@ namespace MC
         setWindowTitle(windowTitle() + " v" + VERSION);
 
         // Installera scener i GraphicsView
-        ui->graphicsView_overview->setScene(scene_);
+        ui->graphicsView_overview->setScene(overview_scene_);
         ui->graphicsView_control_signals->setScene(cs_scene_);
         ui->graphicsView_sensor_data->setScene(sd_scene_);
 
@@ -77,14 +77,14 @@ namespace MC
         connect(ui->actionConnect, SIGNAL(triggered()), this, SLOT(toggleConnection()));
         connect(ui->actionDisconnect, SIGNAL(triggered()), this, SLOT(toggleConnection()));
         connect(ui->actionAbort, SIGNAL(triggered()), this, SLOT(transmitAbort()));
+        connect(ui->actionAboutMazeterControl, SIGNAL(triggered()), this, SLOT(openAboutDialog()));
+        connect(ui->pushButton_abort, SIGNAL(clicked()), this, SLOT(transmitAbort()));
         connect(ui->pushButton_toggle_connection, SIGNAL(clicked()), this, SLOT(toggleConnection()));
         connect(ui->pushButton_calibrate, SIGNAL(clicked()), this, SLOT(transmitCalibrateSensor()));
-        connect(ui->actionAboutMazeterControl, SIGNAL(triggered()), this, SLOT(openAboutDialog()));
         connect(ui->pushButton_clear_plots, SIGNAL(clicked()), this, SLOT(resetPlots()));
-        connect(ui->comboBox_sensor_data, SIGNAL(currentIndexChanged(int)), this, SLOT(chosenSensorDataChanged(int)));
         connect(ui->pushButton_transfer_parameters, SIGNAL(clicked()), this, SLOT(transmitParameters()));
+        connect(ui->comboBox_sensor_data, SIGNAL(currentIndexChanged(int)), this, SLOT(chosenSensorDataChanged(int)));
         connect(ui->verticalSlider_throttle, SIGNAL(sliderReleased()), this, SLOT(throttleRelay()));
-        connect(ui->pushButton_abort, SIGNAL(clicked()), this, SLOT(transmitAbort()));
         connect(ui->spinBox_kd_distance, SIGNAL(valueChanged(int)), this, SLOT(parameterKdDistanceChanged(int)));
         connect(ui->spinBox_kd_line, SIGNAL(valueChanged(int)), this, SLOT(parameterKdLineChanged(int)));
         connect(ui->spinBox_kp_distance, SIGNAL(valueChanged(int)), this, SLOT(parameterKpDistanceChanged(int)));
@@ -108,7 +108,7 @@ namespace MC
     {
         delete mc_;
         delete terminal_;
-        delete scene_;
+        delete overview_scene_;
         delete cs_scene_;
         delete sd_scene_;
         delete plot_timer_;
@@ -151,7 +151,7 @@ namespace MC
 
             if (mc_->isConnected())
                 // Tänd knappen
-                scene_->buttonPressed(event);
+                overview_scene_->buttonPressed(event);
 
             // Förhindra att eventet kaskadar vidare.
             event->accept();
@@ -173,7 +173,7 @@ namespace MC
 
             if (mc_->isConnected())
                 // Släck knappen
-                scene_->buttonReleased(event);
+                overview_scene_->buttonReleased(event);
 
             // Förhindra att eventet kaskadar vidare.
             event->accept();
@@ -261,12 +261,12 @@ namespace MC
         }
     }
 
-    /* Uppdaterar sensordatan som visas i scene_ */
+    /* Uppdaterar sensordatan som visas i overview_scene_ */
     void MainWindow::setSensorValues(SensorData sensor_data)
     {
         try
         {
-            scene_->updateSensorData(sensor_data);
+            overview_scene_->updateSensorData(sensor_data);
         }
         catch (...)
         {
@@ -442,7 +442,7 @@ namespace MC
         ui->spinBox_kp_distance->setValue(parameter_values_->attributeValue("kp-left", "value").toInt());
         ui->spinBox_kp_line->setValue(parameter_values_->attributeValue("kp-right", "value").toInt());
 
-        scene_->show();
+        overview_scene_->show();
         resetPlots();
     }
 
@@ -489,7 +489,7 @@ namespace MC
         ui->timeEdit_running_time->setTime(QTime(0,0,0,0));
 
         clearPlots();
-        scene_->hide();
+        overview_scene_->hide();
     }
 
     /* Tillåter mjuk övergång mellan olika nivåer */
@@ -768,6 +768,8 @@ namespace MC
         else
             // Bryt anslutning
             mc_->parseCommand(UserInput("close"));
+
+        setFocus();
     }
 
     /* Nollställer plots */

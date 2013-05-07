@@ -3,15 +3,15 @@
  * PROJEKT:       MazeterControl
  * PROGRAMMERARE: Marcus Eriksson
  *                Herman Ekwall
- * DATUM:         2013-04-04
+ * DATUM:         2013-05-07
  *
  * BESKRIVNING:   Control tillhandahåller all interface mot serieporten
  *                från terminalen.
  *
  */
 
-#ifndef MAZETERCONTROL_H
-#define MAZETERCONTROL_H
+#ifndef CONTROL_H
+#define CONTROL_H
 
 #include "serialport.h"
 #include "userinput.h"
@@ -131,4 +131,4 @@ namespace MC
     };
 } // namespace MC
 
-#endif // MAZETERCONTROL_H
+#endif // CONTROL_H

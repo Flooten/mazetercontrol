@@ -2,7 +2,7 @@
  * FILNAMN:       controlsignalsplotscene.h
  * PROJEKT:       MazeterControl
  * PROGRAMMERARE: Marcus Eriksson
- * DATUM:         2013-04-18
+ * DATUM:         2013-05-03
  *
  * BESKRIVNING:   ControlSignalsPlotScene är klassen som representerar den scen
  *                som presenterar en tidsplot av motorns kontrollsignalvärden.
