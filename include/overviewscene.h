@@ -1,16 +1,16 @@
 /*
- * FILNAMN:       mcgraphicsscene.h
+ * FILNAMN:       overviewscene.h
  * PROJEKT:       MazeterControl
  * PROGRAMMERARE: Marcus Eriksson
  * DATUM:         2013-04-18
  *
- * BESKRIVNING:   MCGraphicsScene är klassen som representerar den scen
+ * BESKRIVNING:   OverviewScene är klassen som representerar den scen
  *                som presenterar översikten av roboten.
  *
  */
 
-#ifndef MCGRAPHICSSCENE_H
-#define MCGRAPHICSSCENE_H
+#ifndef OVERVIEWSCENE_H
+#define OVERVIEWSCENE_H
 
 #include "sensordata.h"
 
@@ -24,12 +24,12 @@
 
 namespace MC
 {
-    class MCGraphicsScene : public QGraphicsScene
+    class OverviewScene : public QGraphicsScene
     {
         Q_OBJECT
     public:
-        MCGraphicsScene(QObject *parent = NULL);
-        ~MCGraphicsScene();
+        OverviewScene(QObject *parent = NULL);
+        ~OverviewScene();
 
         void updateSensorData(const SensorData& sensor_data);
         void buttonPressed(QKeyEvent* event);
@@ -74,4 +74,4 @@ namespace MC
     };
 } // namespace MC
 
-#endif // MCGRAPHICSSCENE_H
+#endif // OVERVIEWSCENE_H

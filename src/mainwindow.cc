@@ -25,7 +25,7 @@ namespace MC
         , plot_timer_(new QTimer(this))
         , running_time_update_timer_(new QTimer(this))
         , calibrate_countdown_timer_(new QTimer(this))
-        , scene_(new MCGraphicsScene(this))
+        , scene_(new OverviewScene(this))
     {
         ui->setupUi(this);
 

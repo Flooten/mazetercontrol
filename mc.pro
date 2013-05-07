@@ -19,13 +19,13 @@ HEADERS += \
     include/mainwindow.h \
     include/controlsignals.h \
     include/preferencesdialog.h \
-    include/mcgraphicsscene.h \
     include/sensordata.h \
     include/aboutdialog.h \
     include/controlsignalsplotscene.h \
     include/sensordataplotscene.h \
     include/plotscene.h \
-    include/xmlcontrol.h
+    include/xmlcontrol.h \
+    include/overviewscene.h
 
 SOURCES += \
     src/utils.cc \
@@ -36,12 +36,12 @@ SOURCES += \
     src/control.cc \
     src/mainwindow.cc \
     src/preferencesdialog.cc \
-    src/mcgraphicsscene.cc \
     src/aboutdialog.cc \
     src/controlsignalsplotscene.cc \
     src/sensordataplotscene.cc \
     src/plotscene.cc \
-    src/xmlcontrol.cc
+    src/xmlcontrol.cc \
+    src/overviewscene.cc
 
 FORMS += \
     forms/terminal.ui \

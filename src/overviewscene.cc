@@ -1,18 +1,18 @@
 /*
- * FILNAMN:       mcgraphicsscene.cc
+ * FILNAMN:       overviewscene.cc
  * PROJEKT:       MazeterControl
  * PROGRAMMERARE: Marcus Eriksson
  * DATUM:         2013-04-18
  *
  */
 
-#include "mcgraphicsscene.h"
+#include "overviewscene.h"
 
 #include <QFont>
 
 namespace MC
 {
-    MCGraphicsScene::MCGraphicsScene(QObject *parent)
+    OverviewScene::OverviewScene(QObject *parent)
         : QGraphicsScene(parent)
         , background_image_(new QGraphicsPixmapItem(QPixmap(":/images/resources/overview.png")))
     {
@@ -23,14 +23,14 @@ namespace MC
         hide();
     }
 
-    MCGraphicsScene::~MCGraphicsScene()
+    OverviewScene::~OverviewScene()
     {
         delete background_image_;
         clear();
     }
 
     /* Uppdaterar */
-    void MCGraphicsScene::updateSensorData(const SensorData &sensor_data)
+    void OverviewScene::updateSensorData(const SensorData &sensor_data)
     {
         // Giltig sensordata finns i sensor_data, uppdatera texten hos alla graphics items.
         sensor_data_[FRONT_LEFT]->setPlainText(QString::number((unsigned char)sensor_data.distance1) + UNIT_CM);
@@ -48,7 +48,7 @@ namespace MC
     }
 
     /* Tänder en knapp */
-    void MCGraphicsScene::buttonPressed(QKeyEvent* event)
+    void OverviewScene::buttonPressed(QKeyEvent* event)
     {
         switch (event->key())
         {
@@ -71,7 +71,7 @@ namespace MC
     }
 
     /* Släcker en knapp */
-    void MCGraphicsScene::buttonReleased(QKeyEvent* event)
+    void OverviewScene::buttonReleased(QKeyEvent* event)
     {
         switch (event->key())
         {
@@ -96,7 +96,7 @@ namespace MC
     }
 
     /* Visar items */
-    void MCGraphicsScene::show()
+    void OverviewScene::show()
     {
         background_image_->show();
 
@@ -115,7 +115,7 @@ namespace MC
     }
 
     /* Gömmer alla items på scenen */
-    void MCGraphicsScene::hide()
+    void OverviewScene::hide()
     {
         background_image_->hide();
 
@@ -137,7 +137,7 @@ namespace MC
      *  Private
      */
 
-    void MCGraphicsScene::createButtons()
+    void OverviewScene::createButtons()
     {
         QPixmap button(":/images/resources/upr.png");
 
@@ -169,7 +169,7 @@ namespace MC
     }
 
     /* Skapar alla textlådor och placerar ut dessa. */
-    void MCGraphicsScene::createTextItems()
+    void OverviewScene::createTextItems()
     {
         sensor_data_.insert(FRONT_LEFT, new QGraphicsTextItem("0 cm"));
         sensor_data_.insert(FRONT_RIGHT, new QGraphicsTextItem("0 cm"));
@@ -197,7 +197,7 @@ namespace MC
     }
 
     /* Placerar ut textlådorna */
-    void MCGraphicsScene::placeTextItems()
+    void OverviewScene::placeTextItems()
     {
         int left_edge_x = -40;
         int right_edge_x = 305;

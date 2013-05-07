@@ -13,7 +13,7 @@
 
 #include "control.h"
 #include "terminal.h"
-#include "mcgraphicsscene.h"
+#include "overviewscene.h"
 #include "controlsignalsplotscene.h"
 #include "sensordataplotscene.h"
 #include "xmlcontrol.h"
@@ -61,7 +61,7 @@ namespace MC
         QTimer* plot_timer_;
         QTimer* running_time_update_timer_;
         QTimer* calibrate_countdown_timer_;
-        MCGraphicsScene* scene_;
+        OverviewScene* scene_;
         ControlSignalsPlotScene* cs_scene_;
         SensorDataPlotScene* sd_scene_;
         QTime time_;
