@@ -24,6 +24,7 @@
         <file>resources/rotleftr.png</file>
         <file>resources/rotrightp.png</file>
         <file>resources/rotrightr.png</file>
+        <file>resources/overview-os.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>resources/consolas.ttf</file>

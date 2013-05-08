@@ -14,7 +14,7 @@ namespace MC
 {
     OverviewScene::OverviewScene(QObject *parent)
         : QGraphicsScene(parent)
-        , background_image_(new QGraphicsPixmapItem(QPixmap(":/images/resources/overview.png")))
+        , background_image_(new QGraphicsPixmapItem(QPixmap(":/images/resources/overview-os.png")))
     {
         createTextItems();
         createButtons();
@@ -215,7 +215,7 @@ namespace MC
         sensor_data_.insert(LINE_TYPE, new QGraphicsTextItem("Line type: 0"));
 
         // Sätt rätt font
-        QFont font("Ubuntu");
+        QFont font("Open Sans");
         font.setPointSize(10);
         QMapIterator<SensorDataIndex, QGraphicsTextItem*> itr(sensor_data_);
 
