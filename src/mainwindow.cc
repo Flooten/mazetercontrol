@@ -42,6 +42,8 @@ namespace MC
         ui->label_kd->setText("K<sub>D</sub>");
         ui->label_kp->setText("K<sub>P</sub>");
 
+        ui->comboBox_sensor_data->setItemText(7, "Angle [0-360" + QString(QChar(0xb0)) + "]");
+
         // Uppdatera fönsterrubrik
         setWindowTitle(windowTitle() + " v" + VERSION);
 
@@ -54,13 +56,13 @@ namespace MC
         // Generella anslutningar
         connect(terminal_, SIGNAL(terminalClosing()), this, SLOT(closeTerminal()));
         connect(mc_, SIGNAL(log(QString)), this, SLOT(log(QString)));
-        connect(mc_, SIGNAL(btConnected()), this, SLOT(btConnected()));
-        connect(mc_, SIGNAL(btDisconnected()), this, SLOT(btDisconnected()));
         connect(plot_timer_, SIGNAL(timeout()), this, SLOT(drawPlots()));
         connect(running_time_update_timer_, SIGNAL(timeout()), this, SLOT(updateRunningTime()));
         connect(calibrate_countdown_timer_, SIGNAL(timeout()), this, SLOT(calibrateCountdown()));
 
         // Relä av nyligen inkommen data
+        connect(mc_, SIGNAL(btConnected()), this, SLOT(btConnected()));
+        connect(mc_, SIGNAL(btDisconnected()), this, SLOT(btDisconnected()));
         connect(mc_, SIGNAL(modeChanged(Control::Mode)), this, SLOT(setMode(Control::Mode)));
         connect(mc_, SIGNAL(controlSignalsChanged(ControlSignals)), this, SLOT(setControlGagues(ControlSignals)));
         connect(mc_, SIGNAL(controlSignalsChanged(ControlSignals)), cs_scene_, SLOT(newControlSignals(ControlSignals)));
@@ -620,9 +622,11 @@ namespace MC
             break;
 
         case 7:
-            ui->spinBox_sensor_data_current_value->setValue(sensor_data.angle);
-            ui->spinBox_sensor_data_current_value->setSuffix(" degrees");
+        {
+            ui->spinBox_sensor_data_current_value->setValue(sensor_data.angle / 100);
+            ui->spinBox_sensor_data_current_value->setSuffix(QString(QChar(0xb0)));
             break;
+        }
 
         case 8:
             ui->spinBox_sensor_data_current_value->setValue(sensor_data.line_deviation);

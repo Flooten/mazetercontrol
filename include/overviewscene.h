@@ -67,8 +67,8 @@ namespace MC
         QMap<SensorDataIndex, QGraphicsTextItem*> sensor_data_;
         QMap<ButtonIndex, QGraphicsPixmapItem*> buttons_;
 
-        const QString UNIT_CM = " cm";
-        const QString UNIT_DEG = " degrees";
+        const QString UNIT_CM_ = " cm";
+        const QString UNIT_DEG_ = QString(QChar(0xb0));
 
         void createButtons();
         void createTextItems();

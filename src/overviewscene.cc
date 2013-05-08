@@ -33,15 +33,15 @@ namespace MC
     void OverviewScene::updateSensorData(const SensorData &sensor_data)
     {
         // Giltig sensordata finns i sensor_data, uppdatera texten hos alla graphics items.
-        sensor_data_[FRONT_LEFT]->setPlainText(QString::number((unsigned char)sensor_data.distance1) + UNIT_CM);
-        sensor_data_[FRONT_RIGHT]->setPlainText(QString::number((unsigned char)sensor_data.distance2) + UNIT_CM);
-        sensor_data_[LEFT_LONG]->setPlainText(QString::number((unsigned char)sensor_data.distance3) + UNIT_CM);
-        sensor_data_[RIGHT_LONG]->setPlainText(QString::number((unsigned char)sensor_data.distance4) + UNIT_CM);
-        sensor_data_[LEFT_SHORT]->setPlainText(QString::number((unsigned char)sensor_data.distance5) + UNIT_CM);
-        sensor_data_[RIGHT_SHORT]->setPlainText(QString::number((unsigned char)sensor_data.distance6) + UNIT_CM);
-        sensor_data_[BACK]->setPlainText(QString::number((unsigned char)sensor_data.distance7) + UNIT_CM);
-        sensor_data_[ANGLE]->setPlainText("Angle: " + QString::number((unsigned short int)sensor_data.angle / 100) + UNIT_DEG);
-        sensor_data_[LINE_DEVIATION]->setPlainText("Line deviation: " + QString::number((char)sensor_data.line_deviation) + UNIT_CM);
+        sensor_data_[FRONT_LEFT]->setPlainText(QString::number((unsigned char)sensor_data.distance1) + UNIT_CM_);
+        sensor_data_[FRONT_RIGHT]->setPlainText(QString::number((unsigned char)sensor_data.distance2) + UNIT_CM_);
+        sensor_data_[LEFT_LONG]->setPlainText(QString::number((unsigned char)sensor_data.distance3) + UNIT_CM_);
+        sensor_data_[RIGHT_LONG]->setPlainText(QString::number((unsigned char)sensor_data.distance4) + UNIT_CM_);
+        sensor_data_[LEFT_SHORT]->setPlainText(QString::number((unsigned char)sensor_data.distance5) + UNIT_CM_);
+        sensor_data_[RIGHT_SHORT]->setPlainText(QString::number((unsigned char)sensor_data.distance6) + UNIT_CM_);
+        sensor_data_[BACK]->setPlainText(QString::number((unsigned char)sensor_data.distance7) + UNIT_CM_);
+        sensor_data_[ANGLE]->setPlainText("Angle: " + QString::number((unsigned short int)sensor_data.angle / 100) + UNIT_DEG_);
+        sensor_data_[LINE_DEVIATION]->setPlainText("Line deviation: " + QString::number((char)sensor_data.line_deviation) + UNIT_CM_);
         sensor_data_[LINE_TYPE]->setPlainText("Line type: " + QString::number((unsigned char)sensor_data.line_type));
 
         this->update();
@@ -203,15 +203,15 @@ namespace MC
     /* Skapar alla textlådor och placerar ut dessa. */
     void OverviewScene::createTextItems()
     {
-        sensor_data_.insert(FRONT_LEFT, new QGraphicsTextItem("0 cm"));
-        sensor_data_.insert(FRONT_RIGHT, new QGraphicsTextItem("0 cm"));
-        sensor_data_.insert(LEFT_LONG, new QGraphicsTextItem("0 cm"));
-        sensor_data_.insert(RIGHT_LONG, new QGraphicsTextItem("0 cm"));
-        sensor_data_.insert(LEFT_SHORT, new QGraphicsTextItem("0 cm"));
-        sensor_data_.insert(RIGHT_SHORT, new QGraphicsTextItem("0 cm"));
-        sensor_data_.insert(BACK, new QGraphicsTextItem("0 cm"));
-        sensor_data_.insert(ANGLE, new QGraphicsTextItem("Angle: 0 degrees"));
-        sensor_data_.insert(LINE_DEVIATION, new QGraphicsTextItem("Line deviation: 0 cm"));
+        sensor_data_.insert(FRONT_LEFT, new QGraphicsTextItem("0" + UNIT_CM_));
+        sensor_data_.insert(FRONT_RIGHT, new QGraphicsTextItem("0" + UNIT_CM_));
+        sensor_data_.insert(LEFT_LONG, new QGraphicsTextItem("0" + UNIT_CM_));
+        sensor_data_.insert(RIGHT_LONG, new QGraphicsTextItem("0" + UNIT_CM_));
+        sensor_data_.insert(LEFT_SHORT, new QGraphicsTextItem("0" + UNIT_CM_));
+        sensor_data_.insert(RIGHT_SHORT, new QGraphicsTextItem("0" + UNIT_CM_));
+        sensor_data_.insert(BACK, new QGraphicsTextItem("0" + UNIT_CM_));
+        sensor_data_.insert(ANGLE, new QGraphicsTextItem("Angle: 0" + UNIT_DEG_));
+        sensor_data_.insert(LINE_DEVIATION, new QGraphicsTextItem("Line deviation: 0" + UNIT_CM_));
         sensor_data_.insert(LINE_TYPE, new QGraphicsTextItem("Line type: 0"));
 
         // Sätt rätt font
