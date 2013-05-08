@@ -11,8 +11,7 @@ int main(int argc, char *argv[])
 
     // Lägg till de font som används.
     QFontDatabase::addApplicationFont(":/fonts/resources/consolas.ttf");
-    QFontDatabase::addApplicationFont(":/fonts/resources/ubuntu.ttf");
-    QFontDatabase::addApplicationFont(":/fonts/resources/ptsans.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/resources/opensans.ttf");
     QApplication::setStyle(QStyleFactory::create("Fusion"));
 
     MC::MainWindow w;

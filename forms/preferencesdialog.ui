@@ -18,7 +18,7 @@
     <normaloff>:/icons/resources/preferences.ico</normaloff>:/icons/resources/preferences.ico</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">font: 10pt &quot;PT Sans&quot;;</string>
+   <string notr="true">font: 10pt &quot;Open Sans&quot;;</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

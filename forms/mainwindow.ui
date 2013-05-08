@@ -47,7 +47,7 @@ font: 9pt &quot;Consolas&quot;;
 QMenuBar::item {
 background-color: rgb(31, 31, 31);
 }*/
-font: 10pt &quot;PT Sans&quot;;</string>
+font: 10pt &quot;Open Sans&quot;;</string>
   </property>
   <property name="tabShape">
    <enum>QTabWidget::Rounded</enum>
@@ -961,7 +961,7 @@ selection-background-color: rgb(255, 255, 255);
      <x>0</x>
      <y>0</y>
      <width>1080</width>
-     <height>23</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEdit">

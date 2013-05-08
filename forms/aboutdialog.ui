@@ -21,7 +21,7 @@
     <normaloff>:/icons/resources/about.ico</normaloff>:/icons/resources/about.ico</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">font: 8pt &quot;PT Sans&quot;;</string>
+   <string notr="true">font: 8pt &quot;Open Sans&quot;;</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_3">
    <item>
