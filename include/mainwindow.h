@@ -42,15 +42,6 @@ namespace MC
         void keyReleaseEvent(QKeyEvent* event);
 
     public slots:
-        void log(const QString& str);
-        void clearLog();
-        void btConnected();
-        void btDisconnected();
-
-        void setControlGagues(ControlSignals control_signals);
-        void setSensorValues(SensorData sensor_data);
-        void setMode(Control::Mode mode);
-        void setAlgoritm(Control::Algorithm algorithm);
 
     private:
         int calibrate_countdown_ = 5;
@@ -88,6 +79,16 @@ namespace MC
         void writePreferences();
 
     private slots:
+        void log(const QString& str);
+        void clearLog();
+        void btConnected();
+        void btDisconnected();
+
+        void setControlGagues(ControlSignals control_signals);
+        void setSensorValues(SensorData sensor_data);
+        void setMode(Control::Mode mode);
+        void setAlgoritm(Control::Algorithm algorithm);
+
         void openTerminal();
         void closeTerminal();
         void openAboutDialog();

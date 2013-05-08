@@ -181,231 +181,6 @@ namespace MC
     }
 
     /*
-     *  Public slots
-     */
-
-    /* Slot för att tillåta skrivning från andra objekt */
-    void MainWindow::log(const QString& str)
-    {        
-        ui->textEdit_log->append(time_.currentTime().toString("HH:mm:ss") + ": " + str);
-        //ui->textEdit_log->append(str);
-    }
-
-    /* Rensa event log */
-    void MainWindow::clearLog()
-    {
-        ui->textEdit_log->clear();
-    }
-
-    /* Blåtandslänk öppen */
-    void MainWindow::btConnected()
-    {
-        enableWidgets();
-        log("Connection established.");
-        statusMessage("Connection established.");
-
-        // Uppdatera knappen och actions
-        ui->pushButton_toggle_connection->setText("Disconnect");
-        ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/stop.ico"));
-        ui->actionConnect->setEnabled(false);
-        ui->actionDisconnect->setEnabled(true);
-        ui->actionAbort->setEnabled(true);
-
-        // Starta plot_timer_
-        plot_timer_->start(PLOT_DELTA_T);
-    }
-
-    /* Blåtandslänk stängd */
-    void MainWindow::btDisconnected()
-    {
-        disableWidgets();
-        log("Connection closed.");
-        statusMessage("No active connection.");
-
-        // Uppdatera knappen
-        ui->pushButton_toggle_connection->setText("Connect");
-        ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/start.ico"));
-        ui->actionConnect->setEnabled(true);
-        ui->actionDisconnect->setEnabled(false);
-        ui->actionAbort->setEnabled(false);
-
-        // Stanna timers
-        plot_timer_->stop();
-        running_time_update_timer_->stop();
-
-        // Rensa fält
-        sd_scene_->clear();
-        cs_scene_->clear();
-        ui->timeEdit_running_time->setTime(QTime(0,0,0,0));
-        ui->textEdit_log->clear();
-    }
-
-    /* Uppdaterar mätarna för kontrollsignalerna */
-    void MainWindow::setControlGagues(ControlSignals control_signals)
-    {
-        if (mc_->isConnected())
-        {
-            // Höger hjulpar
-            setRightEngineGauge((unsigned char)control_signals.right_value, (char)control_signals.right_direction);
-
-            // Vänster hjulpar
-            setLeftEngineGauge((unsigned char)control_signals.left_value, (char)control_signals.left_direction);
-
-            // Klo
-            if (control_signals.claw_value == 0)
-                ui->label_claw_status->setText("Closed");
-            else
-                ui->label_claw_status->setText("Open");
-
-            // Sätt värden till KP och KD
-        }
-    }
-
-    /* Uppdaterar sensordatan som visas i overview_scene_ */
-    void MainWindow::setSensorValues(SensorData sensor_data)
-    {
-        try
-        {
-            overview_scene_->updateSensorData(sensor_data);
-        }
-        catch (...)
-        {
-            log("Error in overview.");
-        }
-
-        // Fånga ny data och sätt spinbox vid sd-plot till det senaste värdet.
-        ui->spinBox_sensor_data_current_value->setSuffix(" cm");
-        switch (ui->comboBox_sensor_data->currentIndex())
-        {
-        case 0:
-            // Front left
-            ui->spinBox_sensor_data_current_value->setValue(sensor_data.distance1);
-            break;
-
-        case 1:
-            ui->spinBox_sensor_data_current_value->setValue(sensor_data.distance2);
-            break;
-
-        case 2:
-            ui->spinBox_sensor_data_current_value->setValue(sensor_data.distance3);
-            break;
-
-        case 3:
-            ui->spinBox_sensor_data_current_value->setValue(sensor_data.distance4);
-            break;
-
-        case 4:
-            ui->spinBox_sensor_data_current_value->setValue(sensor_data.distance5);
-            break;
-
-        case 5:
-            ui->spinBox_sensor_data_current_value->setValue(sensor_data.distance6);
-            break;
-
-        case 6:
-            ui->spinBox_sensor_data_current_value->setValue(sensor_data.distance7);
-            break;
-
-        case 7:
-            ui->spinBox_sensor_data_current_value->setValue(sensor_data.angle);
-            ui->spinBox_sensor_data_current_value->setSuffix(" degrees");
-            break;
-
-        case 8:
-            ui->spinBox_sensor_data_current_value->setValue(sensor_data.line_deviation);
-            break;
-        }
-    }
-
-    /* Uppdaterar operationsläget */
-    void MainWindow::setMode(Control::Mode mode)
-    {
-        if (mc_->isConnected())
-        {
-            switch (mode)
-            {
-            case Control::AUTO:
-            {
-                ui->label_mode_status->setText("Auto");
-                ui->spinBox_kd_distance->setEnabled(false);
-                ui->spinBox_kp_distance->setEnabled(false);
-                ui->spinBox_kd_line->setEnabled(false);
-                ui->spinBox_kp_line->setEnabled(false);
-                ui->pushButton_transfer_parameters->setEnabled(false);
-                ui->pushButton_calibrate->setEnabled(false);
-                log("Mode changed to: Auto");
-                break;
-            }
-
-            case Control::MANUAL:
-            {
-                ui->label_mode_status->setText("Manual");
-                ui->spinBox_kd_distance->setEnabled(true);
-                ui->spinBox_kp_distance->setEnabled(true);
-                ui->spinBox_kd_line->setEnabled(true);
-                ui->spinBox_kp_line->setEnabled(true);
-                ui->pushButton_transfer_parameters->setEnabled(true);
-                ui->pushButton_calibrate->setEnabled(true);
-
-                running_time_update_timer_->stop();
-                ui->timeEdit_running_time->setTime(QTime(0,0,0,0));
-
-                log("Mode changed to: Manual");
-                break;
-            }
-
-            default:
-                break;
-            }
-        }
-    }
-
-    /* Uppdaterar label för den algoritm som körs */
-    void MainWindow::setAlgoritm(Control::Algorithm algorithm)
-    {
-        if (mc_->isConnected())
-        {
-            switch (algorithm)
-            {
-            case Control::ALGO_IN:
-            {
-                ui->label_algorithm->setText("In");
-                break;
-            }
-
-            case Control::ALGO_OUT:
-            {
-                ui->label_algorithm->setText("Out");
-                break;
-            }
-
-            case Control::ALGO_GOAL:
-            {
-                ui->label_algorithm->setText("Goal");
-                break;
-            }
-
-            case Control::ALGO_GOAL_REVERSE:
-            {
-                ui->label_algorithm->setText("Goal rev.");
-                break;
-            }
-
-            case Control::ALGO_DONE:
-            {
-                ui->label_algorithm->setText("Done");
-                finishAutonomousRun();
-                break;
-            }
-
-            default:
-                ui->label_algorithm->setText("N/A");
-                break;
-            }
-        }
-    }
-
-    /*
      *  Private
      */
 
@@ -716,6 +491,233 @@ namespace MC
      *  Private slots
      */
 
+    /* Slot för att tillåta skrivning från andra objekt */
+    void MainWindow::log(const QString& str)
+    {
+        if (running_time_update_timer_->isActive())
+        {
+            // Timestamp i förfluten tid om i autonom körning.
+            int elapsed_time = time_.elapsed();
+            ui->textEdit_log->append(QTime(0, elapsed_time / 60000, elapsed_time / 1000, elapsed_time % 1000).toString("mm:ss:zzz") + ": " + str);
+        }
+        else
+            ui->textEdit_log->append(time_.currentTime().toString("HH:mm:ss") + ": " + str);
+    }
+
+    /* Rensa event log */
+    void MainWindow::clearLog()
+    {
+        ui->textEdit_log->clear();
+    }
+
+    /* Blåtandslänk öppen */
+    void MainWindow::btConnected()
+    {
+        enableWidgets();
+        log("Connection established.");
+        statusMessage("Connection established.");
+
+        // Uppdatera knappen och actions
+        ui->pushButton_toggle_connection->setText("Disconnect");
+        ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/stop.ico"));
+        ui->actionConnect->setEnabled(false);
+        ui->actionDisconnect->setEnabled(true);
+        ui->actionAbort->setEnabled(true);
+
+        // Starta plot_timer_
+        plot_timer_->start(PLOT_DELTA_T);
+    }
+
+    /* Blåtandslänk stängd */
+    void MainWindow::btDisconnected()
+    {
+        disableWidgets();
+        log("Connection closed.");
+        statusMessage("No active connection.");
+
+        // Uppdatera knappen
+        ui->pushButton_toggle_connection->setText("Connect");
+        ui->pushButton_toggle_connection->setIcon(QIcon(":/icons/resources/start.ico"));
+        ui->actionConnect->setEnabled(true);
+        ui->actionDisconnect->setEnabled(false);
+        ui->actionAbort->setEnabled(false);
+
+        // Stanna timers
+        plot_timer_->stop();
+        running_time_update_timer_->stop();
+
+        // Rensa fält
+        sd_scene_->clear();
+        cs_scene_->clear();
+        ui->timeEdit_running_time->setTime(QTime(0,0,0,0));
+        ui->textEdit_log->clear();
+    }
+
+    /* Uppdaterar mätarna för kontrollsignalerna */
+    void MainWindow::setControlGagues(ControlSignals control_signals)
+    {
+        if (mc_->isConnected())
+        {
+            // Höger hjulpar
+            setRightEngineGauge((unsigned char)control_signals.right_value, (char)control_signals.right_direction);
+
+            // Vänster hjulpar
+            setLeftEngineGauge((unsigned char)control_signals.left_value, (char)control_signals.left_direction);
+
+            // Klo
+            if (control_signals.claw_value == 0)
+                ui->label_claw_status->setText("Closed");
+            else
+                ui->label_claw_status->setText("Open");
+
+            // Sätt värden till KP och KD
+        }
+    }
+
+    /* Uppdaterar sensordatan som visas i overview_scene_ */
+    void MainWindow::setSensorValues(SensorData sensor_data)
+    {
+        try
+        {
+            overview_scene_->updateSensorData(sensor_data);
+        }
+        catch (...)
+        {
+            log("Error in overview.");
+        }
+
+        // Fånga ny data och sätt spinbox vid sd-plot till det senaste värdet.
+        ui->spinBox_sensor_data_current_value->setSuffix(" cm");
+        switch (ui->comboBox_sensor_data->currentIndex())
+        {
+        case 0:
+            // Front left
+            ui->spinBox_sensor_data_current_value->setValue(sensor_data.distance1);
+            break;
+
+        case 1:
+            ui->spinBox_sensor_data_current_value->setValue(sensor_data.distance2);
+            break;
+
+        case 2:
+            ui->spinBox_sensor_data_current_value->setValue(sensor_data.distance3);
+            break;
+
+        case 3:
+            ui->spinBox_sensor_data_current_value->setValue(sensor_data.distance4);
+            break;
+
+        case 4:
+            ui->spinBox_sensor_data_current_value->setValue(sensor_data.distance5);
+            break;
+
+        case 5:
+            ui->spinBox_sensor_data_current_value->setValue(sensor_data.distance6);
+            break;
+
+        case 6:
+            ui->spinBox_sensor_data_current_value->setValue(sensor_data.distance7);
+            break;
+
+        case 7:
+            ui->spinBox_sensor_data_current_value->setValue(sensor_data.angle);
+            ui->spinBox_sensor_data_current_value->setSuffix(" degrees");
+            break;
+
+        case 8:
+            ui->spinBox_sensor_data_current_value->setValue(sensor_data.line_deviation);
+            break;
+        }
+    }
+
+    /* Uppdaterar operationsläget */
+    void MainWindow::setMode(Control::Mode mode)
+    {
+        if (mc_->isConnected())
+        {
+            switch (mode)
+            {
+            case Control::AUTO:
+            {
+                ui->label_mode_status->setText("Auto");
+                ui->spinBox_kd_distance->setEnabled(false);
+                ui->spinBox_kp_distance->setEnabled(false);
+                ui->spinBox_kd_line->setEnabled(false);
+                ui->spinBox_kp_line->setEnabled(false);
+                ui->pushButton_transfer_parameters->setEnabled(false);
+                ui->pushButton_calibrate->setEnabled(false);
+                log("Mode changed to: Auto");
+                break;
+            }
+
+            case Control::MANUAL:
+            {
+                ui->label_mode_status->setText("Manual");
+                ui->spinBox_kd_distance->setEnabled(true);
+                ui->spinBox_kp_distance->setEnabled(true);
+                ui->spinBox_kd_line->setEnabled(true);
+                ui->spinBox_kp_line->setEnabled(true);
+                ui->pushButton_transfer_parameters->setEnabled(true);
+                ui->pushButton_calibrate->setEnabled(true);
+
+                running_time_update_timer_->stop();
+                ui->timeEdit_running_time->setTime(QTime(0,0,0,0));
+
+                log("Mode changed to: Manual");
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+    }
+
+    /* Uppdaterar label för den algoritm som körs */
+    void MainWindow::setAlgoritm(Control::Algorithm algorithm)
+    {
+        if (mc_->isConnected())
+        {
+            switch (algorithm)
+            {
+            case Control::ALGO_IN:
+            {
+                ui->label_algorithm->setText("In");
+                break;
+            }
+
+            case Control::ALGO_OUT:
+            {
+                ui->label_algorithm->setText("Out");
+                break;
+            }
+
+            case Control::ALGO_GOAL:
+            {
+                ui->label_algorithm->setText("Goal");
+                break;
+            }
+
+            case Control::ALGO_GOAL_REVERSE:
+            {
+                ui->label_algorithm->setText("Goal rev.");
+                break;
+            }
+
+            case Control::ALGO_DONE:
+            {
+                ui->label_algorithm->setText("Done");
+                finishAutonomousRun();
+                break;
+            }
+
+            default:
+                ui->label_algorithm->setText("N/A");
+                break;
+            }
+        }
+    }
+
     /* Öppnar terminalen */
     void MainWindow::openTerminal()
     {
@@ -797,9 +799,9 @@ namespace MC
     /* Registrerar att roboten har avslutat en follbordad körning */
     void MainWindow::finishAutonomousRun()
     {
+        log("Autonomous run completed.");
         running_time_update_timer_->stop();
         updateRunningTime();
-        log("Autonomous run completed. Elapsed time: " + ui->timeEdit_running_time->time().toString("mm:ss:zzz"));
     }
 
     /* Uppdaterar körtiden */
