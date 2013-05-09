@@ -682,6 +682,7 @@ namespace MC
             {
                 mode_ = MANUAL;
                 algorithm_ = NO_ALGORITHM;
+                last_turn_ = INVALID;
                 emit modeChanged(mode_);
                 emit algorithmChanged(algorithm_);
             }
