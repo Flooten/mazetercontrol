@@ -107,9 +107,14 @@ namespace MC
             break;
         }
 
-        if (ypos < 70)
+        if (ypos < max_level_)
         {
-            ypos = 70;
+            ypos = max_level_;
+            dot->setPen(pen2_);
+        }
+        else if (ypos > min_level_)
+        {
+            ypos = min_level_;
             dot->setPen(pen2_);
         }
         else

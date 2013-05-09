@@ -66,8 +66,8 @@ namespace MC
         QMap<GridLine, QGraphicsLineItem*> line_map_;
         QGraphicsEllipseItem* last_dot_ = NULL;
 
-        int zero_level_ = 200;
-        int max_level_ = 70;
+        int zero_level_ = 190;
+        int max_level_ = 60;
         int min_level_ = zero_level_;
 
         QPen pen1_ = QPen(Qt::green);

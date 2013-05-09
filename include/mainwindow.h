@@ -60,8 +60,8 @@ namespace MC
         XmlControl* parameter_values_;
 
         const int PLOT_DELTA_T = 50;
-        const int PLOT_VIEW_WIDTH = 770;
-        const int PLOT_VIEW_HEIGHT = 255;
+        const int PLOT_VIEW_WIDTH = 720;
+        const int PLOT_VIEW_HEIGHT = 250;
         const QString INI_FILE = ":/data/data/mc_settings.xml";
         const QString PARAMETER_VALUES_ = QCoreApplication::applicationDirPath() + "/data/parameter_values.xml";
 
