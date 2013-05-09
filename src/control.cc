@@ -700,8 +700,8 @@ namespace MC
         {
             TurnType turn_stack_top = (TurnType)data.at(2);
 
-            if (last_turn_ != turn_stack_top)
-            {
+            //if (last_turn_ != turn_stack_top)
+            //{
                 switch (turn_stack_top)
                 {
                 case LEFT_TURN:
@@ -724,8 +724,8 @@ namespace MC
                     break;
                 }
 
-                last_turn_ = turn_stack_top;
-            }
+                //last_turn_ = turn_stack_top;
+            //}
 
             break;
         }
