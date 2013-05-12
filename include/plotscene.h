@@ -33,7 +33,11 @@ namespace MC
         void center(int time);
 
     protected:
-        QPen dashed_pen_ = QPen(Qt::DashLine);
+        QPen dashed_pen_ = QPen(Qt::DashLine);        
+        QPen red_pen_ = QPen(Qt::red);
+        QPen blue_pen_ = QPen(Qt::blue);
+        QPen green_pen_ = QPen(Qt::green);
+
         int time_ = 0;
         int view_width_;
         int view_height_;

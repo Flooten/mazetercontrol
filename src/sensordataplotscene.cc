@@ -35,7 +35,7 @@ namespace MC
             delete itr.value();
         }
 
-        delete last_dot_;
+        delete last_line_;
     }
 
     /*
@@ -58,12 +58,9 @@ namespace MC
     /* Rita ut */
     void SensorDataPlotScene::draw()
     {
-        QRect rect(0, 0, 1, 1);
         int long_offset = 20;
         int short_offset = 20;
 
-        // Punkt 1
-        QGraphicsEllipseItem* dot = new QGraphicsEllipseItem(rect);
         int ypos = zero_level_;
 
         // Position beroende på vald signal
@@ -109,34 +106,46 @@ namespace MC
             break;
         }
 
-        if (ypos < max_level_)
+        if ((last_line_ != NULL) && last_line_->y() == ypos)
         {
-            ypos = max_level_;
-            dot->setPen(pen2_);
-        }
-        else if (ypos > min_level_)
-        {
-            ypos = min_level_;
-            dot->setPen(pen2_);
+            // Utöka den gamla linjen
+            QLineF line = last_line_->line();
+            line.setP2(QPointF(time_, line.y2()));
+            last_line_->setLine(line);
         }
         else
         {
-            dot->setPen(pen1_);
+            // En ny linje ska ritas
+            QGraphicsLineItem* line = new QGraphicsLineItem();
+
+            if (ypos < max_level_)
+            {
+                ypos = max_level_;
+                line->setPen(red_pen_);
+            }
+            else if (ypos > min_level_)
+            {
+                ypos = min_level_;
+                line->setPen(red_pen_);
+            }
+            else
+            {
+                line->setPen(green_pen_);
+            }
+
+            // Rita förbindelser mellan punkterna om nödvändigt
+            if ((last_line_ != NULL) && abs(ypos - last_line_->line().y2()) >= 2)
+            {
+                QGraphicsLineItem* connector = new QGraphicsLineItem(time_, last_line_->line().y2(), time_, ypos);
+                connector->setPen(green_pen_);
+                addItem(connector);
+            }
+
+            line->setLine(time_, ypos, time_, ypos);
+
+            last_line_ = line;
+            addItem(line);
         }
-
-        dot->setPos(time_, ypos);
-
-        // Rita förbindelser mellan punkterna
-        if ((last_dot_ != NULL) && abs(ypos - last_dot_->y()) >= 2)
-        {
-            QGraphicsLineItem* connector = new QGraphicsLineItem(time_, last_dot_->y(), time_, ypos);
-            connector->setPen(pen1_);
-            addItem(connector);
-        }
-
-        last_dot_ = dot;
-
-        addItem(dot);
 
         // Om scrollning behövs
         if (time_ > view_width_)
@@ -174,7 +183,8 @@ namespace MC
                 removeItem(itr.value());
         }
 
-        last_dot_ = NULL;
+        //last_dot_ = NULL;
+        last_line_ = NULL;
 
         PlotScene::clear();
     }

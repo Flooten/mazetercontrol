@@ -41,8 +41,8 @@ namespace MC
     private:
         QVector<ControlSignals> control_signals_;        
         QVector<QGraphicsLineItem*> line_vector_;
-        QGraphicsEllipseItem* last_rdot_ = NULL;
-        QGraphicsEllipseItem* last_ldot_ = NULL;
+        QGraphicsLineItem* last_rline_ = NULL;
+        QGraphicsLineItem* last_lline_ = NULL;
 
         const int MAX_LEVEL_LEFT_ = 20;
         const int ZERO_LEVEL_LEFT_ = 70;
@@ -51,9 +51,6 @@ namespace MC
         const int MAX_LEVEL_RIGHT_ = 140;
         const int ZERO_LEVEL_RIGHT_ = 190;
         const int MIN_LEVEL_RIGHT_ = 240;
-
-        QPen lpen_;
-        QPen rpen_;
     };
 } // namespace MC
 
