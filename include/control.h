@@ -43,12 +43,12 @@ namespace MC
 
         enum Algorithm
         {
+            NO_ALGORITHM,
             ALGO_IN,
             ALGO_OUT,
             ALGO_GOAL,
             ALGO_GOAL_REVERSE,
-            ALGO_DONE,
-            NO_ALGORITHM
+            ALGO_DONE
         };
 
         explicit Control(const QString& ini_file, QObject *parent = 0);
