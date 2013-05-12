@@ -34,6 +34,8 @@ namespace MC
             itr.next();
             delete itr.value();
         }
+
+        delete last_dot_;
     }
 
     /*

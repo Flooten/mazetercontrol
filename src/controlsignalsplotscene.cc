@@ -37,6 +37,9 @@ namespace MC
 
         while (itr.hasNext())
             delete itr.next();
+
+        delete last_ldot_;
+        delete last_rdot_;
     }
 
     /*
