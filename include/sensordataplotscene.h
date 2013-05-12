@@ -64,14 +64,11 @@ namespace MC
 
         ChosenData chosen_data_ = FRONT_LEFT;
         QMap<GridLine, QGraphicsLineItem*> line_map_;
-        QGraphicsEllipseItem* last_dot_ = NULL;
+        QGraphicsLineItem* last_line_ = NULL;
 
         int zero_level_ = 190;
         int max_level_ = 60;
         int min_level_ = zero_level_;
-
-        QPen pen1_ = QPen(Qt::green);
-        QPen pen2_ = QPen(Qt::red);
     };
 } // namespace MC
 

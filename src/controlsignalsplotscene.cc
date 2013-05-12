@@ -14,8 +14,6 @@ namespace MC
 {
     ControlSignalsPlotScene::ControlSignalsPlotScene(int view_width, int view_height, QObject* parent)
         : PlotScene(view_width, view_height, parent)
-        , lpen_(QPen(Qt::red))
-        , rpen_(QPen(Qt::blue))
     {
         // Lägg in ett idle-element
         ControlSignals cs;
@@ -37,6 +35,9 @@ namespace MC
 
         while (itr.hasNext())
             delete itr.next();
+
+        delete last_lline_;
+        delete last_rline_;
     }
 
     /*
@@ -58,12 +59,6 @@ namespace MC
     /* Ritar om */
     void ControlSignalsPlotScene::draw()
     {
-        QRect rect(0, 0, 1, 1);
-
-        // Vänster
-        QGraphicsEllipseItem* ldot = new QGraphicsEllipseItem(rect);
-        QGraphicsEllipseItem* rdot = new QGraphicsEllipseItem(rect);
-
         int ypos_l = ZERO_LEVEL_LEFT_;
         int ypos_r = ZERO_LEVEL_RIGHT_;
 
@@ -81,32 +76,87 @@ namespace MC
             // Åker bakåt
             ypos_r += control_signals_.last().right_value / 2;
 
-        ldot->setPos(time_, ypos_l);
-        ldot->setPen(lpen_);
-
-        rdot->setPos(time_, ypos_r);
-        rdot->setPen(rpen_);
-
-        // Rita förbindelser mellan punkterna
-        if ((last_ldot_ != NULL) && abs(ypos_l - last_ldot_->y()) >= 2)
+        // Höger
+        if ((last_rline_ != NULL) && last_rline_->line().y2() == ypos_r)
         {
-            QGraphicsLineItem* connector = new QGraphicsLineItem(time_, last_ldot_->y(), time_, ypos_l);
-            connector->setPen(lpen_);
-            addItem(connector);
+            // Utöka den gamla linjen
+            QLineF line = last_rline_->line();
+            line.setP2(QPointF(time_, line.y2()));
+            last_rline_->setLine(line);
+        }
+        else
+        {
+            // En ny linje ska ritas
+            QGraphicsLineItem* rline = new QGraphicsLineItem();
+
+            if (ypos_r < MAX_LEVEL_RIGHT_)
+            {
+                ypos_r = MAX_LEVEL_RIGHT_;
+                rline->setPen(red_pen_);
+            }
+            else if (ypos_r > MIN_LEVEL_RIGHT_)
+            {
+                ypos_r = MIN_LEVEL_RIGHT_;
+                rline->setPen(red_pen_);
+            }
+            else
+            {
+                rline->setPen(blue_pen_);
+            }
+
+            if ((last_rline_ != NULL) && abs(ypos_r - last_rline_->line().y2()) >= 2)
+            {
+                QGraphicsLineItem* connector = new QGraphicsLineItem(time_, last_rline_->line().y2(), time_, ypos_r);
+                connector->setPen(blue_pen_);
+                addItem(connector);
+            }
+
+            rline->setLine(time_, ypos_r, time_, ypos_r);
+
+            last_rline_ = rline;
+            addItem(rline);
         }
 
-        if ((last_rdot_ != NULL) && abs(ypos_r - last_rdot_->y()) >= 2)
+        // Vänster
+        if ((last_lline_ != NULL) && last_lline_->line().y2() == ypos_l)
         {
-            QGraphicsLineItem* connector = new QGraphicsLineItem(time_, last_rdot_->y(), time_, ypos_r);
-            connector->setPen(rpen_);
-            addItem(connector);
+            // Utöka den gamla linjen
+            QLineF line = last_lline_->line();
+            line.setP2(QPointF(time_, line.y2()));
+            last_lline_->setLine(line);
         }
+        else
+        {
+            // En ny linje ska ritas
+            QGraphicsLineItem* lline = new QGraphicsLineItem();
 
-        last_ldot_ = ldot;
-        last_rdot_ = rdot;
+            if (ypos_l < MAX_LEVEL_LEFT_)
+            {
+                ypos_l = MAX_LEVEL_LEFT_;
+                lline->setPen(red_pen_);
+            }
+            else if (ypos_l > MIN_LEVEL_LEFT_)
+            {
+                ypos_l = MIN_LEVEL_LEFT_;
+                lline->setPen(red_pen_);
+            }
+            else
+            {
+                lline->setPen(blue_pen_);
+            }
 
-        addItem(ldot);
-        addItem(rdot);
+            if ((last_lline_ != NULL) && abs(ypos_l - last_lline_->line().y2()) >= 2)
+            {
+                QGraphicsLineItem* connector = new QGraphicsLineItem(time_, last_lline_->line().y2(), time_, ypos_l);
+                connector->setPen(blue_pen_);
+                addItem(connector);
+            }
+
+            lline->setLine(time_, ypos_l, time_, ypos_l);
+
+            last_lline_ = lline;
+            addItem(lline);
+        }
 
         if (time_ > view_width_)
         {
@@ -140,8 +190,8 @@ namespace MC
                 removeItem(itr.peekPrevious());
         }
 
-        last_ldot_ = NULL;
-        last_rdot_ = NULL;
+        last_lline_ = NULL;
+        last_rline_ = NULL;
 
         PlotScene::clear();
     }
