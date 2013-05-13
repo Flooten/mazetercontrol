@@ -716,6 +716,18 @@ namespace MC
                 break;
             }
 
+            case Control::ALGO_START:
+            {
+                ui->label_algorithm->setText("Start");
+                break;
+            }
+
+            case Control::ALGO_FINISH:
+            {
+                ui->label_algorithm->setText("Finish");
+                break;
+            }
+
             default:
                 ui->label_algorithm->setText("N/A");
                 break;

@@ -48,7 +48,9 @@ namespace MC
             ALGO_OUT,
             ALGO_GOAL,
             ALGO_GOAL_REVERSE,
-            ALGO_DONE
+            ALGO_DONE,
+            ALGO_START,
+            ALGO_FINISH
         };
 
         explicit Control(const QString& ini_file, QObject *parent = 0);
