@@ -49,6 +49,7 @@ namespace MC
 
     signals:
         void terminalClosing();
+        void clearingTerminal();
 
     public slots:
         void out(const QString& str);

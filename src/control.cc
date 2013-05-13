@@ -722,7 +722,7 @@ namespace MC
                 default:
                     emit out("Error: Invalid turn stack type.");
                     break;
-//                }
+                }
 
 //                last_turn_ = turn_stack_top;
 //            }

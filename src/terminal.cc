@@ -173,6 +173,7 @@ namespace MC
 
             case UserInput::CLEAR:
                 clear();
+                emit clearingTerminal();
                 break;
 
             default:

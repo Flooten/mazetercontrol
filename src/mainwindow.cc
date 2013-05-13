@@ -55,6 +55,7 @@ namespace MC
 
         // Generella anslutningar
         connect(terminal_, SIGNAL(terminalClosing()), this, SLOT(closeTerminal()));
+        connect(terminal_, SIGNAL(clearingTerminal()), this, SLOT(clearLog()));
         connect(mc_, SIGNAL(log(QString)), this, SLOT(log(QString)));
         connect(plot_timer_, SIGNAL(timeout()), this, SLOT(drawPlots()));
         connect(running_time_update_timer_, SIGNAL(timeout()), this, SLOT(updateRunningTime()));
