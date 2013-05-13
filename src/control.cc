@@ -731,10 +731,12 @@ namespace MC
         }
 
         case ALGO_STATE:
-        {            
-            algorithm_ = (Algorithm)data.at(2);
-
-            emit algorithmChanged(algorithm_);
+        {
+            if (algorithm_ != (Algorithm)data.at(2))
+            {
+                algorithm_ = (Algorithm)data.at(2);
+                emit algorithmChanged(algorithm_);
+            }
 
             break;
         }

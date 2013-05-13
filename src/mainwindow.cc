@@ -688,30 +688,35 @@ namespace MC
             case Control::ALGO_IN:
             {
                 ui->label_algorithm->setText("In");
+                log("Algorithm changed to: In");
                 break;
             }
 
             case Control::ALGO_OUT:
             {
                 ui->label_algorithm->setText("Out");
+                log("Algorithm changed to: Out");
                 break;
             }
 
             case Control::ALGO_GOAL:
             {
                 ui->label_algorithm->setText("Goal");
+                log("Algorithm changed to: Goal");
                 break;
             }
 
             case Control::ALGO_GOAL_REVERSE:
             {
                 ui->label_algorithm->setText("Goal rev.");
+                log("Algorithm changed to: Goal reverse");
                 break;
             }
 
             case Control::ALGO_DONE:
             {
                 ui->label_algorithm->setText("Done");
+                log("Algorithm changed to: Done");
                 finishAutonomousRun();
                 break;
             }
@@ -719,12 +724,14 @@ namespace MC
             case Control::ALGO_START:
             {
                 ui->label_algorithm->setText("Start");
+                log("Algorithm changed to: Start");
                 break;
             }
 
             case Control::ALGO_FINISH:
             {
                 ui->label_algorithm->setText("Finish");
+                log("Algorithm changed to: Finish");
                 break;
             }
 
