@@ -737,6 +737,7 @@ namespace MC
 
             default:
                 ui->label_algorithm->setText("N/A");
+                log("Algorithm changed to: N/A");
                 break;
             }
         }
