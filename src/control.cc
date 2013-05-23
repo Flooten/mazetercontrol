@@ -700,32 +700,27 @@ namespace MC
         {
             TurnType turn_stack_top = (TurnType)data.at(2);
 
-//            if (last_turn_ != turn_stack_top)
-//            {
-                switch (turn_stack_top)
-                {
-                case LEFT_TURN:
-                    emit log("Registered left turn.");
-                    emit out("Registered left turn.");
-                    break;
+            switch (turn_stack_top)
+            {
+            case LEFT_TURN:
+                emit log("Registered left turn.");
+                emit out("Registered left turn.");
+                break;
 
-                case RIGHT_TURN:
-                    emit log("Registered right turn.");
-                    emit out("Registered right turn.");
-                    break;
+            case RIGHT_TURN:
+                emit log("Registered right turn.");
+                emit out("Registered right turn.");
+                break;
 
-                case STRAIGHT:
-                    emit log("Registered straight ahead.");
-                    emit out("Registered straight ahead.");
-                    break;
+            case STRAIGHT:
+                emit log("Registered straight ahead.");
+                emit out("Registered straight ahead.");
+                break;
 
-                default:
-                    emit out("Error: Invalid turn stack type.");
-                    break;
-                }
-
-//                last_turn_ = turn_stack_top;
-//            }
+            default:
+                emit out("Error: Invalid turn stack type.");
+                break;
+            }
 
             break;
         }

@@ -76,8 +76,6 @@ namespace MC
         void clearPlots();
         void drawPlotGrid();
 
-        void writePreferences();
-
     private slots:
         void log(const QString& str);
         void clearLog();
